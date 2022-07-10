@@ -1,3 +1,7 @@
+:root {
+  --side-bar-width: 300px;
+}
+
 .App {
   text-align: center;
 }
@@ -36,3 +40,36 @@
     transform: rotate(360deg);
   }
 }
+
+.pointer {
+  cursor: pointer;
+}
+
+.input-group-text {
+  min-width: 50px;
+  justify-content: center;
+}
+
+.input-text-inline-position {
+  right: 3rem;
+  left: 3rem;
+}
+
+.input-group-pad {
+   padding-right: calc(1.5rem + var(--bs-gutter-x) * 0.5) !important;
+  /*//todo: calculate right padd*/
+}
+
+#details .form-control {
+  border: 0;
+  padding: 0;
+}
+#details textarea.form-control {
+  min-height: 24px;
+  height: auto;
+}
+#details .form-control:focus {
+  box-shadow: none;
+}
+
+
