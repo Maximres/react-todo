@@ -1,23 +1,18 @@
 ﻿import React, {Component} from "react"
 import {Rows} from "./Rows";
-import {SidebarContext} from "../App";
+import {AppContext} from "../contexts/AppContext";
+import {Types} from "../App";
 
 export class Table extends Component {
     constructor(props) {
         super(props);
-        const rowsData = [
-            {id: Math.random(), isChecked: true, text: "lorem11", isFavorite: true},
-            {id: Math.random(), isChecked: true, text: "lorem10", isFavorite: true},
-            {id: Math.random(), isChecked: false, text: "lorem12", isFavorite: false},
-        ];
         this.state = {
             isFocused: false,
-            newTask: "",
-            tasks: rowsData,
-            completedTasks: []
+            newTaskText: "",
         }
     }
 
+    static contextType = AppContext;
 
     componentDidUpdate() {
         //empty
@@ -30,30 +25,22 @@ export class Table extends Component {
 
     handleNewTaskSubmit = (e) => {
         e.preventDefault()
-        if (!this.state.newTask)
+        if (!this.state.newTaskText)
             return;
 
-        this.setState({
-            tasks: [{
-                id: Math.random(),
-                isChecked: false,
-                text: this.state.newTask,
-                isFavorite: false
-            }, ...this.state.tasks]
-        })
-        this.setState({newTask: ""})
-
+        let ctx = this.context;
+        ctx.dispatch({type: Types.CREATE_TASK, payload: this.state.newTaskText})
+        this.setState({newTaskText: ""})
     }
 
     handleCheck = (task) => {
-        task.isChecked = !task.isChecked;
-        let filtered = this.state.tasks.filter(x => x.id !== task.id);
-        this.setState({tasks: [...filtered, task]})
+        let ctx = this.context;
+        ctx.dispatch({type: Types.TOGGLE_CHECKED, payload: {task: task, isChecked: !task.isChecked}})
     }
 
     toggleFavorite = (task) => {
-        task.isFavorite = !task.isFavorite;
-        this.setState({tasks: [...this.state.tasks]})
+        const ctx = this.context;
+        ctx.dispatch( {type: Types.TOGGLE_FAVORITE, payload: {task: task, isFavorite: !task.isFavorite}})
     }
 
     renderRows = (tasks) => {
@@ -63,19 +50,20 @@ export class Table extends Component {
     }
 
     render = () => {
+        let ctx = this.context;
         return <main className="bg-light flex-fill position-relative">
             <div className="container-fluid my-5 overflow-auto vh-100">
                 <div className="row px-5">
                     <div className="col-12">
                         <table className="table table-striped table-hover col-12">
                             <tbody>
-                            {this.renderRows(this.state.tasks.filter(x => !x.isChecked))}
+                            {this.renderRows(ctx.state.tasks.filter(x => !x.isChecked))}
                             </tbody>
 
                         </table>
                         <table className="table table-striped table-hover table-secondary">
                             <tbody>
-                            {this.renderRows(this.state.tasks.filter(x => x.isChecked))}
+                            {this.renderRows(ctx.state.tasks.filter(x => x.isChecked))}
                             </tbody>
                         </table>
                     </div>
@@ -85,7 +73,7 @@ export class Table extends Component {
                     className="row position-absolute input-text-inline-position bottom-0 py-3 pb-4 bg-light bg-opacity-75">
                     <form onSubmit={this.handleNewTaskSubmit}>
                         <div className="input-group flex-nowrap input-group-pad">
-                            {this.state.isFocused || !!this.state.newTask
+                            {this.state.isFocused || !!this.state.newTaskText
                                 ? <div className="input-group-text">
                                     <input className="form-check-input" value="" type="radio"
                                            onChange={this.handleNewTaskSubmit}/>
@@ -94,9 +82,9 @@ export class Table extends Component {
                             }
                             <input onFocus={this.toggleFocus}
                                    onBlur={this.toggleFocus}
-                                   value={this.state.newTask}
+                                   value={this.state.newTaskText}
                                    onChange={(e) => {
-                                       this.setState({newTask: e.target.value})
+                                       this.setState({newTaskText: e.target.value})
                                    }}
                                    className="form-control" type="text" placeholder="Add a task"
                                    aria-describedby="add-task"/>

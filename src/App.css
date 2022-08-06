@@ -68,6 +68,10 @@
   min-height: 24px;
   height: auto;
 }
+#details textarea.form-control[data-main-row-title] {
+  min-height: 36px;
+  height: auto;
+}
 #details .form-control:focus {
   box-shadow: none;
 }

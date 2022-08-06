@@ -1,10 +1,19 @@
 ﻿import React, {Component} from "react";
-import {Favorite} from "../Helpers/FavoriteComponent";
-import {SidebarContext} from "../Helpers/SidebarContext";
+import {Favorite} from "../utils/FavoriteComponent";
+import {AppContext} from "../contexts/AppContext";
+import PropTypes from "prop-types"
+import {Types} from "../App";
 
 class Rows extends Component {
     constructor(props) {
         super(props);
+    }
+
+    static contextType = AppContext
+
+    static propTypes = {
+        handleCheck: PropTypes.func,
+        toggleFavorite: PropTypes.func
     }
 
     handleToggleFavorite = (e, row) => {
@@ -12,10 +21,13 @@ class Rows extends Component {
         this.props.toggleFavorite(row)
     }
 
-    render = () => {
+    toggleSideBar = (task) => {
         let ctx = this.context;
+        ctx.dispatch({type: Types.TOGGLE_SIDEBAR, payload:  {task: task, isSidebarVisible: !ctx.state.isSidebarVisible}})
+    }
 
-        return this.props.tasks && this.props.tasks.map(row => (<tr className="row" key={row.id} onClick={(e) => ctx.toggleSideBar()}>
+    render = () => {
+        return this.props.tasks && this.props.tasks.map(row => (<tr className="row" key={row.id} onClick={(e) => this.toggleSideBar(row)}>
                     <td className="px-1 col-1"  >
                         <div className="d-flex justify-content-center align-items-center">
                             <div className="form-check">
@@ -37,8 +49,6 @@ class Rows extends Component {
         )
     }
 }
-
-Rows.contextType = SidebarContext;
 
 export {Rows};
 
