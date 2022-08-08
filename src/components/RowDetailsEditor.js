@@ -6,7 +6,7 @@ import {Types} from "../App";
 
 const RowDetailsEditor = () => {
     const ctx = useContext(AppContext);
-    const selectedRow = ctx.state.selectedRow;
+    const selectedRow = ctx.selectedRow;
     const [newTaskFocused, setNewTaskFocus] = useState(false);
     const [newTaskValue, setNewTaskValue] = useState("");
 
@@ -15,14 +15,14 @@ const RowDetailsEditor = () => {
     }
 
     const handleSubCheck = (subTask) => {
-        const selectedTask = ctx.state.selectedRow;
+        const selectedTask = ctx.selectedRow;
         const selectedSubTask = selectedTask.subTasks.find(x => x.id === subTask.id);
         selectedSubTask.isChecked = !selectedSubTask.isChecked;
         ctx.dispatch({type: Types.UPDATE_TASK, payload: selectedTask});
     }
 
     const handleNewTaskCheck = (e) => {
-        const task = ctx.state.selectedRow;
+        const task = ctx.selectedRow;
         task.subTasks = [...task.subTasks, {
             id: Math.random(),
             isChecked: false,
@@ -39,12 +39,12 @@ const RowDetailsEditor = () => {
     }
 
     const toggleFavorite = () => {
-        const row = ctx.state.selectedRow;
+        const row = ctx.selectedRow;
         ctx.dispatch({type: Types.TOGGLE_FAVORITE, payload: {task: row, isFavorite: !row.isFavorite}});
     }
 
     const handleSubCheckOnEnter = (e) => {
-        if (e.key === 'Enter'){
+        if (e.key === 'Enter') {
             e.preventDefault();
             e.currentTarget.blur();
             handleNewTaskCheck(e)
@@ -52,7 +52,7 @@ const RowDetailsEditor = () => {
     }
 
     const handleEnterKeyPress = (e) => {
-        if (e.key === 'Enter'){
+        if (e.key === 'Enter') {
             e.preventDefault()
         }
     }
@@ -114,4 +114,4 @@ const RowDetailsEditor = () => {
     </div>)
 }
 
-export {RowDetailsEditor}
+export default RowDetailsEditor;

@@ -15,9 +15,9 @@ export const Types = {
 }
 
 const reducer = (state, action) => {
-    switch (action.type){
+    switch (action.type) {
         case Types.UPDATE_TASK: {
-            
+
             const index = state.tasks.findIndex(x => x.id === action.payload.id);
             const tasks = [...state.tasks]
             tasks[index] = action.payload;
@@ -35,15 +35,15 @@ const reducer = (state, action) => {
             }
         }
         case Types.TOGGLE_SIDEBAR: {
-            
-            if (action.payload.task && action.payload.task !== state.selectedRow && state.isSidebarVisible)
-                return {...state, selectedRow: action.payload.task}
+
+            if (action.payload.task && action.payload.task.id !== state.selectedRowId && state.isSidebarVisible)
+                return {...state, selectedRowId: action.payload.task.id}
 
             const isVisible = action.payload.isSidebarVisible;
             if (!isVisible)
-                return {...state, isSidebarVisible: isVisible, selectedRow: null}
+                return {...state, isSidebarVisible: isVisible, selectedRowId: null}
 
-            return {...state, isSidebarVisible: isVisible, selectedRow: action.payload.task}
+            return {...state, isSidebarVisible: isVisible, selectedRowId: action.payload.task.id}
         }
         case Types.TOGGLE_FOCUSED:
             return {...state, isFocused: !state.isFocused}
@@ -64,7 +64,7 @@ const reducer = (state, action) => {
             return {...state, tasks: tasks}
         }
         case Types.SELECT_ROW: {
-            return {...state, selectedRow: action.payload}
+            return {...state, selectedRowId: action.payload.id}
         }
         default:
             return state;
@@ -74,14 +74,15 @@ const reducer = (state, action) => {
 function App() {
 
     const rowsData = [
-        {id: Math.random(), isChecked: true, text: "lorem10", isFavorite: true, subTasks: []},
-        {id: Math.random(), isChecked: true, text: "lorem11", isFavorite: true, subTasks: []},
+        {id: Math.random(), isChecked: true, text: "lorem10", isFavorite: true, remindDate: null, dueDate: null, subTasks: []},
+        {id: Math.random(), isChecked: true, text: "lorem11", isFavorite: true, remindDate: null, dueDate: null, subTasks: []},
         {
             id: Math.random(),
             isChecked: false,
             text: "lorem12",
             isFavorite: false,
             remindDate: null,
+            dueDate: null,
             subTasks: [{
                 id: Math.random(),
                 isChecked: false,
@@ -94,10 +95,24 @@ function App() {
         isSidebarVisible: false,
         isFocused: false,
         tasks: rowsData,
-        selectedRow: {}
+        selectedRowId: null,
+
     })
 
-    return <AppContext.Provider value={{state, dispatch}}>
+    const contextProps = {
+        state,
+        dispatch,
+        get selectedRow() {
+            if (!this.state.selectedRowId)
+                return null;
+
+            const localCacheCreated = this.cache = this.cache || [];
+            const cacheElementExits = this.cache[this.state.selectedRowId];
+            const foundElement = this.cache[this.state.selectedRowId] = this.state.tasks.find(x => x.id === this.state.selectedRowId);
+            return (localCacheCreated && cacheElementExits) || foundElement;
+        }
+    };
+    return <AppContext.Provider value={contextProps}>
         <>
             <Table/>
             <Details/>

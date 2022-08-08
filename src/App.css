@@ -1,5 +1,6 @@
 :root {
   --side-bar-width: 300px;
+  font-size: 14px;
 }
 
 .App {
@@ -74,6 +75,10 @@
 }
 #details .form-control:focus {
   box-shadow: none;
+}
+
+.dropdown-item-height {
+  min-height: 3rem;
 }
 
 
