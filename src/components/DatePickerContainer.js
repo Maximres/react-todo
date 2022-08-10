@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import DateTimeEnum from "../utils/DateTimeEnum";
+import ReminderEnum from "../utils/ReminderEnum";
 import {CalendarContainer} from "react-datepicker/dist"
 import useReminder from "../hooks/useReminder";
 

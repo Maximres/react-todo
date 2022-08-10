@@ -4,7 +4,7 @@ import DueDateMenuItems from "./DueDateMenuItems";
 import {AppContext} from "../contexts/AppContext";
 import {format, differenceInCalendarDays} from "date-fns";
 import {forwardRef, useContext} from "react";
-import DateTimeEnum from "../utils/DateTimeEnum";
+import ReminderEnum from "../utils/ReminderEnum";
 import useReminder from "../hooks/useReminder";
 
 const DueDateInput = forwardRef(({isOpen, setIsOpen}, ref) => {
@@ -28,13 +28,13 @@ const DueDateInput = forwardRef(({isOpen, setIsOpen}, ref) => {
     const handleClearReminder = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        clearReminder(DateTimeEnum.DUE_DATE);
+        clearReminder(ReminderEnum.DUE_DATE);
     }
 
     return <div className="dropdown d-flex justify-content-between align-items-center"
                 onClick={ () => {
                 } }>
-        <div className=" d-flex justify-content-between align-items-center pointer dropdown-item-height"
+        <div className=" d-flex justify-content-between align-items-center pointer flex-grow-1"
              data-bs-toggle="dropdown"
              disabled={ isOpen }
              ref={ ref }

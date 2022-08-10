@@ -1,9 +1,11 @@
 ﻿import {CalendarRepeat} from "../utils/IconsComponent";
 import React, {forwardRef, useCallback, useEffect, useMemo, useRef} from "react";
-import DateTimeEnum from "../utils/DateTimeEnum";
+import ReminderEnum from "../utils/ReminderEnum";
 import ReminderInput from "./ReminderInput";
-import ReminderDropdown from "./ReminderGroupItem";
+import ReminderDatePickerDropdown from "./ReminderGroupItem";
 import DueDateInput from "./DueDateInput";
+import RepeatInput from "./RepeatInput";
+import ReminderIntervalPickerDropdown from "./ReminderIntervalPickerDropdown";
 
 const RowDetailsReminder = () => {
 
@@ -15,11 +17,14 @@ const RowDetailsReminder = () => {
         return <DueDateInput { ...props }/>
     }, [])
 
-    return (<div className="m-3">
-        <div className="list-group ">
-            <div className="list-group-item ">
+    const RepeatInputComponent = useCallback((props) => {
+        return <RepeatInput { ...props }/>
+    }, [])
 
-                <ReminderDropdown
+    return (<div className="m-3">
+        <div className="list-group">
+            <div className="list-group-item group-item-height d-flex align-items-center py-0">
+                <ReminderDatePickerDropdown
                     datePickerProps={ useMemo(() => ({
                         showTimeInput: true,
                         dateFormat: "h:mm aa",
@@ -27,27 +32,35 @@ const RowDetailsReminder = () => {
                         placeholderText: "Pick a date & time"
                     }), []) }
                     customInput={ ReminderInputComponent }
-                    dateTimeType={ DateTimeEnum.REMINDER }
+                    dateTimeType={ ReminderEnum.REMINDER }
                 />
-
             </div>
-            <div className="list-group-item ">
-                <ReminderDropdown
+            <div className="list-group-item group-item-height d-flex align-items-center py-0">
+                <ReminderDatePickerDropdown
                     datePickerProps={ useMemo(() => ({
                         shouldCloseOnSelect: false,
                         placeholderText: "Pick a date"
                     }), []) }
                     customInput={ DueDateInputComponent }
-                    dateTimeType={ DateTimeEnum.DUE_DATE }
+                    dateTimeType={ ReminderEnum.DUE_DATE }
                 />
             </div>
-            <div className="list-group-item d-flex justify-content-between align-items-center dropdown-item-height">
-                            <span className="me-3">
-                                <CalendarRepeat onClick={ () => {
-                                } }/>
-                            </span>
-                <span className="form-control me-1" type="text" onFocus={ () => ({}) }>Repeat</span>
+            {/*<div className="list-group-item group-item-height d-flex align-items-center py-0">*/}
+            {/*    <ReminderDatePickerDropdown*/}
+            {/*        datePickerProps={ useMemo(() => ({*/}
+            {/*            shouldCloseOnSelect: false,*/}
+            {/*            placeholderText: "Repeat"*/}
+            {/*        }), []) }*/}
+            {/*        customInput={ RepeatInputComponent }*/}
+            {/*        dateTimeType={ ReminderEnum.REPEAT }*/}
+            {/*    />*/}
+            {/*</div>*/}
+            <div className="list-group-item group-item-height d-flex align-items-center py-0">
+                <ReminderIntervalPickerDropdown
 
+                    customInput={ RepeatInputComponent }
+                    dateTimeType={ ReminderEnum.REPEAT }
+                />
             </div>
         </div>
     </div>)

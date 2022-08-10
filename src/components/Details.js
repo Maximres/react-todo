@@ -7,6 +7,7 @@ import {
 import {Types} from "../App";
 import RowDetailsEditor from "./RowDetailsEditor";
 import RowDetailsCalendar from  "./RowDetailsReminder";
+import RowDetailsMyDay from "./RowDetailsMyDay";
 
 export class Details extends React.Component {
     constructor(props) {
@@ -36,18 +37,7 @@ export class Details extends React.Component {
 
                 {selectedRow && <RowDetailsEditor/>}
 
-                <div className="m-3">
-                    <div className="list-group ">
-
-                        <label className="list-group-item d-flex justify-content-between align-items-center pointer">
-                            <span className="me-3">
-                                <MyDay onClick={() => {
-                                }}/>
-                            </span>
-                            <span className="form-control me-1" type="text" onFocus={() => ({})}>Add to My Day</span>
-                        </label>
-                    </div>
-                </div>
+                <RowDetailsMyDay/>
 
 
                 {selectedRow && <RowDetailsCalendar/>}
@@ -55,7 +45,7 @@ export class Details extends React.Component {
                 <div className="m-3">
                     <div className="list-group ">
 
-                        <label className="list-group-item d-flex justify-content-between align-items-center">
+                        <label className="list-group-item group-item-height d-flex justify-content-between align-items-center">
                             <span className="me-3">
                                 <File onClick={() => {
                                 }}/>
@@ -68,8 +58,8 @@ export class Details extends React.Component {
 
                 <div className="m-3">
                     <div className="list-group ">
-                        <label className="list-group-item d-flex justify-content-between align-items-center">
-                        <textarea rows={2} className="form-control overflow-hidden"
+                        <label className="list-group-item group-item-height d-flex justify-content-between align-items-center">
+                        <textarea rows={3} className="form-control overflow-hidden"
                                   placeholder="Add note"
                                   value={() => ({})}
                                   onKeyPress={() => ({})}

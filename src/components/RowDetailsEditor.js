@@ -59,13 +59,12 @@ const RowDetailsEditor = () => {
 
     return (<div className="m-3">
         <ul className="list-group">
-            <li className="list-group-item d-flex justify-content-between align-items-center flex-fill">
+            <li className="list-group-item group-item-height d-flex justify-content-between align-items-center flex-fill">
                 <input className="form-check-input me-3 p-2 flex-shrink-0" type="checkbox"
                        checked={selectedRow.isChecked}
                        onChange={() => handleCheck(selectedRow)}/>
                 <textarea rows={1}
                           className="form-control me-1 overflow-hidden fw-bolder fs-4"
-                          data-main-row-title={true}
                           value={selectedRow.text}
                           onKeyPress={handleEnterKeyPress}
                           onChange={e => handleTextChange(e, selectedRow)}/>

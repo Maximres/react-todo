@@ -1,6 +1,6 @@
 ﻿import React, {useContext} from "react";
 import {useCallback} from "react";
-import DateTimeEnum from "../utils/DateTimeEnum";
+import ReminderEnum from "../utils/ReminderEnum";
 import {add, set} from "date-fns";
 import {Types} from "../App";
 import {AppContext} from "../contexts/AppContext";
@@ -12,38 +12,58 @@ const UseReminder = () => {
         const today = new Date();
         let taskCopy;
         switch (dateType) {
-            case DateTimeEnum.LATER_TODAY: {
+            case ReminderEnum.LATER_TODAY: {
                 const fourHoursByNow = set(add(today, {hours: 4}), {minutes: 0, seconds: 0, milliseconds: 0});
                 taskCopy = {...selectedTask, remindDate: fourHoursByNow};
                 break;
             }
-            case DateTimeEnum.TOMORROW: {
+            case ReminderEnum.TOMORROW: {
                 const tomorrow = set(add(today, {days: 1}), {hours: 9, minutes: 0, seconds: 0, milliseconds: 0});
                 taskCopy = {...selectedTask, remindDate: tomorrow};
                 break;
             }
-            case DateTimeEnum.NEXT_WEEK: {
+            case ReminderEnum.NEXT_WEEK: {
                 const nextWeek = set(add(today, {days: 7}), {hours: 9, minutes: 0, seconds: 0, milliseconds: 0});
                 taskCopy = {...selectedTask, remindDate: nextWeek};
                 break;
             }
-            case DateTimeEnum.REMINDER:
+            case ReminderEnum.REMINDER:
                 taskCopy = {...selectedTask, remindDate: value};
                 break;
-            case DateTimeEnum.DUE_TODAY:
+
+            case ReminderEnum.DUE_TODAY:
                 taskCopy = {...selectedTask, dueDate: today};
                 break;
-            case DateTimeEnum.DUE_TOMORROW:
+            case ReminderEnum.DUE_TOMORROW:
                 taskCopy = {...selectedTask, dueDate: add(today, {days: 1})};
                 break;
-            case DateTimeEnum.DUE_NEXT_WEEK:
+            case ReminderEnum.DUE_NEXT_WEEK:
                 taskCopy = {...selectedTask, dueDate: add(today, {days: 7})};
                 break;
-            case DateTimeEnum.DUE_DATE:
+            case ReminderEnum.DUE_DATE:
                 taskCopy = {...selectedTask, dueDate: value};
                 break;
+
+            case ReminderEnum.REPEAT_DAILY:
+                taskCopy = {...selectedTask, repeatPeriod: [365, ReminderEnum.REPEAT_DAILY]};
+                break;
+            case ReminderEnum.REPEAT_WEEKDAYS:
+                taskCopy = {...selectedTask, repeatPeriod: [365, ReminderEnum.REPEAT_WEEKDAYS]};
+                break;
+            case ReminderEnum.REPEAT_WEEKLY:
+                taskCopy = {...selectedTask, repeatPeriod: [365, ReminderEnum.REPEAT_WEEKLY]};
+                break;
+            case ReminderEnum.REPEAT_MONTHLY:
+                taskCopy = {...selectedTask, repeatPeriod: [365, ReminderEnum.REPEAT_MONTHLY]};
+                break;
+            case ReminderEnum.REPEAT_YEARLY:
+                taskCopy = {...selectedTask, repeatPeriod: [365, ReminderEnum.REPEAT_YEARLY]};
+                break;
+            case ReminderEnum.REPEAT:
+                taskCopy = {...selectedTask, repeatPeriod: value};
+                break;
             default:
-                throw new Error("Argument Out Of Range Error")
+                throw new Error("Argument Out Of Range Error in `UseReminder`")
         }
         appContext.dispatch({type: Types.UPDATE_TASK, payload: taskCopy})
     }, [appContext])
@@ -51,21 +71,30 @@ const UseReminder = () => {
     const clearReminder = useCallback((dateType) => {
         let taskCopy;
         switch (dateType) {
-            case DateTimeEnum.LATER_TODAY:
-            case DateTimeEnum.TOMORROW:
-            case DateTimeEnum.NEXT_WEEK:
-            case DateTimeEnum.REMINDER:
+            case ReminderEnum.LATER_TODAY:
+            case ReminderEnum.TOMORROW:
+            case ReminderEnum.NEXT_WEEK:
+            case ReminderEnum.REMINDER:
                 taskCopy = {...selectedTask, remindDate: null};
                 break;
-            case DateTimeEnum.DUE_TODAY:
-            case DateTimeEnum.DUE_TOMORROW:
-            case DateTimeEnum.DUE_NEXT_WEEK:
-            case DateTimeEnum.DUE_DATE:
+
+            case ReminderEnum.DUE_TODAY:
+            case ReminderEnum.DUE_TOMORROW:
+            case ReminderEnum.DUE_NEXT_WEEK:
+            case ReminderEnum.DUE_DATE:
                 taskCopy = {...selectedTask, dueDate: null};
                 break;
-            default:
-                taskCopy = {...selectedTask, remindDate: null, dueDate: null};
+
+            case ReminderEnum.REPEAT:
+            case ReminderEnum.REPEAT_DAILY:
+            case ReminderEnum.REPEAT_WEEKDAYS:
+            case ReminderEnum.REPEAT_WEEKLY:
+            case ReminderEnum.REPEAT_MONTHLY:
+            case ReminderEnum.REPEAT_YEARLY:
+                taskCopy = {...selectedTask, repeatPeriod: null};
                 break;
+            default:
+                throw new Error("Argument Out Of Range Error in `UseReminder`")
         }
         appContext.dispatch({type: Types.UPDATE_TASK, payload: taskCopy})
     }, [appContext])

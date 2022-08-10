@@ -12,5 +12,9 @@ export const Today = (props) => <FontAwesomeIcon className="pointer" {...props} 
 export const File = (props) => <FontAwesomeIcon className="pointer" {...props} icon={solid("paperclip")}/>
 export const Tomorrow = (props) => <FontAwesomeIcon className="pointer"  {...props} icon={regular("circle-right")}/>
 export const NextWeek = (props) => <FontAwesomeIcon className="pointer" {...props} icon={regular("circle-play")}/>
+export const Week = (props) => <FontAwesomeIcon className="pointer" {...props} icon={solid("calendar-week")}/>
+export const Month = (props) => <FontAwesomeIcon className="pointer" {...props} icon={solid("calendar-check")}/>
+export const Year = (props) => <FontAwesomeIcon className="pointer" {...props} icon={solid("calendar")}/>
+export const Weekdays = (props) => <FontAwesomeIcon className="pointer" {...props} icon={solid("calendar-plus")}/>
 export const Reminder = (props) => <FontAwesomeIcon className="pointer" {...props} icon={regular("bell")}/>
 export const PickDate = (props) => <FontAwesomeIcon className="pointer" {...props} icon={regular("calendar-days")}/>

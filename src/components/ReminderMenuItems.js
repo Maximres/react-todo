@@ -1,10 +1,10 @@
 ﻿import React from "react";
-import DateTimeEnum from "../utils/DateTimeEnum";
+import ReminderEnum from "../utils/ReminderEnum";
 import {Clock, ClockRotate, NextWeek, Tomorrow} from "../utils/IconsComponent";
 
 const ReminderMenuItems = ({setReminder, openCalendar}) => {
     return <ul className="dropdown-menu" style={ {width: "300px"} }>
-        <li className="dropdown-item pointer" onClick={ (e) => setReminder(DateTimeEnum.LATER_TODAY) }>
+        <li className="dropdown-item pointer" onClick={ (e) => setReminder(ReminderEnum.LATER_TODAY) }>
             <div className="d-flex align-items-center">
                                         <span className="me-2">
                                             <ClockRotate/>
@@ -12,7 +12,7 @@ const ReminderMenuItems = ({setReminder, openCalendar}) => {
                 <button type="button" className="border-0 bg-transparent">Later today</button>
             </div>
         </li>
-        <li className="dropdown-item pointer" onClick={ () => setReminder(DateTimeEnum.TOMORROW) }>
+        <li className="dropdown-item pointer" onClick={ () => setReminder(ReminderEnum.TOMORROW) }>
             <div className="d-flex align-items-center">
                                         <span className="me-2">
                                             <Tomorrow/>
@@ -21,7 +21,7 @@ const ReminderMenuItems = ({setReminder, openCalendar}) => {
 
             </div>
         </li>
-        <li className="dropdown-item pointer" onClick={ () => setReminder(DateTimeEnum.NEXT_WEEK) }>
+        <li className="dropdown-item pointer" onClick={ () => setReminder(ReminderEnum.NEXT_WEEK) }>
             <div className="d-flex align-items-center">
                                         <span className="me-2">
                                             <NextWeek/>

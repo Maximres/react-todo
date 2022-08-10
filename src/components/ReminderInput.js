@@ -4,7 +4,7 @@ import ReminderMenuItems from "./ReminderMenuItems";
 import {AppContext} from "../contexts/AppContext";
 import {format} from "date-fns";
 import useReminder from "../hooks/useReminder";
-import DateTimeEnum from "../utils/DateTimeEnum";
+import ReminderEnum from "../utils/ReminderEnum";
 
 const ReminderInput = forwardRef(({isOpen, id, date, setIsOpen}, ref) => {
     const ctx = useContext(AppContext)
@@ -19,13 +19,13 @@ const ReminderInput = forwardRef(({isOpen, id, date, setIsOpen}, ref) => {
     const handleClearReminder = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        clearReminder(DateTimeEnum.REMINDER);
+        clearReminder(ReminderEnum.REMINDER);
     }
 
     return <div className="dropdown d-flex justify-content-between align-items-center"
                 onClick={ () => {
                 } }>
-        <div className=" d-flex justify-content-between align-items-center pointer dropdown-item-height"
+        <div className=" d-flex justify-content-between align-items-center pointer flex-grow-1"
              data-bs-toggle="dropdown"
              disabled={ isOpen }
              ref={ ref }

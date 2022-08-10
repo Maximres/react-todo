@@ -1,6 +1,8 @@
 :root {
   --side-bar-width: 300px;
-  font-size: 14px;
+  --default-font-size-number: 14;
+  --default-font-size: calc(var(--default-font-size-number) * 1px);
+  font-size: var(--default-font-size);
 }
 
 .App {
@@ -61,7 +63,7 @@
   /*//todo: calculate right padd*/
 }
 
-#details .form-control {
+#details .form-control:not([data-preseve-border]) {
   border: 0;
   padding: 0;
 }
@@ -77,8 +79,8 @@
   box-shadow: none;
 }
 
-.dropdown-item-height {
-  min-height: 3rem;
+.group-item-height {
+  min-height: calc(1rem * calc(45 / var(--default-font-size-number))); /* desired 45px height with rem. practical? maybe.. */
 }
 
 

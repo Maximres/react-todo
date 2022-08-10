@@ -74,8 +74,28 @@ const reducer = (state, action) => {
 function App() {
 
     const rowsData = [
-        {id: Math.random(), isChecked: true, text: "lorem10", isFavorite: true, remindDate: null, dueDate: null, subTasks: []},
-        {id: Math.random(), isChecked: true, text: "lorem11", isFavorite: true, remindDate: null, dueDate: null, subTasks: []},
+        {
+            id: Math.random(),
+            isChecked: true,
+            text: "lorem10",
+            isFavorite: true,
+            remindDate: null,
+            dueDate: null,
+            isMyDay: false,
+            repeatPeriod: null,
+            subTasks: []
+        },
+        {
+            id: Math.random(),
+            isChecked: true,
+            text: "lorem11",
+            isFavorite: true,
+            remindDate: null,
+            dueDate: null,
+            isMyDay: false,
+            repeatPeriod: null,
+            subTasks: []
+        },
         {
             id: Math.random(),
             isChecked: false,
@@ -83,6 +103,8 @@ function App() {
             isFavorite: false,
             remindDate: null,
             dueDate: null,
+            repeatPeriod: null,
+            isMyDay: false,
             subTasks: [{
                 id: Math.random(),
                 isChecked: false,
@@ -112,7 +134,7 @@ function App() {
             return (localCacheCreated && cacheElementExits) || foundElement;
         }
     };
-    return <AppContext.Provider value={contextProps}>
+    return <AppContext.Provider value={ contextProps }>
         <>
             <Table/>
             <Details/>
