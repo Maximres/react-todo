@@ -1,20 +1,28 @@
-﻿import React, {useState} from "react";
+﻿import React from "react";
+import {useState} from "react";
 import ReminderEnum from "../utils/ReminderEnum";
 
-const CustomRepeatIntervalPicker = ({setIsOpen, setReminder}) => {
+type Props = {
+    setIsOpen: (value: boolean) => void,
+    setReminder: (dateType: ReminderEnum, value: any ) => void,
+    closeDropdown: () => void,
+}
+
+const CustomRepeatIntervalPicker = ({setIsOpen, setReminder, closeDropdown}: Props) => {
     const [repeats, setRepeats] = useState(1)
     const [interval, setInterval] = useState(ReminderEnum.REPEAT_DAILY)
 
-    const onRepeatsChange = (e) => {
+    const onRepeatsChange = (e: any) => {
         setRepeats(e.target.value)
     }
 
-    const onDateTimePeriodChange = (e) => {
+    const onDateTimePeriodChange = (e: any) => {
         setInterval(e.target.value)
     }
 
     const onSave = () => {
         setReminder(ReminderEnum.REPEAT, [repeats, interval]);
+        closeDropdown();
     }
 
     return <div className="w-100 ">
@@ -35,14 +43,11 @@ const CustomRepeatIntervalPicker = ({setIsOpen, setReminder}) => {
 
                 </div>
             </div>
-
             <div className="d-flex gap-1">
-
                 <button type="button" onClick={ () => setIsOpen(false) } className="btn btn-secondary btn-sm px-4 mt-2 flex-grow-1">Cancel
                 </button>
                 <button type="button" onClick={ onSave } className="btn btn-primary btn-sm px-4 mt-2 flex-grow-1">Save
                 </button>
-
             </div>
         </div>
     </div>

@@ -1,14 +1,14 @@
-﻿import React, {useContext} from "react";
-import {useCallback} from "react";
+﻿import React from "react";
+import {useCallback, useContext} from "react";
 import ReminderEnum from "../utils/ReminderEnum";
 import {add, set} from "date-fns";
-import {Types} from "../App";
+import {ActionTypes} from "../App";
 import {AppContext} from "../contexts/AppContext";
 
 const UseReminder = () => {
     const appContext = useContext(AppContext)
-    const selectedTask = appContext.selectedRow;
-    const setReminder = useCallback((dateType, value) => {
+    const selectedTask = appContext?.selectedRow;
+    const setReminder = useCallback((dateType: ReminderEnum, value?: any) => {
         const today = new Date();
         let taskCopy;
         switch (dateType) {
@@ -65,10 +65,10 @@ const UseReminder = () => {
             default:
                 throw new Error("Argument Out Of Range Error in `UseReminder`")
         }
-        appContext.dispatch({type: Types.UPDATE_TASK, payload: taskCopy})
+        appContext.dispatch({type: ActionTypes.UPDATE_TASK, payload: taskCopy})
     }, [appContext])
 
-    const clearReminder = useCallback((dateType) => {
+    const clearReminder = useCallback((dateType: ReminderEnum) => {
         let taskCopy;
         switch (dateType) {
             case ReminderEnum.LATER_TODAY:
@@ -96,7 +96,7 @@ const UseReminder = () => {
             default:
                 throw new Error("Argument Out Of Range Error in `UseReminder`")
         }
-        appContext.dispatch({type: Types.UPDATE_TASK, payload: taskCopy})
+        appContext.dispatch({type: ActionTypes.UPDATE_TASK, payload: taskCopy})
     }, [appContext])
 
     return [setReminder, clearReminder];

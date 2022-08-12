@@ -3,8 +3,15 @@ import ReminderEnum from "../utils/ReminderEnum";
 import {Month, NextWeek, PickDate, Today, Tomorrow, Week, Weekdays, Year} from "../utils/IconsComponent";
 import CustomRepeatIntervalPicker from "./CustomRepeatIntervalPicker";
 
-const RepeatMenuItems = ({setReminder, setIsOpen, isOpen, closeDropdown}) => {
-    const closeDropDownAndSetReminder = (reminderType) => {
+type Props = {
+    setReminder: (dateType: ReminderEnum, value?: any) => void,
+    closeDropdown: () => void
+    isOpen: boolean,
+    setIsOpen: (arg: boolean) => void
+}
+
+const RepeatMenuItems = ({setReminder, setIsOpen, isOpen, closeDropdown}: Props) => {
+    const closeDropDownAndSetReminder = (reminderType: ReminderEnum) => {
         closeDropdown();
         setReminder(reminderType);
     }
@@ -66,7 +73,7 @@ const RepeatMenuItems = ({setReminder, setIsOpen, isOpen, closeDropdown}) => {
 
         { isOpen && <li className="">
             <div className="d-flex align-items-center">
-                <CustomRepeatIntervalPicker setIsOpen={setIsOpen} setReminder={setReminder}/>
+                <CustomRepeatIntervalPicker setIsOpen={setIsOpen} closeDropdown={closeDropdown} setReminder={setReminder}/>
             </div>
         </li> }
 

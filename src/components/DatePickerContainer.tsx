@@ -1,9 +1,17 @@
 ﻿import React from "react";
 import ReminderEnum from "../utils/ReminderEnum";
-import {CalendarContainer} from "react-datepicker/dist"
+import {CalendarContainer} from "react-datepicker"
 import useReminder from "../hooks/useReminder";
 
-const DatePickerContainer = ({className, children, closeCalendar, date, dateTimeType}) => {
+type Props = {
+    className: string,
+    children: React.ReactNode,
+    closeCalendar: (arg: boolean) => void,
+    date: Date,
+    dateTimeType: ReminderEnum
+}
+
+const DatePickerContainer = ({className, children, closeCalendar, date, dateTimeType}: Props) => {
     const [setReminder] = useReminder()
     return <CalendarContainer className={ className }>
         <div>

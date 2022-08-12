@@ -2,7 +2,12 @@
 import ReminderEnum from "../utils/ReminderEnum";
 import {Clock, ClockRotate, NextWeek, Tomorrow} from "../utils/IconsComponent";
 
-const ReminderMenuItems = ({setReminder, openCalendar}) => {
+type Props = {
+    setReminder: (dateType: ReminderEnum, value?: any) => void,
+    openCalendar: () => void
+}
+
+const ReminderMenuItems = ({setReminder, openCalendar}: Props) => {
     return <ul className="dropdown-menu" style={ {width: "300px"} }>
         <li className="dropdown-item pointer" onClick={ (e) => setReminder(ReminderEnum.LATER_TODAY) }>
             <div className="d-flex align-items-center">

@@ -1,49 +1,53 @@
 ﻿import React, {useContext, useState} from "react";
-import {Favorite} from "../utils/FavoriteComponent";
-import {Options} from "../utils/IconsComponent";
-import {AppContext} from "../contexts/AppContext";
-import {Types} from "../App";
+import {Options, Favorite} from "../utils/IconsComponent";
+import {IRow, ITask} from "../contexts/AppContext";
+import {ActionTypes} from "../App";
+import useAppContext from "../contexts/UseAppContext";
 
 const RowDetailsEditor = () => {
-    const ctx = useContext(AppContext);
+    const ctx = useAppContext();
     const selectedRow = ctx.selectedRow;
     const [newTaskFocused, setNewTaskFocus] = useState(false);
     const [newTaskValue, setNewTaskValue] = useState("");
 
-    const handleCheck = (task) => {
-        ctx.dispatch({type: Types.TOGGLE_CHECKED, payload: {task: task, isChecked: !task.isChecked}});
+    const handleCheck = (task: IRow) => {
+        ctx.dispatch({type: ActionTypes.TOGGLE_CHECKED, payload: {task: task, isChecked: !task.isChecked}});
     }
 
-    const handleSubCheck = (subTask) => {
+    const handleSubCheck = (subTask: ITask) => {
         const selectedTask = ctx.selectedRow;
-        const selectedSubTask = selectedTask.subTasks.find(x => x.id === subTask.id);
+        const selectedSubTask = selectedTask.subTasks.find(x => x.id === subTask.id) as ITask;
         selectedSubTask.isChecked = !selectedSubTask.isChecked;
-        ctx.dispatch({type: Types.UPDATE_TASK, payload: selectedTask});
+        ctx.dispatch({type: ActionTypes.UPDATE_TASK, payload: selectedTask});
     }
 
-    const handleNewTaskCheck = (e) => {
+    const handleNewTaskCheck = (e: any) => {
         const task = ctx.selectedRow;
         task.subTasks = [...task.subTasks, {
             id: Math.random(),
             isChecked: false,
             text: newTaskValue
         }]
-        ctx.dispatch({type: Types.UPDATE_TASK, payload: task});
+        ctx.dispatch({type: ActionTypes.UPDATE_TASK, payload: task});
         setNewTaskFocus(false);
         setNewTaskValue("")
     }
 
-    const handleTextChange = (e, task) => {
+    const handleTextChange = (e: any, task: ITask) => {
         task.text = e.target.value;
-        ctx.dispatch({type: Types.UPDATE_TASK, payload: task});
+        ctx.dispatch({type: ActionTypes.UPDATE_TASK, payload: task});
+    }
+
+    const handleSubTextChange = (e: any, subTask: ITask) => {
+        //todo: handle sub task
     }
 
     const toggleFavorite = () => {
         const row = ctx.selectedRow;
-        ctx.dispatch({type: Types.TOGGLE_FAVORITE, payload: {task: row, isFavorite: !row.isFavorite}});
+        ctx.dispatch({type: ActionTypes.TOGGLE_FAVORITE, payload: {task: row, isFavorite: !row.isFavorite}});
     }
 
-    const handleSubCheckOnEnter = (e) => {
+    const handleSubCheckOnEnter = (e: any) => {
         if (e.key === 'Enter') {
             e.preventDefault();
             e.currentTarget.blur();
@@ -51,7 +55,7 @@ const RowDetailsEditor = () => {
         }
     }
 
-    const handleEnterKeyPress = (e) => {
+    const handleEnterKeyPress = (e: any) => {
         if (e.key === 'Enter') {
             e.preventDefault()
         }
@@ -69,7 +73,7 @@ const RowDetailsEditor = () => {
                           onKeyPress={handleEnterKeyPress}
                           onChange={e => handleTextChange(e, selectedRow)}/>
 
-                <Favorite isFavorite={selectedRow.isFavorite} onClick={toggleFavorite}/>
+                <Favorite onClick={() => toggleFavorite()} isFavorite={selectedRow.isFavorite}/>
             </li>
 
             {selectedRow && selectedRow.subTasks && selectedRow.subTasks.map(subTask => {
@@ -82,7 +86,7 @@ const RowDetailsEditor = () => {
                               className={"form-control me-1 overflow-hidden " + (subTask.isChecked ? "text-decoration-line-through" : "")}
                               value={subTask.text}
                               onKeyPress={handleEnterKeyPress}
-                              onChange={e => handleTextChange(e, subTask)}/>
+                              onChange={e => handleSubTextChange(e, subTask)}/>
                     <div className="mx-2">
                         <Options/>
                     </div>

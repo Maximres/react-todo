@@ -6,26 +6,39 @@ import {format, differenceInCalendarDays} from "date-fns";
 import {forwardRef, useContext} from "react";
 import ReminderEnum from "../utils/ReminderEnum";
 import useReminder from "../hooks/useReminder";
+import useAppContext from "../contexts/UseAppContext";
 
-const DueDateInput = forwardRef(({isOpen, setIsOpen}, ref) => {
-    const ctx = useContext(AppContext)
+type Props = {
+    isOpen : boolean,
+    setIsOpen: (value: boolean) => void
+}
+
+const DueDateInput = forwardRef(({isOpen, setIsOpen} : Props, ref: React.ForwardedRef<HTMLDivElement>) => {
+    const ctx = useAppContext()
     const [setReminder, clearReminder] = useReminder();
     const selectedTask = ctx.selectedRow;
     const weeks = "EEEE";
     const weekMonthDayFormat = "iii, LLL d";
     const hasDueDate = selectedTask && selectedTask.dueDate;
-    const diffDays = differenceInCalendarDays(selectedTask.dueDate, new Date());
-    const isToday = diffDays === 0;
-    const isTomorrow = diffDays === 1;
-    const nextWeekOrGreater = diffDays > 1;
-    const date = isToday
-        ? "Today"
-        : isTomorrow
-            ? "Tomorrow"
-            : hasDueDate && format(selectedTask.dueDate, (nextWeekOrGreater ? weekMonthDayFormat : weeks));
+    let date;
+    if (hasDueDate) {
+        const dueDateValue = selectedTask.dueDate as Date;
+        const diffDays = differenceInCalendarDays(dueDateValue, new Date());
+
+        const isToday = diffDays === 0;
+        const isTomorrow = diffDays === 1;
+        const nextWeekOrGreater = diffDays > 1;
+        date = isToday
+            ? "Today"
+            : isTomorrow
+                ? "Tomorrow"
+                : hasDueDate && format(dueDateValue, (nextWeekOrGreater ? weekMonthDayFormat : weeks));
+    }
+
+
     const dueDateText = hasDueDate ? `Due ${ date }` : 'Add due date';
 
-    const handleClearReminder = (e) => {
+    const handleClearReminder = (e: any) => {
         e.preventDefault();
         e.stopPropagation();
         clearReminder(ReminderEnum.DUE_DATE);
@@ -36,7 +49,6 @@ const DueDateInput = forwardRef(({isOpen, setIsOpen}, ref) => {
                 } }>
         <div className=" d-flex justify-content-between align-items-center pointer flex-grow-1"
              data-bs-toggle="dropdown"
-             disabled={ isOpen }
              ref={ ref }
              aria-expanded="false">
                   <span className="me-3">

@@ -2,28 +2,28 @@ import React, {useReducer, useState} from "react";
 import './App.css';
 import {Table} from "./components/Table";
 import {Details} from "./components/Details";
-import {AppContext} from "./contexts/AppContext";
+import {AppContext, IRow, IAppContextType, IState, IAction} from "./contexts/AppContext";
 
-export const Types = {
-    UPDATE_TASK: "UPDATE_TASK",
-    CREATE_TASK: "CREATE_TASK",
-    TOGGLE_SIDEBAR: "TOGGLE_SIDEBAR",
-    TOGGLE_FOCUSED: "TOGGLE_FOCUSED",
-    TOGGLE_FAVORITE: "TOGGLE_FAVORITE",
-    TOGGLE_CHECKED: "TOGGLE_CHECKED",
-    SELECT_ROW: "SELECT_ROW",
+export enum ActionTypes {
+    UPDATE_TASK = "UPDATE_TASK",
+    CREATE_TASK = "CREATE_TASK",
+    TOGGLE_SIDEBAR = "TOGGLE_SIDEBAR",
+    TOGGLE_FOCUSED = "TOGGLE_FOCUSED",
+    TOGGLE_FAVORITE = "TOGGLE_FAVORITE",
+    TOGGLE_CHECKED = "TOGGLE_CHECKED",
+    SELECT_ROW = "SELECT_ROW",
 }
 
-const reducer = (state, action) => {
+const reducer = (state: IState, action: IAction): IState => {
     switch (action.type) {
-        case Types.UPDATE_TASK: {
+        case ActionTypes.UPDATE_TASK: {
 
             const index = state.tasks.findIndex(x => x.id === action.payload.id);
             const tasks = [...state.tasks]
             tasks[index] = action.payload;
             return {...state, tasks: tasks}
         }
-        case Types.CREATE_TASK: {
+        case ActionTypes.CREATE_TASK: {
             return {
                 ...state,
                 tasks: [{
@@ -31,10 +31,10 @@ const reducer = (state, action) => {
                     isChecked: false,
                     text: action.payload,
                     isFavorite: false
-                }, ...state.tasks]
+                } as IRow, ...state.tasks]
             }
         }
-        case Types.TOGGLE_SIDEBAR: {
+        case ActionTypes.TOGGLE_SIDEBAR: {
 
             if (action.payload.task && action.payload.task.id !== state.selectedRowId && state.isSidebarVisible)
                 return {...state, selectedRowId: action.payload.task.id}
@@ -45,9 +45,9 @@ const reducer = (state, action) => {
 
             return {...state, isSidebarVisible: isVisible, selectedRowId: action.payload.task.id}
         }
-        case Types.TOGGLE_FOCUSED:
+        case ActionTypes.TOGGLE_FOCUSED:
             return {...state, isFocused: !state.isFocused}
-        case Types.TOGGLE_FAVORITE: {
+        case ActionTypes.TOGGLE_FAVORITE: {
             const task = action.payload.task;
             const isFavorite = action.payload.isFavorite;
             const index = state.tasks.findIndex(x => x.id === task.id);
@@ -55,7 +55,7 @@ const reducer = (state, action) => {
             tasks[index].isFavorite = isFavorite;
             return {...state, tasks: tasks}
         }
-        case Types.TOGGLE_CHECKED: {
+        case ActionTypes.TOGGLE_CHECKED: {
             const task = action.payload.task;
             const isChecked = action.payload.isChecked;
             task.isChecked = isChecked;
@@ -63,7 +63,7 @@ const reducer = (state, action) => {
             const tasks = [...filtered, task];
             return {...state, tasks: tasks}
         }
-        case Types.SELECT_ROW: {
+        case ActionTypes.SELECT_ROW: {
             return {...state, selectedRowId: action.payload.id}
         }
         default:
@@ -113,25 +113,31 @@ function App() {
         },
     ];
 
-    const [state, dispatch] = useReducer(reducer, {
+    const initialArgs: IState= {
         isSidebarVisible: false,
         isFocused: false,
         tasks: rowsData,
         selectedRowId: null,
 
-    })
+    };
+    const [state, dispatch] = useReducer(reducer, initialArgs)
 
-    const contextProps = {
+    const contextProps: IAppContextType = {
         state,
         dispatch,
         get selectedRow() {
-            if (!this.state.selectedRowId)
-                return null;
+            const cache: any[] = []
 
-            const localCacheCreated = this.cache = this.cache || [];
-            const cacheElementExits = this.cache[this.state.selectedRowId];
-            const foundElement = this.cache[this.state.selectedRowId] = this.state.tasks.find(x => x.id === this.state.selectedRowId);
-            return (localCacheCreated && cacheElementExits) || foundElement;
+            return ((cache: any[]) => {
+                if (!this.state.selectedRowId)
+                    return null;
+
+                const localCacheCreated = cache = cache || [];
+                const cacheElementExits = cache[this.state.selectedRowId];
+                const foundElement = cache[this.state.selectedRowId] = this.state.tasks.find(x => x.id === this.state.selectedRowId);
+                return (localCacheCreated && cacheElementExits) || foundElement;
+            })(cache)
+
         }
     };
     return <AppContext.Provider value={ contextProps }>

@@ -1,4 +1,4 @@
-﻿import React, {useCallback} from "react"
+﻿import React, {useCallback, useState} from "react"
 import {Calendar, CalendarRepeat} from "../utils/IconsComponent";
 import {forwardRef} from "react";
 import ReminderEnum from "../utils/ReminderEnum";
@@ -6,32 +6,32 @@ import useReminder from "../hooks/useReminder";
 import RepeatMenuItems from "./RepeatMenuItems";
 import RepeatDisplayNameHelper from "../utils/RepeatDisplayNameHelper";
 import useAppContext from "../contexts/UseAppContext";
-import {Dropdown} from "bootstrap/dist/js/bootstrap.esm"
 
+type Props = {
+    isOpen : boolean,
+    setIsOpen: (value: boolean) => void,
+    closeDropdown: () => void
+}
 
-const RepeatInput = forwardRef(({isOpen, setIsOpen}, ref) => {
+const RepeatInput = forwardRef(({isOpen, setIsOpen, closeDropdown}: Props, ref: React.Ref<HTMLDivElement>) => {
     const ctx = useAppContext()
     const [setReminder, clearReminder] = useReminder();
     const selectedTask = ctx.selectedRow;
 
     const hasRepeatDate = selectedTask && selectedTask.repeatPeriod != null;
-    let repeatText = "Repeat";
+    let repeatText: string | null = "Repeat";
     if (hasRepeatDate) {
-        const [repeatsCount, repeatsInterval] = selectedTask.repeatPeriod;
+        const [repeatsCount, repeatsInterval] = selectedTask.repeatPeriod as any;
         const displayName = RepeatDisplayNameHelper(repeatsInterval);
         repeatText = displayName;
     }
 
-    const handleClearReminder = (e) => {
+    const handleClearReminder = (e: any) => {
         e.preventDefault();
         e.stopPropagation();
         clearReminder(ReminderEnum.REPEAT);
     }
 
-    const closeDropdown = useCallback(() => {
-        const dd = new Dropdown(ref.current);
-        dd.hide();
-    }, [ref]);
 
     return <div className="dropdown d-flex justify-content-between align-items-center"
                 onClick={ () => {
@@ -39,7 +39,6 @@ const RepeatInput = forwardRef(({isOpen, setIsOpen}, ref) => {
         <div className=" d-flex justify-content-between align-items-center pointer flex-grow-1"
              data-bs-toggle="dropdown"
              data-bs-auto-close="outside"
-            // disabled={ isOpen }
              ref={ ref }
              aria-expanded="false">
                   <span className="me-3">

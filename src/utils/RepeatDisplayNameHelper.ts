@@ -1,6 +1,6 @@
 ﻿import ReminderEnum from "./ReminderEnum";
 
-const RepeatDisplayNameHelper = (type) => {
+const RepeatDisplayNameHelper = (type?: ReminderEnum) => {
     switch (type) {
         case ReminderEnum.REPEAT_DAILY:
             return "Daily";
