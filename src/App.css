@@ -59,7 +59,7 @@
 }
 
 .input-group-pad {
-   padding-right: calc(1.5rem + var(--bs-gutter-x) * 0.5) !important;
+  padding-right: calc(1.5rem + var(--bs-gutter-x) * 0.5) !important;
   /*//todo: calculate right padd*/
 }
 
@@ -67,20 +67,23 @@
   border: 0;
   padding: 0;
 }
+
 #details textarea.form-control {
   min-height: 24px;
   height: auto;
 }
+
 #details textarea.form-control[data-main-row-title] {
   min-height: 36px;
   height: auto;
 }
+
 #details .form-control:focus {
   box-shadow: none;
 }
 
 .group-item-height {
-  min-height: calc(1rem * calc(45 / var(--default-font-size-number))); /* desired 45px height with rem. practical? maybe.. */
+  min-height: calc(
+    1rem * calc(45 / var(--default-font-size-number))
+  ); /* desired 45px height with rem. practical? maybe.. */
 }
-
-
