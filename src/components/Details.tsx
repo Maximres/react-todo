@@ -1,23 +1,24 @@
 ﻿import React from "react";
 import { File } from "../utils/IconsComponent";
-import { ActionTypes } from "../App";
 import RowDetailsEditor from "./RowDetailsEditor";
 import RowDetailsCalendar from "./RowDetailsReminder";
 import RowDetailsMyDay from "./RowDetailsMyDay";
-import useAppContext from "../hooks/useAppContext";
+import { useAppDispatch, useAppSelector } from "../data/hooks";
+import selectCurrentRow from "../data/selectors";
+import { toggleSidebar } from "../data/appSlice";
 
 export const Details = (): JSX.Element | null => {
-  const ctx = useAppContext();
-  const selectedRow = ctx.selectedRow;
+  const selectedRow = useAppSelector(selectCurrentRow);
+  const dispatch = useAppDispatch();
+  const isSidebarVisible = useAppSelector(
+    (state) => state.app.isSidebarVisible,
+  );
 
   const closeDetails = () => {
-    ctx.dispatch({
-      type: ActionTypes.TOGGLE_SIDEBAR,
-      payload: { isSidebarVisible: false },
-    });
+    dispatch(toggleSidebar({ isSidebarVisible: false }));
   };
 
-  return !ctx.state.isSidebarVisible ? null : (
+  return !isSidebarVisible ? null : (
     <aside
       className="d-flex flex-column align-items-stretch flex-shrink-0 bg-white overflow-auto"
       style={{ width: "380px" }}

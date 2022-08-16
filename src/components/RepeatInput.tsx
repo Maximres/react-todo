@@ -4,7 +4,8 @@ import ReminderEnum from "../utils/ReminderEnum";
 import useReminder from "../hooks/useReminder";
 import RepeatMenuItems from "./RepeatMenuItems";
 import RepeatDisplayNameHelper from "../utils/RepeatDisplayNameHelper";
-import useAppContext from "../hooks/useAppContext";
+import { useAppSelector } from "../data/hooks";
+import selectCurrentRow from "../data/selectors";
 
 type Props = {
   isOpen: boolean;
@@ -17,14 +18,13 @@ const RepeatInput = forwardRef(
     { isOpen, setIsOpen, closeDropdown }: Props,
     ref: React.Ref<HTMLDivElement>,
   ) => {
-    const ctx = useAppContext();
+    const selectedTask = useAppSelector(selectCurrentRow);
     const [setReminder, clearReminder] = useReminder();
-    const selectedTask = ctx.selectedRow;
 
     const hasRepeatDate = selectedTask && selectedTask.repeatPeriod != null;
     let repeatText: string | null = "Repeat";
     if (hasRepeatDate) {
-      const [repeatsCount, repeatsInterval] = selectedTask.repeatPeriod as any;
+      const [, repeatsInterval] = selectedTask.repeatPeriod as any;
       const displayName = RepeatDisplayNameHelper(repeatsInterval);
       repeatText = displayName;
     }

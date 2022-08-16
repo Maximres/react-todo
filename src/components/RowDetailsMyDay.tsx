@@ -1,15 +1,17 @@
 ﻿import React from "react";
 import { MyDay } from "../utils/IconsComponent";
-import useAppContext from "../hooks/useAppContext";
-import { ActionTypes } from "../App";
+import { useAppDispatch, useAppSelector } from "../data/hooks";
+import selectCurrentRow from "../data/selectors";
+import { IRow } from "../types/appTypes";
+import { updateTask } from "../data/appSlice";
 
 const RowDetailsMyDay = () => {
-  const ctx = useAppContext();
-  const selectedTask = ctx.selectedRow;
+  const selectedTask = useAppSelector(selectCurrentRow) as IRow;
+  const dispatch = useAppDispatch();
   const myDayTextColor = selectedTask.isMyDay ? "text-primary" + " " : "";
   const addToMyDay = () => {
     selectedTask.isMyDay = !selectedTask.isMyDay;
-    ctx.dispatch({ type: ActionTypes.UPDATE_TASK, payload: selectedTask });
+    dispatch(updateTask(selectedTask));
   };
 
   return (

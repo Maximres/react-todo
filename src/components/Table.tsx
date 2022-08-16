@@ -1,13 +1,20 @@
 ﻿import React, { useState } from "react";
 import { Rows } from "./Rows";
-import { IRow } from "../contexts/AppContext";
-import { ActionTypes } from "../App";
-import useAppContext from "../hooks/useAppContext";
+import { IRow } from "../types/appTypes";
+import { useAppDispatch, useAppSelector } from "../data/hooks";
+import {
+  createTask,
+  toggleChecked,
+  toggleFavorite as toggleFavoriteTask,
+} from "../data/appSlice";
 
 const Table = () => {
   const [isFocused, setFocused] = useState(false);
   const [newTaskText, setNewTaskText] = useState("");
-  const ctx = useAppContext();
+
+  const isSidebarVisible = useAppSelector((s) => s.app.isSidebarVisible);
+  const tasks = useAppSelector((s) => s.app.tasks);
+  const dispatch = useAppDispatch();
 
   const toggleFocus = () => {
     setFocused(!isFocused);
@@ -17,22 +24,16 @@ const Table = () => {
     e.preventDefault();
     if (!newTaskText) return;
 
-    ctx.dispatch({ type: ActionTypes.CREATE_TASK, payload: newTaskText });
+    dispatch(createTask(newTaskText));
     setNewTaskText("");
   };
 
   const handleCheck = (task: IRow) => {
-    ctx.dispatch({
-      type: ActionTypes.TOGGLE_CHECKED,
-      payload: { task: task, isChecked: !task.isChecked },
-    });
+    dispatch(toggleChecked({ task: task, isChecked: !task.isChecked }));
   };
 
   const toggleFavorite = (task: IRow) => {
-    ctx.dispatch({
-      type: ActionTypes.TOGGLE_FAVORITE,
-      payload: { task: task, isFavorite: !task.isFavorite },
-    });
+    dispatch(toggleFavoriteTask({ task: task, isFavorite: !task.isFavorite }));
   };
 
   const renderRows = (tasks: IRow[]) => {
@@ -51,14 +52,10 @@ const Table = () => {
         <div className="row px-5">
           <div className="col-12">
             <table className="table table-striped table-hover col-12">
-              <tbody>
-                {renderRows(ctx.state.tasks.filter((x) => !x.isChecked))}
-              </tbody>
+              <tbody>{renderRows(tasks.filter((x) => !x.isChecked))}</tbody>
             </table>
             <table className="table table-striped table-hover table-secondary">
-              <tbody>
-                {renderRows(ctx.state.tasks.filter((x) => x.isChecked))}
-              </tbody>
+              <tbody>{renderRows(tasks.filter((x) => x.isChecked))}</tbody>
             </table>
           </div>
         </div>

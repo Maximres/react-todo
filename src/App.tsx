@@ -1,14 +1,8 @@
-import React, { useReducer } from "react";
+import React from "react";
 import "./App.css";
 import { Table } from "./components/Table";
 import { Details } from "./components/Details";
-import {
-  AppContext,
-  IAction,
-  IAppContextType,
-  IRow,
-  IState,
-} from "./contexts/AppContext";
+import { IAction, IRow, IState } from "./types/appTypes";
 
 export enum ActionTypes {
   UPDATE_TASK = "UPDATE_TASK",
@@ -129,38 +123,11 @@ function App() {
     },
   ];
 
-  const initialArgs: IState = {
-    isSidebarVisible: false,
-    isFocused: false,
-    tasks: rowsData,
-    selectedRowId: null,
-  };
-  const [state, dispatch] = useReducer(reducer, initialArgs);
-
-  const contextProps: IAppContextType = {
-    state,
-    dispatch,
-    get selectedRow() {
-      const cache: any[] = [];
-
-      return ((cache: any[]) => {
-        if (!this.state.selectedRowId) return null;
-
-        const localCacheCreated = (cache = cache || []);
-        const cacheElementExits = cache[this.state.selectedRowId];
-        const foundElement = (cache[this.state.selectedRowId] =
-          this.state.tasks.find((x) => x.id === this.state.selectedRowId));
-        return (localCacheCreated && cacheElementExits) || foundElement;
-      })(cache);
-    },
-  };
   return (
-    <AppContext.Provider value={contextProps}>
-      <>
-        <Table />
-        <Details />
-      </>
-    </AppContext.Provider>
+    <>
+      <Table />
+      <Details />
+    </>
   );
 }
 

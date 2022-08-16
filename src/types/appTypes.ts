@@ -8,10 +8,10 @@ export interface ITask {
 }
 
 export interface IRow extends ITask {
-  remindDate: Date | null;
-  dueDate: Date | null;
+  remindDate: number | null | undefined;
+  dueDate: number | null | undefined;
   isMyDay: boolean;
-  repeatPeriod: [number, typeof ReminderEnum] | null;
+  repeatPeriod: [number, ReminderEnum] | null;
   isFavorite: boolean;
   subTasks: ITask[];
 }
@@ -33,7 +33,3 @@ export interface IAppContextType {
   dispatch: Dispatch<IAction>;
   selectedRow: IRow;
 }
-
-export const AppContext = React.createContext<IAppContextType>(
-  {} as IAppContextType,
-);

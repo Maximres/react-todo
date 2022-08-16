@@ -4,7 +4,8 @@ import ReminderMenuItems from "./ReminderMenuItems";
 import { format } from "date-fns";
 import useReminder from "../hooks/useReminder";
 import ReminderEnum from "../utils/ReminderEnum";
-import useAppContext from "../hooks/useAppContext";
+import { useAppSelector } from "../data/hooks";
+import selectCurrentRow from "../data/selectors";
 
 type Props = {
   isOpen: boolean;
@@ -13,20 +14,19 @@ type Props = {
 
 const ReminderInput = forwardRef(
   ({ isOpen, setIsOpen }: Props, ref: React.Ref<HTMLDivElement>) => {
-    const ctx = useAppContext();
+    const selectedTask = useAppSelector(selectCurrentRow);
     const [setReminder, clearReminder] = useReminder();
-    const selectedTask = ctx.selectedRow;
     const hasReminder = selectedTask && selectedTask.remindDate;
     const pattern12AmPmFormat = "p";
     const weekMonthDayFormat = "iii, LLL d";
     const reminderText = hasReminder
       ? `Remind me at ${format(
-          selectedTask.remindDate as Date,
+          selectedTask.remindDate as number,
           pattern12AmPmFormat,
         )}`
       : "Remind me";
     const reminderDetailedText = hasReminder
-      ? format(selectedTask.remindDate as Date, weekMonthDayFormat)
+      ? format(selectedTask.remindDate as number, weekMonthDayFormat)
       : null;
 
     const handleClearReminder = (e: any) => {

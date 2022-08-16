@@ -4,7 +4,8 @@ import DueDateMenuItems from "./DueDateMenuItems";
 import { differenceInCalendarDays, format } from "date-fns";
 import ReminderEnum from "../utils/ReminderEnum";
 import useReminder from "../hooks/useReminder";
-import useAppContext from "../hooks/useAppContext";
+import { useAppSelector } from "../data/hooks";
+import selectCurrentRow from "../data/selectors";
 
 type Props = {
   isOpen: boolean;
@@ -13,15 +14,14 @@ type Props = {
 
 const DueDateInput = forwardRef(
   ({ isOpen, setIsOpen }: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
-    const ctx = useAppContext();
+    const selectedTask = useAppSelector(selectCurrentRow);
     const [setReminder, clearReminder] = useReminder();
-    const selectedTask = ctx.selectedRow;
     const weeks = "EEEE";
     const weekMonthDayFormat = "iii, LLL d";
     const hasDueDate = selectedTask && selectedTask.dueDate;
     let date;
     if (hasDueDate) {
-      const dueDateValue = selectedTask.dueDate as Date;
+      const dueDateValue = selectedTask.dueDate as number;
       const diffDays = differenceInCalendarDays(dueDateValue, new Date());
 
       const isToday = diffDays === 0;

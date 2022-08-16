@@ -1,8 +1,8 @@
 ﻿import React from "react";
 import { Favorite } from "../utils/IconsComponent";
-import { IRow } from "../contexts/AppContext";
-import { ActionTypes } from "../App";
-import useAppContext from "../hooks/useAppContext";
+import { IRow } from "../types/appTypes";
+import { useAppDispatch, useAppSelector } from "../data/hooks";
+import { toggleSidebar as toggleTaskSidebar } from "../data/appSlice";
 
 type Props = {
   tasks: IRow[];
@@ -15,7 +15,8 @@ const Rows = ({
   toggleFavorite,
   handleCheck,
 }: Props): JSX.Element | null => {
-  const ctx = useAppContext();
+  const isSidebarVisible = useAppSelector((s) => s.app.isSidebarVisible);
+  const dispatch = useAppDispatch();
 
   const handleToggleFavorite = (e: any, row: IRow) => {
     e.stopPropagation();
@@ -23,10 +24,9 @@ const Rows = ({
   };
 
   const toggleSideBar = (task: IRow) => {
-    ctx.dispatch({
-      type: ActionTypes.TOGGLE_SIDEBAR,
-      payload: { task: task, isSidebarVisible: !ctx.state.isSidebarVisible },
-    });
+    dispatch(
+      toggleTaskSidebar({ task: task, isSidebarVisible: !isSidebarVisible }),
+    );
   };
 
   const elements = tasks.map((row) => (

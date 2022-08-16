@@ -1,33 +1,35 @@
 ﻿import React, { useState } from "react";
 import { Favorite, Options } from "../utils/IconsComponent";
-import { IRow, ITask } from "../contexts/AppContext";
-import { ActionTypes } from "../App";
-import useAppContext from "../hooks/useAppContext";
+import { IRow, ITask } from "../types/appTypes";
+import { useAppDispatch, useAppSelector } from "../data/hooks";
+import selectCurrentRow from "../data/selectors";
+import {
+  toggleChecked,
+  toggleFavorite as toggleFavoriteTask,
+  updateTask,
+} from "../data/appSlice";
 
 const RowDetailsEditor = () => {
-  const ctx = useAppContext();
-  const selectedRow = ctx.selectedRow;
+  const dispatch = useAppDispatch();
+  const selectedRow = useAppSelector(selectCurrentRow) as IRow;
   const [newTaskFocused, setNewTaskFocus] = useState(false);
   const [newTaskValue, setNewTaskValue] = useState("");
 
   const handleCheck = (task: IRow) => {
-    ctx.dispatch({
-      type: ActionTypes.TOGGLE_CHECKED,
-      payload: { task: task, isChecked: !task.isChecked },
-    });
+    dispatch(toggleChecked({ task: task, isChecked: !task.isChecked }));
   };
 
   const handleSubCheck = (subTask: ITask) => {
-    const selectedTask = ctx.selectedRow;
-    const selectedSubTask = selectedTask.subTasks.find(
+    const selectedSubTask = selectedRow.subTasks.find(
       (x) => x.id === subTask.id,
     ) as ITask;
-    selectedSubTask.isChecked = !selectedSubTask.isChecked;
-    ctx.dispatch({ type: ActionTypes.UPDATE_TASK, payload: selectedTask });
+    dispatch(
+      updateTask({ ...selectedRow, isChecked: !selectedSubTask.isChecked }),
+    );
   };
 
   const handleNewTaskCheck = (e: any) => {
-    const task = ctx.selectedRow;
+    const task = { ...selectedRow };
     task.subTasks = [
       ...task.subTasks,
       {
@@ -36,14 +38,13 @@ const RowDetailsEditor = () => {
         text: newTaskValue,
       },
     ];
-    ctx.dispatch({ type: ActionTypes.UPDATE_TASK, payload: task });
+    dispatch(updateTask(task));
     setNewTaskFocus(false);
     setNewTaskValue("");
   };
 
   const handleTextChange = (e: any, task: ITask) => {
-    task.text = e.target.value;
-    ctx.dispatch({ type: ActionTypes.UPDATE_TASK, payload: task });
+    dispatch(updateTask({ ...(task as IRow), text: e.target.value }));
   };
 
   const handleSubTextChange = (e: any, subTask: ITask) => {
@@ -51,11 +52,8 @@ const RowDetailsEditor = () => {
   };
 
   const toggleFavorite = () => {
-    const row = ctx.selectedRow;
-    ctx.dispatch({
-      type: ActionTypes.TOGGLE_FAVORITE,
-      payload: { task: row, isFavorite: !row.isFavorite },
-    });
+    const row = selectedRow;
+    dispatch(toggleFavoriteTask({ task: row, isFavorite: !row.isFavorite }));
   };
 
   const handleSubCheckOnEnter = (e: any) => {
