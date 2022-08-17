@@ -1,7 +1,7 @@
 ﻿import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IRow, IState } from "../types/appTypes";
 
-const rowsMockData: any = [
+const rowsMockData: IRow[] = [
   {
     id: Math.random(),
     isChecked: true,
@@ -12,6 +12,7 @@ const rowsMockData: any = [
     isMyDay: false,
     repeatPeriod: null,
     subTasks: [],
+    createdDate: Number(new Date()),
   },
   {
     id: Math.random(),
@@ -23,6 +24,7 @@ const rowsMockData: any = [
     isMyDay: false,
     repeatPeriod: null,
     subTasks: [],
+    createdDate: Number(new Date()),
   },
   {
     id: Math.random(),
@@ -33,14 +35,16 @@ const rowsMockData: any = [
     dueDate: null,
     repeatPeriod: null,
     isMyDay: false,
+    createdDate: Number(new Date(1995, 11, 17)),
     subTasks: [
       {
         id: Math.random(),
         isChecked: false,
         text: "lorem15",
+        createdDate: Number(new Date(1995, 11, 19))
       },
     ],
-  },
+  } ,
 ];
 
 const initialState: IState = {
@@ -59,12 +63,31 @@ const appSlice = createSlice({
       state.tasks[index] = action.payload;
     },
     createTask: (state, action: PayloadAction<string>) => {
-      state.tasks.push({
+      const newTask: IRow = {
         id: Math.random(),
         isChecked: false,
         text: action.payload,
         isFavorite: false,
-      } as IRow);
+        createdDate: Number(new Date()),
+        subTasks: [],
+        remindDate: undefined,
+        isMyDay: false,
+        repeatPeriod: null,
+        dueDate: undefined,
+      };
+      state.tasks.push(newTask);
+    },
+    deleteTask: (state, action: PayloadAction<number>) => {
+      const index = state.tasks.findIndex((x) => x.id === action.payload);
+      if (index == null)
+        throw new Error("Task is not found");
+
+      state.tasks.splice(index, 1);
+
+      if(state.selectedRowId === action.payload){
+        state.isSidebarVisible = false;
+        state.selectedRowId = null;
+      }
     },
     toggleSidebar: (
       state,
@@ -130,4 +153,5 @@ export const {
   toggleSidebar,
   updateTask,
   createTask,
+  deleteTask,
 } = appSlice.actions;

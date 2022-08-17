@@ -6,6 +6,7 @@ import RowDetailsMyDay from "./RowDetailsMyDay";
 import { useAppDispatch, useAppSelector } from "../../data/hooks";
 import selectCurrentRow from "../../data/selectors";
 import { toggleSidebar } from "../../data/appSlice";
+import Footer from "./Footer";
 
 export const Details = (): JSX.Element | null => {
   const selectedRow = useAppSelector(selectCurrentRow);
@@ -13,12 +14,11 @@ export const Details = (): JSX.Element | null => {
   const isSidebarVisible = useAppSelector(
     (state) => state.app.isSidebarVisible,
   );
-
   const closeDetails = () => {
     dispatch(toggleSidebar({ isSidebarVisible: false }));
   };
 
-  return !isSidebarVisible ? null : (
+  return isSidebarVisible && selectedRow ? (
     <aside
       className="d-flex flex-column align-items-stretch flex-shrink-0 bg-white overflow-auto"
       style={{ width: "380px" }}
@@ -33,11 +33,11 @@ export const Details = (): JSX.Element | null => {
         />
       </div>
 
-      {selectedRow && <RowDetailsEditor />}
+      <RowDetailsEditor />
 
       <RowDetailsMyDay />
 
-      {selectedRow && <RowDetailsCalendar />}
+      <RowDetailsCalendar />
 
       <div className="m-3">
         <div className="list-group ">
@@ -66,6 +66,8 @@ export const Details = (): JSX.Element | null => {
           </label>
         </div>
       </div>
+
+      <Footer />
     </aside>
-  );
+  ) : null;
 };

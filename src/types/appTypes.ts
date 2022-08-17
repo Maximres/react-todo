@@ -1,10 +1,11 @@
-﻿import React, { Dispatch } from "react";
+﻿import { Dispatch } from "react";
 import ReminderEnum from "../utils/ReminderEnum";
 
 export interface ITask {
   id: number;
   isChecked: boolean;
   text: string | undefined;
+  createdDate: number;
 }
 
 export interface IRow extends ITask {

@@ -36,6 +36,7 @@ const RowDetailsEditor = () => {
         id: Math.random(),
         isChecked: false,
         text: newTaskValue,
+        createdDate: Number(new Date())
       },
     ];
     dispatch(updateTask(task));
