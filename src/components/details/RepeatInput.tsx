@@ -1,11 +1,11 @@
 ﻿import React, { forwardRef } from "react";
-import { CalendarRepeat } from "../utils/IconsComponent";
-import ReminderEnum from "../utils/ReminderEnum";
-import useReminder from "../hooks/useReminder";
+import { CalendarRepeat } from "../../utils/IconsComponent";
+import ReminderEnum from "../../utils/ReminderEnum";
+import useReminder from "../../hooks/useReminder";
 import RepeatMenuItems from "./RepeatMenuItems";
-import RepeatDisplayNameHelper from "../utils/RepeatDisplayNameHelper";
-import { useAppSelector } from "../data/hooks";
-import selectCurrentRow from "../data/selectors";
+import RepeatDisplayNameHelper from "../../utils/RepeatDisplayNameHelper";
+import { useAppSelector } from "../../data/hooks";
+import selectCurrentRow from "../../data/selectors";
 
 type Props = {
   isOpen: boolean;

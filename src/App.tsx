@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
-import { Table } from "./components/Table";
-import { Details } from "./components/Details";
+import { Table } from "./components/main/Table";
+import { Details } from "./components/details/Details";
 import { IAction, IRow, IState } from "./types/appTypes";
 
 export enum ActionTypes {

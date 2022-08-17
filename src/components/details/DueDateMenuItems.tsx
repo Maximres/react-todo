@@ -1,6 +1,6 @@
 ﻿import React from "react";
-import ReminderEnum from "../utils/ReminderEnum";
-import { NextWeek, PickDate, Today, Tomorrow } from "../utils/IconsComponent";
+import ReminderEnum from "../../utils/ReminderEnum";
+import { NextWeek, PickDate, Today, Tomorrow } from "../../utils/IconsComponent";
 
 type Props = {
   setReminder: (dateType: ReminderEnum, value?: any) => void;

@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import ReminderEnum from "../utils/ReminderEnum";
+import ReminderEnum from "../../utils/ReminderEnum";
 import {
   Month,
   PickDate,
@@ -7,7 +7,7 @@ import {
   Week,
   Weekdays,
   Year,
-} from "../utils/IconsComponent";
+} from "../../utils/IconsComponent";
 import CustomRepeatIntervalPicker from "./CustomRepeatIntervalPicker";
 
 type Props = {

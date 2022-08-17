@@ -1,18 +1,17 @@
 ﻿import React, { useState } from "react";
 import { Rows } from "./Rows";
-import { IRow } from "../types/appTypes";
-import { useAppDispatch, useAppSelector } from "../data/hooks";
+import { IRow } from "../../types/appTypes";
+import { useAppDispatch, useAppSelector } from "../../data/hooks";
 import {
   createTask,
   toggleChecked,
   toggleFavorite as toggleFavoriteTask,
-} from "../data/appSlice";
+} from "../../data/appSlice";
 
 const Table = () => {
   const [isFocused, setFocused] = useState(false);
   const [newTaskText, setNewTaskText] = useState("");
 
-  const isSidebarVisible = useAppSelector((s) => s.app.isSidebarVisible);
   const tasks = useAppSelector((s) => s.app.tasks);
   const dispatch = useAppDispatch();
 

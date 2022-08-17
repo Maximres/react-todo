@@ -1,8 +1,8 @@
 ﻿import React from "react";
-import { Favorite } from "../utils/IconsComponent";
-import { IRow } from "../types/appTypes";
-import { useAppDispatch, useAppSelector } from "../data/hooks";
-import { toggleSidebar as toggleTaskSidebar } from "../data/appSlice";
+import { Favorite } from "../../utils/IconsComponent";
+import { IRow } from "../../types/appTypes";
+import { useAppDispatch, useAppSelector } from "../../data/hooks";
+import { toggleSidebar as toggleTaskSidebar } from "../../data/appSlice";
 
 type Props = {
   tasks: IRow[];

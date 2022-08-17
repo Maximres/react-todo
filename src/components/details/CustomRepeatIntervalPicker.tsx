@@ -1,5 +1,5 @@
 ﻿import React, { useState } from "react";
-import ReminderEnum from "../utils/ReminderEnum";
+import ReminderEnum from "../../utils/ReminderEnum";
 
 type Props = {
   setIsOpen: (value: boolean) => void;

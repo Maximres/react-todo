@@ -1,9 +1,9 @@
 ﻿import React from "react";
-import { MyDay } from "../utils/IconsComponent";
-import { useAppDispatch, useAppSelector } from "../data/hooks";
-import selectCurrentRow from "../data/selectors";
-import { IRow } from "../types/appTypes";
-import { updateTask } from "../data/appSlice";
+import { MyDay } from "../../utils/IconsComponent";
+import { useAppDispatch, useAppSelector } from "../../data/hooks";
+import selectCurrentRow from "../../data/selectors";
+import { IRow } from "../../types/appTypes";
+import { updateTask } from "../../data/appSlice";
 
 const RowDetailsMyDay = () => {
   const selectedTask = useAppSelector(selectCurrentRow) as IRow;

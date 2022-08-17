@@ -1,13 +1,13 @@
 ﻿import React, { useState } from "react";
-import { Favorite, Options } from "../utils/IconsComponent";
-import { IRow, ITask } from "../types/appTypes";
-import { useAppDispatch, useAppSelector } from "../data/hooks";
-import selectCurrentRow from "../data/selectors";
+import { Favorite, Options } from "../../utils/IconsComponent";
+import { IRow, ITask } from "../../types/appTypes";
+import { useAppDispatch, useAppSelector } from "../../data/hooks";
+import selectCurrentRow from "../../data/selectors";
 import {
   toggleChecked,
   toggleFavorite as toggleFavoriteTask,
   updateTask,
-} from "../data/appSlice";
+} from "../../data/appSlice";
 
 const RowDetailsEditor = () => {
   const dispatch = useAppDispatch();

@@ -1,11 +1,11 @@
 ﻿import React from "react";
-import { File } from "../utils/IconsComponent";
+import { File } from "../../utils/IconsComponent";
 import RowDetailsEditor from "./RowDetailsEditor";
 import RowDetailsCalendar from "./RowDetailsReminder";
 import RowDetailsMyDay from "./RowDetailsMyDay";
-import { useAppDispatch, useAppSelector } from "../data/hooks";
-import selectCurrentRow from "../data/selectors";
-import { toggleSidebar } from "../data/appSlice";
+import { useAppDispatch, useAppSelector } from "../../data/hooks";
+import selectCurrentRow from "../../data/selectors";
+import { toggleSidebar } from "../../data/appSlice";
 
 export const Details = (): JSX.Element | null => {
   const selectedRow = useAppSelector(selectCurrentRow);
