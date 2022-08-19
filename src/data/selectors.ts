@@ -1,20 +1,21 @@
 ﻿import { RootState } from "./store";
 import { IRow } from "../types/appTypes";
 
+type cacheType = { [key: string]: IRow | undefined };
+
 const selectCurrentRow = (state: RootState) => {
   //todo: change to weakMap or use lib
-  const cache: any[] = [];
+  const cache: cacheType = {};
 
-  return ((cache: any[]): IRow | null => {
-    if (!state.app.selectedRowId) return null;
+  return ((cache: cacheType): IRow | undefined => {
+    if (!state.app.selectedRowId) return undefined;
 
-    const localCacheCreated = (cache = cache || []);
+    const localCacheCreated = (cache = cache || {});
     const cacheElementExits = cache[state.app.selectedRowId];
     const foundElement = (cache[state.app.selectedRowId] = state.app.tasks.find(
       (x) => x.id === state.app.selectedRowId,
     ));
-    const foundElementCopy = { ...foundElement };
-    return (localCacheCreated && cacheElementExits) || foundElementCopy;
+    return (localCacheCreated && cacheElementExits) || foundElement;
   })(cache);
 };
 

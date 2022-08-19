@@ -10,8 +10,7 @@ const RowDetailsMyDay = () => {
   const dispatch = useAppDispatch();
   const myDayTextColor = selectedTask.isMyDay ? "text-primary" + " " : "";
   const addToMyDay = () => {
-    selectedTask.isMyDay = !selectedTask.isMyDay;
-    dispatch(updateTask(selectedTask));
+    dispatch(updateTask({ ...selectedTask, isMyDay: !selectedTask.isMyDay }));
   };
 
   return (

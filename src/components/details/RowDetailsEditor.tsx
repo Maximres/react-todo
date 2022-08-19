@@ -4,8 +4,10 @@ import { IRow, ITask } from "../../types/appTypes";
 import { useAppDispatch, useAppSelector } from "../../data/hooks";
 import selectCurrentRow from "../../data/selectors";
 import {
+  createSubTask,
   toggleChecked,
   toggleFavorite as toggleFavoriteTask,
+  toggleSubTaskChecked,
   updateTask,
 } from "../../data/appSlice";
 
@@ -20,26 +22,17 @@ const RowDetailsEditor = () => {
   };
 
   const handleSubCheck = (subTask: ITask) => {
-    const selectedSubTask = selectedRow.subTasks.find(
-      (x) => x.id === subTask.id,
-    ) as ITask;
     dispatch(
-      updateTask({ ...selectedRow, isChecked: !selectedSubTask.isChecked }),
+      toggleSubTaskChecked({
+        parentTaskId: selectedRow.id,
+        subTaskId: subTask.id,
+        isChecked: !subTask.isChecked,
+      }),
     );
   };
 
   const handleNewTaskCheck = (e: any) => {
-    const task = { ...selectedRow };
-    task.subTasks = [
-      ...task.subTasks,
-      {
-        id: Math.random(),
-        isChecked: false,
-        text: newTaskValue,
-        createdDate: Number(new Date())
-      },
-    ];
-    dispatch(updateTask(task));
+    dispatch(createSubTask(selectedRow.id, newTaskValue));
     setNewTaskFocus(false);
     setNewTaskValue("");
   };

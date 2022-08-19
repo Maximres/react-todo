@@ -2,17 +2,17 @@
 import ReminderEnum from "../utils/ReminderEnum";
 
 export interface ITask {
-  id: number;
+  id: string;
   isChecked: boolean;
   text: string | undefined;
   createdDate: number;
 }
 
 export interface IRow extends ITask {
-  remindDate: number | null | undefined;
-  dueDate: number | null | undefined;
+  remindDate?: number | null;
+  dueDate?: number | null;
   isMyDay: boolean;
-  repeatPeriod: [number, ReminderEnum] | null;
+  repeatPeriod?: [number, ReminderEnum] | null;
   isFavorite: boolean;
   subTasks: ITask[];
 }
@@ -21,7 +21,7 @@ export interface IState {
   isSidebarVisible: boolean;
   isFocused: boolean;
   tasks: IRow[];
-  selectedRowId: number | null;
+  selectedRowId: string | null;
 }
 
 export interface IAction {
