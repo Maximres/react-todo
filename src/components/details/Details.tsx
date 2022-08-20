@@ -1,12 +1,12 @@
 ﻿import React from "react";
-import { File } from "../../utils/IconsComponent";
-import RowDetailsEditor from "./RowDetailsEditor";
-import RowDetailsCalendar from "./RowDetailsReminder";
-import RowDetailsMyDay from "./RowDetailsMyDay";
-import { useAppDispatch, useAppSelector } from "../../data/hooks";
-import selectCurrentRow from "../../data/selectors";
-import { toggleSidebar } from "../../data/appSlice";
-import Footer from "./Footer";
+import Icons from "../common/IconsComponent";
+import RowDetailsEditor from "./components/RowDetailsEditor";
+import RowDetailsCalendar from "./components/RowDetailsReminder";
+import RowDetailsMyDay from "./components/RowDetailsMyDay";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks/redux";
+import selectCurrentRow from "../../utils/selectors/selectCurrentRow";
+import { toggleSidebar } from "../../app/appSlice";
+import Footer from "./components/Footer";
 
 export const Details = (): JSX.Element | null => {
   const selectedRow = useAppSelector(selectCurrentRow);
@@ -43,7 +43,7 @@ export const Details = (): JSX.Element | null => {
         <div className="list-group ">
           <label className="list-group-item group-item-height d-flex justify-content-between align-items-center">
             <span className="me-3">
-              <File onClick={() => {}} />
+              <Icons.File onClick={() => {}} />
             </span>
             <span className="form-control me-1" onFocus={() => ({})}>
               Add file

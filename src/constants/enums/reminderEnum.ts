@@ -1,4 +1,4 @@
-﻿enum ReminderEnum {
+﻿enum reminderEnum {
   LATER_TODAY = "LATER_TODAY",
   TOMORROW = "TOMORROW",
   NEXT_WEEK = "NEXT_WEEK",
@@ -17,4 +17,4 @@
   REPEAT = "REPEAT",
 }
 
-export default ReminderEnum;
+export default reminderEnum;

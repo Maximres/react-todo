@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Table } from "./components/main/Table";
+import { Table } from "./components/table/Table";
 import { Details } from "./components/details/Details";
 
 function App() {

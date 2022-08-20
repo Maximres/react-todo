@@ -1,35 +1,35 @@
 ﻿import React from "react";
-import ReminderEnum from "../../utils/ReminderEnum";
-import { NextWeek, PickDate, Today, Tomorrow } from "../../utils/IconsComponent";
+import reminderEnum from "../../../constants/enums/reminderEnum";
+import Icons from "../../common/IconsComponent";
 
 type Props = {
-  setReminder: (dateType: ReminderEnum, value?: any) => void;
+  setReminder: (dateType: reminderEnum, value?: any) => void;
   openCalendar: () => void;
 };
 
-const DueDateMenuItems = ({ setReminder, openCalendar }: Props) => {
+const ReminderMenuItems = ({ setReminder, openCalendar }: Props) => {
   return (
     <ul className="dropdown-menu" style={{ width: "300px" }}>
       <li
         className="dropdown-item pointer"
-        onClick={(e) => setReminder(ReminderEnum.DUE_TODAY)}
+        onClick={(e) => setReminder(reminderEnum.LATER_TODAY)}
       >
         <div className="d-flex align-items-center">
           <span className="me-2">
-            <Today />
+            <Icons.ClockRotate />
           </span>
           <button type="button" className="border-0 bg-transparent">
-            Today
+            Later today
           </button>
         </div>
       </li>
       <li
         className="dropdown-item pointer"
-        onClick={() => setReminder(ReminderEnum.DUE_TOMORROW)}
+        onClick={() => setReminder(reminderEnum.TOMORROW)}
       >
         <div className="d-flex align-items-center">
           <span className="me-2">
-            <Tomorrow />
+            <Icons.Tomorrow />
           </span>
           <button type="button" className="border-0 bg-transparent">
             Tomorrow
@@ -38,11 +38,11 @@ const DueDateMenuItems = ({ setReminder, openCalendar }: Props) => {
       </li>
       <li
         className="dropdown-item pointer"
-        onClick={() => setReminder(ReminderEnum.DUE_NEXT_WEEK)}
+        onClick={() => setReminder(reminderEnum.NEXT_WEEK)}
       >
         <div className="d-flex align-items-center">
           <span className="me-2">
-            <NextWeek />
+            <Icons.NextWeek />
           </span>
           <button type="button" className="border-0 bg-transparent">
             Next week
@@ -55,10 +55,10 @@ const DueDateMenuItems = ({ setReminder, openCalendar }: Props) => {
       <li className="dropdown-item pointer" onClick={() => openCalendar()}>
         <div className="d-flex align-items-center">
           <span className="me-2">
-            <PickDate />
+            <Icons.Clock />
           </span>
           <button type="button" className="border-0 bg-transparent">
-            Pick a date
+            Pick a date & time
           </button>
         </div>
       </li>
@@ -66,4 +66,4 @@ const DueDateMenuItems = ({ setReminder, openCalendar }: Props) => {
   );
 };
 
-export default DueDateMenuItems;
+export default ReminderMenuItems;

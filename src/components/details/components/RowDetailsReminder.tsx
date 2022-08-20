@@ -1,5 +1,5 @@
 ﻿import React, { useCallback, useMemo } from "react";
-import ReminderEnum from "../../utils/ReminderEnum";
+import reminderEnum from "../../../constants/enums/reminderEnum";
 import ReminderInput from "./ReminderInput";
 import ReminderDatePickerDropdown from "./ReminderGroupItem";
 import DueDateInput from "./DueDateInput";
@@ -33,8 +33,8 @@ const RowDetailsReminder = () => {
               }),
               [],
             )}
-            customInput={ReminderInputComponent}
-            dateTimeType={ReminderEnum.REMINDER}
+            CustomInput={ReminderInput}
+            dateTimeType={reminderEnum.REMINDER}
           />
         </div>
         <div className="list-group-item group-item-height d-flex align-items-center py-0">
@@ -46,14 +46,14 @@ const RowDetailsReminder = () => {
               }),
               [],
             )}
-            customInput={DueDateInputComponent}
-            dateTimeType={ReminderEnum.DUE_DATE}
+            CustomInput={DueDateInput}
+            dateTimeType={reminderEnum.DUE_DATE}
           />
         </div>
         <div className="list-group-item group-item-height d-flex align-items-center py-0">
           <ReminderIntervalPickerDropdown
-            customInput={RepeatInputComponent}
-            dateTimeType={ReminderEnum.REPEAT}
+            CustomInput={RepeatInput}
+            dateTimeType={reminderEnum.REPEAT}
           />
         </div>
       </div>

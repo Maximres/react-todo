@@ -1,11 +1,11 @@
 ﻿import React, { forwardRef } from "react";
-import { CalendarRepeat } from "../../utils/IconsComponent";
-import ReminderEnum from "../../utils/ReminderEnum";
-import useReminder from "../../hooks/useReminder";
+import Icons from "../../common/IconsComponent";
+import reminderEnum from "../../../constants/enums/reminderEnum";
+import useReminder from "../../../utils/hooks/useReminder";
 import RepeatMenuItems from "./RepeatMenuItems";
-import RepeatDisplayNameHelper from "../../utils/RepeatDisplayNameHelper";
-import { useAppSelector } from "../../data/hooks";
-import selectCurrentRow from "../../data/selectors";
+import getRepeatName from "../../../utils/helpers/getRepeatName";
+import { useAppSelector } from "../../../utils/hooks/redux";
+import selectCurrentRow from "../../../utils/selectors/selectCurrentRow";
 
 type Props = {
   isOpen: boolean;
@@ -25,14 +25,14 @@ const RepeatInput = forwardRef(
     let repeatText: string | null = "Repeat";
     if (hasRepeatDate) {
       const [, repeatsInterval] = selectedTask.repeatPeriod as any;
-      const displayName = RepeatDisplayNameHelper(repeatsInterval);
+      const displayName = getRepeatName(repeatsInterval);
       repeatText = displayName;
     }
 
     const handleClearReminder = (e: any) => {
       e.preventDefault();
       e.stopPropagation();
-      clearReminder(ReminderEnum.REPEAT);
+      clearReminder(reminderEnum.REPEAT);
     };
 
     return (
@@ -48,7 +48,7 @@ const RepeatInput = forwardRef(
           aria-expanded="false"
         >
           <span className="me-3">
-            <CalendarRepeat className={hasRepeatDate ? "text-primary" : ""} />
+            <Icons.CalendarRepeat className={hasRepeatDate ? "text-primary" : ""} />
           </span>
           <div className="form-control me-1 d-flex flex-column ">
             <span className={hasRepeatDate ? "text-primary" : ""}>

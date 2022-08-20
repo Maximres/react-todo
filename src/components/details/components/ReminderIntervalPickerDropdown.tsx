@@ -3,12 +3,11 @@ import { Dropdown } from "bootstrap/dist/js/bootstrap.esm";
 
 type Props = {
   dateTimeType: string;
-  customInput: (props: any) => React.ReactNode;
+  CustomInput: React.ForwardRefExoticComponent<any>;
 };
 
-const ReminderDatePickerDropdown = ({ customInput }: Props) => {
+const ReminderDatePickerDropdown = ({ CustomInput }: Props) => {
   const id = useId();
-  const [customDate, setCustomDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLElement>();
 
@@ -21,13 +20,11 @@ const ReminderDatePickerDropdown = ({ customInput }: Props) => {
     const handleHiddenDropdown = () => {
       setIsOpen(false);
     };
-    dropdownRef.current?.addEventListener(
-      "hidden.bs.dropdown",
-      handleHiddenDropdown,
-    );
+    const dropdownNode = dropdownRef.current;
+    dropdownNode?.addEventListener("hidden.bs.dropdown", handleHiddenDropdown);
 
     return () => {
-      dropdownRef.current?.removeEventListener(
+      dropdownNode?.removeEventListener(
         "hidden.bs.dropdown",
         handleHiddenDropdown,
       );
@@ -36,14 +33,15 @@ const ReminderDatePickerDropdown = ({ customInput }: Props) => {
 
   return (
     <div className="flex-grow-1">
-      {customInput({
-        ref: dropdownRef,
-        isOpen: isOpen,
-        setIsOpen: setIsOpen,
-        date: customDate,
-        id: id,
-        closeDropdown,
-      })}
+      {
+        <CustomInput
+          ref={dropdownRef}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          id={id}
+          closeDropdown={closeDropdown}
+        />
+      }
     </div>
   );
 };

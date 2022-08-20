@@ -1,17 +1,10 @@
 ﻿import React from "react";
-import ReminderEnum from "../../utils/ReminderEnum";
-import {
-  Month,
-  PickDate,
-  Today,
-  Week,
-  Weekdays,
-  Year,
-} from "../../utils/IconsComponent";
+import reminderEnum from "../../../constants/enums/reminderEnum";
+import Icons from "../../common/IconsComponent";
 import CustomRepeatIntervalPicker from "./CustomRepeatIntervalPicker";
 
 type Props = {
-  setReminder: (dateType: ReminderEnum, value?: any) => void;
+  setReminder: (dateType: reminderEnum, value?: any) => void;
   closeDropdown: () => void;
   isOpen: boolean;
   setIsOpen: (arg: boolean) => void;
@@ -23,7 +16,7 @@ const RepeatMenuItems = ({
   isOpen,
   closeDropdown,
 }: Props) => {
-  const closeDropDownAndSetReminder = (reminderType: ReminderEnum) => {
+  const closeDropDownAndSetReminder = (reminderType: reminderEnum) => {
     closeDropdown();
     setReminder(reminderType);
   };
@@ -35,12 +28,12 @@ const RepeatMenuItems = ({
           <li
             className="dropdown-item pointer"
             onClick={() =>
-              closeDropDownAndSetReminder(ReminderEnum.REPEAT_DAILY)
+              closeDropDownAndSetReminder(reminderEnum.REPEAT_DAILY)
             }
           >
             <div className="d-flex align-items-center">
               <span className="me-2">
-                <Today />
+                <Icons.Today />
               </span>
               <button type="button" className="border-0 bg-transparent">
                 Daily
@@ -50,12 +43,12 @@ const RepeatMenuItems = ({
           <li
             className="dropdown-item pointer"
             onClick={() =>
-              closeDropDownAndSetReminder(ReminderEnum.REPEAT_WEEKDAYS)
+              closeDropDownAndSetReminder(reminderEnum.REPEAT_WEEKDAYS)
             }
           >
             <div className="d-flex align-items-center">
               <span className="me-2">
-                <Weekdays />
+                <Icons.Weekdays />
               </span>
               <button type="button" className="border-0 bg-transparent">
                 Weekday
@@ -65,12 +58,12 @@ const RepeatMenuItems = ({
           <li
             className="dropdown-item pointer"
             onClick={() =>
-              closeDropDownAndSetReminder(ReminderEnum.REPEAT_WEEKLY)
+              closeDropDownAndSetReminder(reminderEnum.REPEAT_WEEKLY)
             }
           >
             <div className="d-flex align-items-center">
               <span className="me-2">
-                <Week />
+                <Icons.Week />
               </span>
               <button type="button" className="border-0 bg-transparent">
                 Weekly
@@ -80,12 +73,12 @@ const RepeatMenuItems = ({
           <li
             className="dropdown-item pointer"
             onClick={() =>
-              closeDropDownAndSetReminder(ReminderEnum.REPEAT_MONTHLY)
+              closeDropDownAndSetReminder(reminderEnum.REPEAT_MONTHLY)
             }
           >
             <div className="d-flex align-items-center">
               <span className="me-2">
-                <Month />
+                <Icons.Month />
               </span>
               <button type="button" className="border-0 bg-transparent">
                 Monthly
@@ -95,12 +88,12 @@ const RepeatMenuItems = ({
           <li
             className="dropdown-item pointer"
             onClick={() =>
-              closeDropDownAndSetReminder(ReminderEnum.REPEAT_YEARLY)
+              closeDropDownAndSetReminder(reminderEnum.REPEAT_YEARLY)
             }
           >
             <div className="d-flex align-items-center">
               <span className="me-2">
-                <Year />
+                <Icons.Year />
               </span>
               <button type="button" className="border-0 bg-transparent">
                 Yearly
@@ -110,7 +103,7 @@ const RepeatMenuItems = ({
           <li className="dropdown-item pointer" onClick={() => setIsOpen(true)}>
             <div className="d-flex align-items-center">
               <span className="me-2">
-                <PickDate />
+                <Icons.PickDate />
               </span>
               <button type="button" className="border-0 bg-transparent">
                 Custom

@@ -1,9 +1,9 @@
 ﻿import { useCallback } from "react";
-import ReminderEnum from "../utils/ReminderEnum";
+import reminderEnum from "../../constants/enums/reminderEnum";
 import { add, set } from "date-fns";
-import { useAppDispatch, useAppSelector } from "../data/hooks";
-import { updateTask } from "../data/appSlice";
-import selectCurrentRow from "../data/selectors";
+import { useAppDispatch, useAppSelector } from "./redux";
+import { updateTask } from "../../app/appSlice";
+import selectCurrentRow from "../selectors/selectCurrentRow";
 
 const useReminder = () => {
   const dispatch = useAppDispatch();
@@ -15,10 +15,10 @@ const useReminder = () => {
     );
   const selectedTaskCopy = { ...selectedTask };
   const setReminder = useCallback(
-    (dateType: ReminderEnum, value?: unknown) => {
+    (dateType: reminderEnum, value?: unknown) => {
       const todayTicks = Number(new Date());
       switch (dateType) {
-        case ReminderEnum.LATER_TODAY: {
+        case reminderEnum.LATER_TODAY: {
           const fourHoursByNow = set(add(todayTicks, { hours: 4 }), {
             minutes: 0,
             seconds: 0,
@@ -27,7 +27,7 @@ const useReminder = () => {
           selectedTaskCopy.remindDate = Number(fourHoursByNow);
           break;
         }
-        case ReminderEnum.TOMORROW: {
+        case reminderEnum.TOMORROW: {
           const tomorrow = set(add(todayTicks, { days: 1 }), {
             hours: 9,
             minutes: 0,
@@ -38,7 +38,7 @@ const useReminder = () => {
 
           break;
         }
-        case ReminderEnum.NEXT_WEEK: {
+        case reminderEnum.NEXT_WEEK: {
           const nextWeek = set(add(todayTicks, { days: 7 }), {
             hours: 9,
             minutes: 0,
@@ -48,39 +48,39 @@ const useReminder = () => {
           selectedTaskCopy.remindDate = Number(nextWeek);
           break;
         }
-        case ReminderEnum.REMINDER:
+        case reminderEnum.REMINDER:
           selectedTaskCopy.remindDate = value == null ? value : Number(value);
           break;
-        case ReminderEnum.DUE_TODAY:
+        case reminderEnum.DUE_TODAY:
           selectedTaskCopy.dueDate = todayTicks;
           break;
-        case ReminderEnum.DUE_TOMORROW:
+        case reminderEnum.DUE_TOMORROW:
           selectedTaskCopy.dueDate = Number(add(todayTicks, { days: 1 }));
           break;
-        case ReminderEnum.DUE_NEXT_WEEK:
+        case reminderEnum.DUE_NEXT_WEEK:
           selectedTaskCopy.dueDate = Number(add(todayTicks, { days: 7 }));
           break;
-        case ReminderEnum.DUE_DATE:
+        case reminderEnum.DUE_DATE:
           selectedTaskCopy.dueDate = value == null ? value : Number(value);
           break;
-        case ReminderEnum.REPEAT_DAILY:
-          selectedTaskCopy.repeatPeriod = [365, ReminderEnum.REPEAT_DAILY];
+        case reminderEnum.REPEAT_DAILY:
+          selectedTaskCopy.repeatPeriod = [365, reminderEnum.REPEAT_DAILY];
           break;
-        case ReminderEnum.REPEAT_WEEKDAYS:
-          selectedTaskCopy.repeatPeriod = [365, ReminderEnum.REPEAT_WEEKDAYS];
+        case reminderEnum.REPEAT_WEEKDAYS:
+          selectedTaskCopy.repeatPeriod = [365, reminderEnum.REPEAT_WEEKDAYS];
           break;
-        case ReminderEnum.REPEAT_WEEKLY:
-          selectedTaskCopy.repeatPeriod = [365, ReminderEnum.REPEAT_WEEKLY];
+        case reminderEnum.REPEAT_WEEKLY:
+          selectedTaskCopy.repeatPeriod = [365, reminderEnum.REPEAT_WEEKLY];
 
           break;
-        case ReminderEnum.REPEAT_MONTHLY:
-          selectedTaskCopy.repeatPeriod = [365, ReminderEnum.REPEAT_MONTHLY];
+        case reminderEnum.REPEAT_MONTHLY:
+          selectedTaskCopy.repeatPeriod = [365, reminderEnum.REPEAT_MONTHLY];
           break;
-        case ReminderEnum.REPEAT_YEARLY:
-          selectedTaskCopy.repeatPeriod = [365, ReminderEnum.REPEAT_YEARLY];
+        case reminderEnum.REPEAT_YEARLY:
+          selectedTaskCopy.repeatPeriod = [365, reminderEnum.REPEAT_YEARLY];
           break;
-        case ReminderEnum.REPEAT:
-          selectedTaskCopy.repeatPeriod = [365, value as ReminderEnum];
+        case reminderEnum.REPEAT:
+          selectedTaskCopy.repeatPeriod = [365, value as reminderEnum];
 
           break;
         default:
@@ -92,28 +92,28 @@ const useReminder = () => {
   );
 
   const clearReminder = useCallback(
-    (dateType: ReminderEnum) => {
+    (dateType: reminderEnum) => {
       switch (dateType) {
-        case ReminderEnum.LATER_TODAY:
-        case ReminderEnum.TOMORROW:
-        case ReminderEnum.NEXT_WEEK:
-        case ReminderEnum.REMINDER:
+        case reminderEnum.LATER_TODAY:
+        case reminderEnum.TOMORROW:
+        case reminderEnum.NEXT_WEEK:
+        case reminderEnum.REMINDER:
           selectedTaskCopy.remindDate = null;
           break;
 
-        case ReminderEnum.DUE_TODAY:
-        case ReminderEnum.DUE_TOMORROW:
-        case ReminderEnum.DUE_NEXT_WEEK:
-        case ReminderEnum.DUE_DATE:
+        case reminderEnum.DUE_TODAY:
+        case reminderEnum.DUE_TOMORROW:
+        case reminderEnum.DUE_NEXT_WEEK:
+        case reminderEnum.DUE_DATE:
           selectedTaskCopy.dueDate = null;
           break;
 
-        case ReminderEnum.REPEAT:
-        case ReminderEnum.REPEAT_DAILY:
-        case ReminderEnum.REPEAT_WEEKDAYS:
-        case ReminderEnum.REPEAT_WEEKLY:
-        case ReminderEnum.REPEAT_MONTHLY:
-        case ReminderEnum.REPEAT_YEARLY:
+        case reminderEnum.REPEAT:
+        case reminderEnum.REPEAT_DAILY:
+        case reminderEnum.REPEAT_WEEKDAYS:
+        case reminderEnum.REPEAT_WEEKLY:
+        case reminderEnum.REPEAT_MONTHLY:
+        case reminderEnum.REPEAT_YEARLY:
           selectedTaskCopy.repeatPeriod = null;
           break;
         default:

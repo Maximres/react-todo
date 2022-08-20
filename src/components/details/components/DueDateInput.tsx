@@ -1,11 +1,11 @@
 ﻿import React, { forwardRef } from "react";
-import { Calendar } from "../../utils/IconsComponent";
+import Icons from "../../common/IconsComponent";
 import DueDateMenuItems from "./DueDateMenuItems";
 import { differenceInCalendarDays, format } from "date-fns";
-import ReminderEnum from "../../utils/ReminderEnum";
-import useReminder from "../../hooks/useReminder";
-import { useAppSelector } from "../../data/hooks";
-import selectCurrentRow from "../../data/selectors";
+import reminderEnum from "../../../constants/enums/reminderEnum";
+import useReminder from "../../../utils/hooks/useReminder";
+import { useAppSelector } from "../../../utils/hooks/redux";
+import selectCurrentRow from "../../../utils/selectors/selectCurrentRow";
 
 type Props = {
   isOpen: boolean;
@@ -40,7 +40,7 @@ const DueDateInput = forwardRef(
     const handleClearReminder = (e: any) => {
       e.preventDefault();
       e.stopPropagation();
-      clearReminder(ReminderEnum.DUE_DATE);
+      clearReminder(reminderEnum.DUE_DATE);
     };
 
     return (
@@ -55,7 +55,7 @@ const DueDateInput = forwardRef(
           aria-expanded="false"
         >
           <span className="me-3">
-            <Calendar className={hasDueDate ? "text-primary" : ""} />
+            <Icons.Calendar className={hasDueDate ? "text-primary" : ""} />
           </span>
           <div className="form-control me-1 d-flex flex-column ">
             <span className={hasDueDate ? "text-primary" : ""}>

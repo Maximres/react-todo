@@ -1,5 +1,5 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { IRow, IState, ITask } from "../types/appTypes";
+import { IRow, IState, ITask } from "../constants/types/appTypes";
 
 const rowsMockData: IRow[] = [
   {

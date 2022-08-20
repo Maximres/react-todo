@@ -1,14 +1,14 @@
 ﻿import React from "react";
-import ReminderEnum from "../../utils/ReminderEnum";
+import reminderEnum from "../../../constants/enums/reminderEnum";
 import { CalendarContainer } from "react-datepicker";
-import useReminder from "../../hooks/useReminder";
+import useReminder from "../../../utils/hooks/useReminder";
 
 type Props = {
   className: string;
   children: React.ReactNode;
   closeCalendar: (arg: boolean) => void;
   date: Date;
-  dateTimeType: ReminderEnum;
+  dateTimeType: reminderEnum;
 };
 
 const DatePickerContainer = ({

@@ -1,8 +1,8 @@
 ﻿import React from "react";
-import { Favorite } from "../../utils/IconsComponent";
-import { IRow } from "../../types/appTypes";
-import { useAppDispatch, useAppSelector } from "../../data/hooks";
-import { toggleSidebar as toggleTaskSidebar } from "../../data/appSlice";
+import Icons from "../../common/IconsComponent";
+import { IRow } from "../../../constants/types/appTypes";
+import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux";
+import { toggleSidebar as toggleTaskSidebar } from "../../../app/appSlice";
 
 type Props = {
   tasks: IRow[];
@@ -46,7 +46,7 @@ const Rows = ({
       </td>
       <td className="px-1 col">{row.text}</td>
       <td className="px-1 col-1">
-        <Favorite
+        <Icons.Favorite
           isFavorite={row.isFavorite}
           onClick={(e: any) => handleToggleFavorite(e, row)}
         />

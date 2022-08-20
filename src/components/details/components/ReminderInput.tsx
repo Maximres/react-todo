@@ -1,11 +1,11 @@
 ﻿import React, { forwardRef } from "react";
-import { Reminder } from "../../utils/IconsComponent";
+import Icons from "../../common/IconsComponent";
 import ReminderMenuItems from "./ReminderMenuItems";
 import { format } from "date-fns";
-import useReminder from "../../hooks/useReminder";
-import ReminderEnum from "../../utils/ReminderEnum";
-import { useAppSelector } from "../../data/hooks";
-import selectCurrentRow from "../../data/selectors";
+import useReminder from "../../../utils/hooks/useReminder";
+import reminderEnum from "../../../constants/enums/reminderEnum";
+import { useAppSelector } from "../../../utils/hooks/redux";
+import selectCurrentRow from "../../../utils/selectors/selectCurrentRow";
 
 type Props = {
   isOpen: boolean;
@@ -32,7 +32,7 @@ const ReminderInput = forwardRef(
     const handleClearReminder = (e: any) => {
       e.preventDefault();
       e.stopPropagation();
-      clearReminder(ReminderEnum.REMINDER);
+      clearReminder(reminderEnum.REMINDER);
     };
 
     return (
@@ -47,7 +47,7 @@ const ReminderInput = forwardRef(
           aria-expanded="false"
         >
           <span className="me-3">
-            <Reminder className={hasReminder ? "text-primary" : ""} />
+            <Icons.Reminder className={hasReminder ? "text-primary" : ""} />
           </span>
           <div className="form-control me-1 d-flex flex-column ">
             <span className={hasReminder ? "text-primary" : ""}>

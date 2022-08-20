@@ -1,9 +1,9 @@
 ﻿import React, { useState } from "react";
-import ReminderEnum from "../../utils/ReminderEnum";
+import reminderEnum from "../../../constants/enums/reminderEnum";
 
 type Props = {
   setIsOpen: (value: boolean) => void;
-  setReminder: (dateType: ReminderEnum, value: any) => void;
+  setReminder: (dateType: reminderEnum, value: any) => void;
   closeDropdown: () => void;
 };
 
@@ -13,7 +13,7 @@ const CustomRepeatIntervalPicker = ({
   closeDropdown,
 }: Props) => {
   const [repeats, setRepeats] = useState(1);
-  const [interval, setInterval] = useState(ReminderEnum.REPEAT_DAILY);
+  const [interval, setInterval] = useState(reminderEnum.REPEAT_DAILY);
 
   const onRepeatsChange = (e: any) => {
     setRepeats(e.target.value);
@@ -24,7 +24,7 @@ const CustomRepeatIntervalPicker = ({
   };
 
   const onSave = () => {
-    setReminder(ReminderEnum.REPEAT, [repeats, interval]);
+    setReminder(reminderEnum.REPEAT, [repeats, interval]);
     closeDropdown();
   };
 
@@ -45,10 +45,10 @@ const CustomRepeatIntervalPicker = ({
           </div>
           <div className="col-9 ps-0">
             <select className="form-select" onChange={onDateTimePeriodChange}>
-              <option value={ReminderEnum.REPEAT_DAILY}>days</option>
-              <option value={ReminderEnum.REPEAT_WEEKLY}>weeks</option>
-              <option value={ReminderEnum.REPEAT_MONTHLY}>months</option>
-              <option value={ReminderEnum.REPEAT_YEARLY}>years</option>
+              <option value={reminderEnum.REPEAT_DAILY}>days</option>
+              <option value={reminderEnum.REPEAT_WEEKLY}>weeks</option>
+              <option value={reminderEnum.REPEAT_MONTHLY}>months</option>
+              <option value={reminderEnum.REPEAT_YEARLY}>years</option>
             </select>
           </div>
         </div>

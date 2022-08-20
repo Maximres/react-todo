@@ -1,12 +1,12 @@
 ﻿import React, { useState } from "react";
-import { Rows } from "./Rows";
-import { IRow } from "../../types/appTypes";
-import { useAppDispatch, useAppSelector } from "../../data/hooks";
+import { Rows } from "./components/Rows";
+import { IRow } from "../../constants/types/appTypes";
+import { useAppDispatch, useAppSelector } from "../../utils/hooks/redux";
 import {
   createTask,
   toggleChecked,
   toggleFavorite as toggleFavoriteTask,
-} from "../../data/appSlice";
+} from "../../app/appSlice";
 
 const Table = () => {
   const [isFocused, setFocused] = useState(false);

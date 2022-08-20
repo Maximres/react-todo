@@ -1,9 +1,9 @@
 ﻿import React from "react";
-import { MyDay } from "../../utils/IconsComponent";
-import { useAppDispatch, useAppSelector } from "../../data/hooks";
-import selectCurrentRow from "../../data/selectors";
-import { IRow } from "../../types/appTypes";
-import { updateTask } from "../../data/appSlice";
+import Icons from "../../common/IconsComponent";
+import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux";
+import selectCurrentRow from "../../../utils/selectors/selectCurrentRow";
+import { IRow } from "../../../constants/types/appTypes";
+import { updateTask } from "../../../app/appSlice";
 
 const RowDetailsMyDay = () => {
   const selectedTask = useAppSelector(selectCurrentRow) as IRow;
@@ -24,7 +24,7 @@ const RowDetailsMyDay = () => {
           onClick={addToMyDay}
         >
           <span className="me-3">
-            <MyDay />
+            <Icons.MyDay />
           </span>
           <span
             className={myDayTextColor + "form-control me-1"}

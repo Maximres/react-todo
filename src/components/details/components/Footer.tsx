@@ -1,10 +1,10 @@
 ﻿import React from "react";
-import { Trash } from "../../utils/IconsComponent";
-import { useAppDispatch, useAppSelector } from "../../data/hooks";
-import { IRow } from "../../types/appTypes";
-import { deleteTask } from "../../data/appSlice";
+import Icons from "../../common/IconsComponent";
+import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux";
+import { IRow } from "../../../constants/types/appTypes";
+import { deleteTask } from "../../../app/appSlice";
 import {format, differenceInYears} from "date-fns";
-import selectCurrentRow from "../../data/selectors";
+import selectCurrentRow from "../../../utils/selectors/selectCurrentRow";
 
 const Footer = () => {
   const selectedRow = useAppSelector(selectCurrentRow) as IRow;
@@ -21,7 +21,7 @@ const Footer = () => {
       <div className="text-center flex-grow-1">
         <span>Created on {format(selectedRow.createdDate, yearsDiff > 0 ? weekMonthDayFormatAndYear : weekMonthDayFormat) }</span>
       </div>
-      <Trash className="p-4 fs-5" onClick={clickHandler} />
+      <Icons.Trash className="p-4 fs-5" onClick={clickHandler} />
     </div>
   );
 };

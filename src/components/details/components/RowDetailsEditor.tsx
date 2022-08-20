@@ -1,15 +1,15 @@
 ﻿import React, { useState } from "react";
-import { Favorite, Options } from "../../utils/IconsComponent";
-import { IRow, ITask } from "../../types/appTypes";
-import { useAppDispatch, useAppSelector } from "../../data/hooks";
-import selectCurrentRow from "../../data/selectors";
+import Icons from "../../common/IconsComponent";
+import { IRow, ITask } from "../../../constants/types/appTypes";
+import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux";
+import selectCurrentRow from "../../../utils/selectors/selectCurrentRow";
 import {
   createSubTask,
   toggleChecked,
   toggleFavorite as toggleFavoriteTask,
   toggleSubTaskChecked,
   updateTask,
-} from "../../data/appSlice";
+} from "../../../app/appSlice";
 
 const RowDetailsEditor = () => {
   const dispatch = useAppDispatch();
@@ -82,7 +82,7 @@ const RowDetailsEditor = () => {
             onChange={(e) => handleTextChange(e, selectedRow)}
           />
 
-          <Favorite
+          <Icons.Favorite
             onClick={() => toggleFavorite()}
             isFavorite={selectedRow.isFavorite}
           />
@@ -113,7 +113,7 @@ const RowDetailsEditor = () => {
                   onChange={(e) => handleSubTextChange(e, subTask)}
                 />
                 <div className="mx-2">
-                  <Options />
+                  <Icons.Options />
                 </div>
               </li>
             );

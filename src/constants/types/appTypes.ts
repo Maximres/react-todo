@@ -1,5 +1,5 @@
 ﻿import { Dispatch } from "react";
-import ReminderEnum from "../utils/ReminderEnum";
+import reminderEnum from "../enums/reminderEnum";
 
 export interface ITask {
   id: string;
@@ -12,7 +12,7 @@ export interface IRow extends ITask {
   remindDate?: number | null;
   dueDate?: number | null;
   isMyDay: boolean;
-  repeatPeriod?: [number, ReminderEnum] | null;
+  repeatPeriod?: [number, reminderEnum] | null;
   isFavorite: boolean;
   subTasks: ITask[];
 }

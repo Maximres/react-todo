@@ -1,5 +1,5 @@
-﻿import { RootState } from "./store";
-import { IRow } from "../types/appTypes";
+﻿import { RootState } from "../../app/store";
+import { IRow } from "../../constants/types/appTypes";
 
 type cacheType = { [key: string]: IRow | undefined };
 

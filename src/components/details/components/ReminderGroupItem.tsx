@@ -5,12 +5,12 @@ import DatePickerContainer from "./DatePickerContainer";
 type Props = {
   dateTimeType: string;
   datePickerProps: {};
-  customInput: (props: any) => React.ReactNode;
+  CustomInput: React.ForwardRefExoticComponent<any>;
 };
 
 const ReminderDatePickerDropdown = ({
   datePickerProps,
-  customInput,
+  CustomInput,
   dateTimeType,
 }: Props) => {
   const id = useId();
@@ -47,13 +47,15 @@ const ReminderDatePickerDropdown = ({
       ref={datePickerRef as any}
       customInputRef="inputRef"
       // inputRef={ dropdownRef as any }
-      customInput={customInput({
-        isOpen: isOpen,
-        setIsOpen: setIsOpen,
-        date: customDate,
-        id: id,
-        ref: dropdownRef,
-      })}
+      customInput={
+        <CustomInput
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          date={customDate}
+          id={id}
+          ref={dropdownRef}
+        />
+      }
       calendarContainer={CalendarContainer}
     />
   );
