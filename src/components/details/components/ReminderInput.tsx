@@ -1,5 +1,5 @@
 ﻿import React, { forwardRef } from "react";
-import Icons from "../../common/IconsComponent";
+import Icons from "../../common/AppIcons";
 import ReminderMenuItems from "./ReminderMenuItems";
 import { format } from "date-fns";
 import useReminder from "../../../utils/hooks/useReminder";

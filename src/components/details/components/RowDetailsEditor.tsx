@@ -1,5 +1,5 @@
 ﻿import React, { useState } from "react";
-import Icons from "../../common/IconsComponent";
+import Icons from "../../common/AppIcons";
 import { IRow, ITask } from "../../../constants/types/appTypes";
 import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux";
 import selectCurrentRow from "../../../utils/selectors/selectCurrentRow";
@@ -9,7 +9,7 @@ import {
   toggleFavorite as toggleFavoriteTask,
   toggleSubTaskChecked,
   updateTask,
-} from "../../../app/appSlice";
+} from "../../../app/store/appSlice";
 
 const RowDetailsEditor = () => {
   const dispatch = useAppDispatch();

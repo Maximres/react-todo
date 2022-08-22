@@ -1,11 +1,11 @@
 ﻿import React from "react";
-import Icons from "../common/IconsComponent";
+import Icons from "../common/AppIcons";
 import RowDetailsEditor from "./components/RowDetailsEditor";
 import RowDetailsCalendar from "./components/RowDetailsReminder";
 import RowDetailsMyDay from "./components/RowDetailsMyDay";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks/redux";
 import selectCurrentRow from "../../utils/selectors/selectCurrentRow";
-import { toggleSidebar } from "../../app/appSlice";
+import { toggleSidebar } from "../../app/store/appSlice";
 import Footer from "./components/Footer";
 
 export const Details = (): JSX.Element | null => {
@@ -20,7 +20,7 @@ export const Details = (): JSX.Element | null => {
 
   return isSidebarVisible && selectedRow ? (
     <aside
-      className="d-flex flex-column align-items-stretch flex-shrink-0 bg-white overflow-auto"
+      className="d-flex flex-column align-items-stretch flex-shrink-0 overflow-auto bg-light"
       style={{ width: "380px" }}
       id="details"
     >

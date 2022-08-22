@@ -1,5 +1,5 @@
 ﻿import React, { forwardRef } from "react";
-import Icons from "../../common/IconsComponent";
+import Icons from "../../common/AppIcons";
 import DueDateMenuItems from "./DueDateMenuItems";
 import { differenceInCalendarDays, format } from "date-fns";
 import reminderEnum from "../../../constants/enums/reminderEnum";

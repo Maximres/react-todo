@@ -6,7 +6,7 @@ import {
   createTask,
   toggleChecked,
   toggleFavorite as toggleFavoriteTask,
-} from "../../app/appSlice";
+} from "../../app/store/appSlice";
 
 const Table = () => {
   const [isFocused, setFocused] = useState(false);
@@ -46,7 +46,7 @@ const Table = () => {
   };
 
   return (
-    <main className="bg-light flex-fill position-relative">
+    <main className="bg-white flex-fill position-relative">
       <div className="container-fluid my-5 overflow-auto vh-100">
         <div className="row px-5">
           <div className="col-12">

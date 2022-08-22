@@ -1,8 +1,8 @@
 ﻿import React from "react";
-import Icons from "../../common/IconsComponent";
+import Icons from "../../common/AppIcons";
 import { IRow } from "../../../constants/types/appTypes";
 import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux";
-import { toggleSidebar as toggleTaskSidebar } from "../../../app/appSlice";
+import { toggleSidebar as toggleTaskSidebar } from "../../../app/store/appSlice";
 
 type Props = {
   tasks: IRow[];

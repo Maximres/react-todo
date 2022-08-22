@@ -1,5 +1,5 @@
 ﻿import React, { forwardRef } from "react";
-import Icons from "../../common/IconsComponent";
+import Icons from "../../common/AppIcons";
 import reminderEnum from "../../../constants/enums/reminderEnum";
 import useReminder from "../../../utils/hooks/useReminder";
 import RepeatMenuItems from "./RepeatMenuItems";

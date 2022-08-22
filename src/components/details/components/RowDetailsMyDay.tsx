@@ -1,9 +1,9 @@
 ﻿import React from "react";
-import Icons from "../../common/IconsComponent";
+import Icons from "../../common/AppIcons";
 import { useAppDispatch, useAppSelector } from "../../../utils/hooks/redux";
 import selectCurrentRow from "../../../utils/selectors/selectCurrentRow";
 import { IRow } from "../../../constants/types/appTypes";
-import { updateTask } from "../../../app/appSlice";
+import { updateTask } from "../../../app/store/appSlice";
 
 const RowDetailsMyDay = () => {
   const selectedTask = useAppSelector(selectCurrentRow) as IRow;

@@ -87,3 +87,23 @@
     1rem * calc(45 / var(--default-font-size-number))
   ); /* desired 45px height with rem. practical? maybe.. */
 }
+
+.account-icon {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  width: 50px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background-color: var(--bs-primary);
+  cursor: pointer;
+}
+
+.flex-basis-0 {
+  flex-basis: 0;
+}
+
+.form-control-after-search {
+  position: absolute;
+  right: calc(1rem + 5px);
+}

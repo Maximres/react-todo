@@ -1,9 +1,14 @@
 ﻿import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { regular, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { default as cn } from "classnames";
 
 const Icon = (props: any, icon: IconProp) => (
-  <FontAwesomeIcon {...props} icon={icon} />
+  <FontAwesomeIcon
+    {...props}
+    className={cn(props.className, { pointer: true })}
+    icon={icon}
+  />
 );
 
 const Options = (props: any) => Icon(props, solid("ellipsis-vertical"));
@@ -27,6 +32,12 @@ const Weekdays = (props: any) => Icon(props, solid("calendar-plus"));
 const Reminder = (props: any) => Icon(props, regular("bell"));
 const PickDate = (props: any) => Icon(props, regular("calendar-days"));
 const Trash = (props: any) => Icon(props, regular("trash-can"));
+const User = (props: any) => Icon(props, regular("user"));
+const Plus = (props: any) => Icon(props, solid("plus"));
+const NewGroup = (props: any) => Icon(props, regular("object-ungroup"));
+const Group = (props: any) => Icon(props, regular("object-group"));
+const List = (props: any) => Icon(props, solid("align-justify"));
+const Search = (props: any) => Icon(props, solid("magnifying-glass"));
 
 const Icons = {
   Options,
@@ -47,6 +58,12 @@ const Icons = {
   Reminder,
   PickDate,
   Trash,
+  User,
+  Plus,
+  NewGroup,
+  Group,
+  List,
+  Search,
 };
 
 export default Icons;
