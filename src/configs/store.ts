@@ -4,7 +4,6 @@
   configureStore,
   Dispatch,
   MiddlewareAPI,
-  ThunkAction, TypedStartListening,
 } from "@reduxjs/toolkit";
 import appSlice from "../features/tasks/tasksSlice";
 import detailsSlice from "../features/details/detailsSlice";
@@ -33,12 +32,3 @@ const store = configureStore({
 });
 
 export default store;
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
-export type AppStartListening = TypedStartListening<RootState, AppDispatch>
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  AnyAction
->;

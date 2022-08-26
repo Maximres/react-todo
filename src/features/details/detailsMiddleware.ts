@@ -1,5 +1,5 @@
 ﻿import { createListenerMiddleware } from "@reduxjs/toolkit";
-import { AppStartListening } from "../../configs/store";
+import { AppStartListening } from "../../configs/redux";
 import { sidebarVisibilityListener } from "./detailsSlice";
 
 export const detailsListenerMiddleware = createListenerMiddleware();

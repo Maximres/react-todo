@@ -3,7 +3,7 @@ import {
   IDetailsState,
   ITaskDetails,
 } from "../../constants/types/detailsTypes";
-import type { AppStartListening } from "../../configs/store";
+import type { AppStartListening } from "../../configs/redux";
 import { IRow } from "../../constants/types/appTypes";
 
 const initialState: IDetailsState = {
