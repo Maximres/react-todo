@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Table } from "../features/tasks/Table";
+import { Tasks } from "../features/tasks/Tasks";
 import { Details } from "../features/details/Details";
 import List from "../features/groups/List";
 
@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       <List />
-      <Table />
+      <Tasks />
       <Details />
     </>
   );

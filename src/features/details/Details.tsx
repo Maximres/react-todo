@@ -4,7 +4,7 @@ import RowDetailsEditor from "./components/RowDetailsEditor";
 import RowDetailsReminder from "./components/RowDetailsReminder";
 import RowDetailsMyDay from "./components/RowDetailsMyDay";
 import { useAppDispatch, useAppSelector } from "../../configs/redux";
-import { closeSidebar } from "../appSlice";
+import { closeSidebar } from "../tasks/tasksSlice";
 import Footer from "./components/Footer";
 
 export const Details = (): JSX.Element | null => {

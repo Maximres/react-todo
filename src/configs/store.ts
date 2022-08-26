@@ -6,7 +6,7 @@
   MiddlewareAPI,
   ThunkAction, TypedStartListening,
 } from "@reduxjs/toolkit";
-import appSlice from "../features/appSlice";
+import appSlice from "../features/tasks/tasksSlice";
 import detailsSlice from "../features/details/detailsSlice";
 import { Middleware } from "redux";
 import { detailsListenerMiddleware } from "../features/details/detailsMiddleware";

@@ -1,5 +1,5 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { IRow, IState } from "../constants/types/appTypes";
+import { IRow, IState } from "../../constants/types/appTypes";
 
 const rowsMockData: IRow[] = [
   {
@@ -42,7 +42,7 @@ const initialState: IState = {
   tasks: rowsMockData,
 };
 
-const appSlice = createSlice({
+const tasksSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
@@ -124,7 +124,7 @@ const appSlice = createSlice({
   },
 });
 
-export default appSlice.reducer;
+export default tasksSlice.reducer;
 export const {
   selectRow,
   toggleChecked,
@@ -134,4 +134,4 @@ export const {
   updateTask,
   createTask,
   deleteTask,
-} = appSlice.actions;
+} = tasksSlice.actions;

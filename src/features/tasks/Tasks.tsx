@@ -2,13 +2,14 @@
 import { Rows } from "./components/Rows";
 import { IRow } from "../../constants/types/appTypes";
 import { useAppDispatch, useAppSelector } from "../../configs/redux";
+import Icons from "../../components/AppIcons"
 import {
   createTask,
   toggleChecked,
   toggleFavorite as toggleFavoriteTask,
-} from "../appSlice";
+} from "./tasksSlice";
 
-const Table = () => {
+const Tasks = () => {
   const [isFocused, setFocused] = useState(false);
   const [newTaskText, setNewTaskText] = useState("");
 
@@ -72,7 +73,7 @@ const Table = () => {
                 </div>
               ) : (
                 <span className="input-group-text" id="add-task">
-                  +
+                  <Icons.Plus/>
                 </span>
               )}
               <input
@@ -95,4 +96,4 @@ const Table = () => {
   );
 };
 
-export { Table };
+export { Tasks };

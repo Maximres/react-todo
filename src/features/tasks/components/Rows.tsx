@@ -2,7 +2,7 @@
 import Icons from "../../../components/AppIcons";
 import { IRow } from "../../../constants/types/appTypes";
 import { useAppDispatch, useAppSelector } from "../../../configs/redux";
-import { toggleSelected } from "../../appSlice";
+import { toggleSelected } from "../tasksSlice";
 
 type Props = {
   tasks: IRow[];
