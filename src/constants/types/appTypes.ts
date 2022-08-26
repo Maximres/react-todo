@@ -1,36 +1,33 @@
-﻿import { Dispatch } from "react";
-import reminderEnum from "../enums/reminderEnum";
+﻿import reminderEnum from "../enums/reminderEnum";
 
-export interface ITask {
+export interface IIdentifier {
   id: string;
+}
+
+export interface ITask extends IIdentifier {
   isChecked: boolean;
-  text: string | undefined;
+  text?: string;
   createdDate: number;
 }
 
-export interface IRow extends ITask {
-  remindDate?: number | null;
-  dueDate?: number | null;
+export interface IReminder {
+  remindDate?: number;
+  dueDate?: number;
   isMyDay: boolean;
-  repeatPeriod?: [number, reminderEnum] | null;
+  repeatPeriod?: [number, keyof typeof reminderEnum];
+}
+
+export interface IRow extends ITask, IReminder {
   isFavorite: boolean;
-  subTasks: ITask[];
+  subTasks: ITask[]; // todo remove
 }
 
 export interface IState {
-  isSidebarVisible: boolean;
-  isFocused: boolean;
   tasks: IRow[];
-  selectedRowId: string | null;
+  selectedRowId?: string;
 }
 
 export interface IAction {
   type: string;
   payload: any;
-}
-
-export interface IAppContextType {
-  state: IState;
-  dispatch: Dispatch<IAction>;
-  selectedRow: IRow;
 }

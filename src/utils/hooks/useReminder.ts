@@ -1,8 +1,8 @@
 ﻿import { useCallback } from "react";
 import reminderEnum from "../../constants/enums/reminderEnum";
 import { add, set } from "date-fns";
-import { useAppDispatch, useAppSelector } from "./redux";
-import { updateTask } from "../../app/store/appSlice";
+import { useAppDispatch, useAppSelector } from "../../configs/redux";
+import { updateTask } from "../../features/appSlice";
 import selectCurrentRow from "../selectors/selectCurrentRow";
 
 const useReminder = () => {
@@ -49,7 +49,7 @@ const useReminder = () => {
           break;
         }
         case reminderEnum.REMINDER:
-          selectedTaskCopy.remindDate = value == null ? value : Number(value);
+          selectedTaskCopy.remindDate = value == null ? undefined : Number(value);
           break;
         case reminderEnum.DUE_TODAY:
           selectedTaskCopy.dueDate = todayTicks;
@@ -61,7 +61,7 @@ const useReminder = () => {
           selectedTaskCopy.dueDate = Number(add(todayTicks, { days: 7 }));
           break;
         case reminderEnum.DUE_DATE:
-          selectedTaskCopy.dueDate = value == null ? value : Number(value);
+          selectedTaskCopy.dueDate = value == null ? undefined : Number(value);
           break;
         case reminderEnum.REPEAT_DAILY:
           selectedTaskCopy.repeatPeriod = [365, reminderEnum.REPEAT_DAILY];
@@ -98,14 +98,14 @@ const useReminder = () => {
         case reminderEnum.TOMORROW:
         case reminderEnum.NEXT_WEEK:
         case reminderEnum.REMINDER:
-          selectedTaskCopy.remindDate = null;
+          selectedTaskCopy.remindDate = undefined;
           break;
 
         case reminderEnum.DUE_TODAY:
         case reminderEnum.DUE_TOMORROW:
         case reminderEnum.DUE_NEXT_WEEK:
         case reminderEnum.DUE_DATE:
-          selectedTaskCopy.dueDate = null;
+          selectedTaskCopy.dueDate = undefined;
           break;
 
         case reminderEnum.REPEAT:
@@ -114,7 +114,7 @@ const useReminder = () => {
         case reminderEnum.REPEAT_WEEKLY:
         case reminderEnum.REPEAT_MONTHLY:
         case reminderEnum.REPEAT_YEARLY:
-          selectedTaskCopy.repeatPeriod = null;
+          selectedTaskCopy.repeatPeriod = undefined;
           break;
         default:
           throw new Error("Argument Out Of Range Error in `UseReminder`");
