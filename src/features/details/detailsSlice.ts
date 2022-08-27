@@ -77,15 +77,15 @@ export const sidebarVisibilityListener = (
 ) => {
   startListening({
     predicate: (action, currentState, originalState) => {
-      const currState = currentState.app;
-      const prevState = originalState.app;
+      const currState = currentState.main;
+      const prevState = originalState.main;
       return (
         currState.selectedRowId !== prevState.selectedRowId ||
         currState.tasks !== prevState.tasks
       );
     },
     effect: (action, api) => {
-      const app = api.getState().app;
+      const app = api.getState().main;
       const rowId = app.selectedRowId;
       const task = app.tasks.find((t) => t.id === rowId);
       api.dispatch(updateDetails(task));

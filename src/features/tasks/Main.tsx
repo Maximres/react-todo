@@ -1,5 +1,5 @@
 ﻿import React, { useState } from "react";
-import { Rows } from "./components/Rows";
+import { Tasks } from "./components/Tasks";
 import { IRow } from "../../constants/types/appTypes";
 import { useAppDispatch, useAppSelector } from "../../configs/redux";
 import Icons from "../../components/AppIcons"
@@ -7,13 +7,13 @@ import {
   createTask,
   toggleChecked,
   toggleFavorite as toggleFavoriteTask,
-} from "./tasksSlice";
+} from "./mainSlice";
 
-const Tasks = () => {
+const Main = () => {
   const [isFocused, setFocused] = useState(false);
   const [newTaskText, setNewTaskText] = useState("");
 
-  const tasks = useAppSelector((s) => s.app.tasks);
+  const tasks = useAppSelector((s) => s.main.tasks);
   const dispatch = useAppDispatch();
 
   const toggleFocus = () => {
@@ -38,7 +38,7 @@ const Tasks = () => {
 
   const renderRows = (tasks: IRow[]) => {
     return (
-      <Rows
+      <Tasks
         tasks={tasks}
         handleCheck={handleCheck}
         toggleFavorite={toggleFavorite}
@@ -96,4 +96,4 @@ const Tasks = () => {
   );
 };
 
-export { Tasks };
+export { Main };

@@ -1,14 +1,14 @@
 import React from "react";
 import "./App.css";
-import { Tasks } from "../features/tasks/Tasks";
+import { Main } from "../features/tasks/Main";
 import { Details } from "../features/details/Details";
-import List from "../features/groups/List";
+import Lists from "../features/lists/Lists";
 
 function App() {
   return (
     <>
-      <List />
-      <Tasks />
+      <Lists />
+      <Main />
       <Details />
     </>
   );

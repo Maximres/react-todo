@@ -2,7 +2,7 @@
 import reminderEnum from "../../constants/enums/reminderEnum";
 import { add, set } from "date-fns";
 import { useAppDispatch, useAppSelector } from "../../configs/redux";
-import { updateTask } from "../../features/tasks/tasksSlice";
+import { updateTask } from "../../features/tasks/mainSlice";
 import selectCurrentRow from "../selectors/selectCurrentRow";
 
 const useReminder = () => {

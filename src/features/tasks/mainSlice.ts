@@ -42,8 +42,8 @@ const initialState: IState = {
   tasks: rowsMockData,
 };
 
-const tasksSlice = createSlice({
-  name: "app",
+const mainSlice = createSlice({
+  name: "main",
   initialState,
   reducers: {
     updateTask: (state, action: PayloadAction<IRow>) => {
@@ -124,7 +124,7 @@ const tasksSlice = createSlice({
   },
 });
 
-export default tasksSlice.reducer;
+export default mainSlice.reducer;
 export const {
   selectRow,
   toggleChecked,
@@ -134,4 +134,4 @@ export const {
   updateTask,
   createTask,
   deleteTask,
-} = tasksSlice.actions;
+} = mainSlice.actions;

@@ -2,7 +2,7 @@
 import Icons from "../../../components/AppIcons";
 import { IRow } from "../../../constants/types/appTypes";
 import { useAppDispatch, useAppSelector } from "../../../configs/redux";
-import { toggleSelected } from "../tasksSlice";
+import { toggleSelected } from "../mainSlice";
 
 type Props = {
   tasks: IRow[];
@@ -10,7 +10,7 @@ type Props = {
   handleCheck: (arg: IRow) => void;
 };
 
-const Rows = ({
+const Tasks = ({
   tasks,
   toggleFavorite,
   handleCheck,
@@ -56,4 +56,4 @@ const Rows = ({
   return tasks ? <>{elements}</> : null;
 };
 
-export { Rows };
+export { Tasks };

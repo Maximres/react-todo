@@ -2,7 +2,7 @@
 import Icons from "../../../components/AppIcons";
 import { useAppDispatch, useAppSelector } from "../../../configs/redux";
 import { IRow } from "../../../constants/types/appTypes";
-import { deleteTask } from "../../tasks/tasksSlice";
+import { deleteTask } from "../../tasks/mainSlice";
 import {format, differenceInYears} from "date-fns";
 import selectCurrentRow from "../../../utils/selectors/selectCurrentRow";
 

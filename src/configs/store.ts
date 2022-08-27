@@ -5,8 +5,9 @@
   Dispatch,
   MiddlewareAPI,
 } from "@reduxjs/toolkit";
-import appSlice from "../features/tasks/tasksSlice";
-import detailsSlice from "../features/details/detailsSlice";
+import mainReducer from "../features/tasks/mainSlice";
+import detailsReducer from "../features/details/detailsSlice";
+import listsReducer from "../features/lists/listsSlice";
 import { Middleware } from "redux";
 import { detailsListenerMiddleware } from "../features/details/detailsMiddleware";
 
@@ -22,8 +23,9 @@ const consoleLogger = (api: MiddlewareAPI<Dispatch, any>) => {
 
 const store = configureStore({
   reducer: {
-    app: appSlice,
-    details: detailsSlice,
+    main: mainReducer,
+    details: detailsReducer,
+    lists: listsReducer,
   },
   middleware: (defaultMiddleware) =>
     defaultMiddleware()

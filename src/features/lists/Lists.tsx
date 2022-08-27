@@ -1,9 +1,13 @@
 ﻿import React from "react";
 import Icons from "../../components/AppIcons";
-import GroupItem from "./GroupItem";
-import ListItem from "./ListItem";
+import GroupItem from "./components/GroupItem";
+import ListItem from "./components/ListItem";
+import { useAppSelector } from "../../configs/redux";
 
-const List = () => {
+const Lists = () => {
+  const defaultLists = useAppSelector((x) => x.lists.defaultLists);
+  const customLists = useAppSelector((x) => x.lists.customLists);
+
   return (
     <aside
       className="d-flex flex-column align-items-stretch flex-shrink-0 bg-light"
@@ -45,14 +49,35 @@ const List = () => {
       <section className="flex-grow-1 overflow-auto">
         <div className="w-100">
           <ul className="list-group list-group-flush">
-            <ListItem name={"My day"} Icon={<Icons.MyDay/>} />
-            <ListItem name={"Important"} Icon={<Icons.Favorite/>}/>
-            <ListItem name={"Planned"} Icon={<Icons.Planned/>}/>
-            <ListItem name={"All"} Icon={<Icons.All/>}/>
-            <ListItem name={"Tasks"} Icon={<Icons.Task/>} />
+            {defaultLists.map((item) => {
+              return (
+                <ListItem
+                  key={item.taskId}
+                  name={item.name}
+                  total={item.tasksTotal}
+                  Icon={item.Icon}
+                />
+              );
+            })}
+            {/*<ListItem name={"My day"} Icon={<Icons.MyDay/>} />*/}
+            {/*<ListItem name={"Important"} Icon={<Icons.Favorite/>}/>*/}
+            {/*<ListItem name={"Planned"} Icon={<Icons.Planned/>}/>*/}
+            {/*<ListItem name={"All"} Icon={<Icons.All/>}/>*/}
+            {/*<ListItem name={"Main"} Icon={<Icons.Task/>} />*/}
           </ul>
           <hr className="w-100 m-0" />
           <ul className="list-group list-group-flush">
+            {customLists.map((item) => {
+              return (
+                <ListItem
+                  key={item.taskId}
+                  name={item.name}
+                  total={item.tasksTotal}
+                  Icon={item.Icon}
+                />
+              );
+            })}
+
             <ListItem />
             <ListItem />
             <ListItem />
@@ -101,4 +126,4 @@ const List = () => {
   );
 };
 
-export default List;
+export default Lists;

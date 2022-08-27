@@ -1,6 +1,6 @@
 ﻿import React from "react";
-import useValidId from "../../utils/hooks/useValidId";
-import Icons from "../../components/AppIcons";
+import useValidId from "../../../utils/hooks/useValidId";
+import Icons from "../../../components/AppIcons";
 
 type GroupProps = {
   children: JSX.Element;
