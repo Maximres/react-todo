@@ -6,10 +6,15 @@ type Props = {
   isSubItem?: boolean;
   Icon?: JSX.Element;
   name?: string;
-  total?: number
+  total?: number;
 };
 
-const ListItem = ({ isSubItem, name, Icon = <Icons.List />, total = 0 }: Props) => {
+const ListItem = ({
+  isSubItem,
+  name,
+  Icon = <Icons.List />,
+  total = 0,
+}: Props) => {
   return (
     <li className="list-group-item list-group-item-action border-0 bg-light">
       <div

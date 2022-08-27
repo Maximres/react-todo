@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import Icons from "../../../components/AppIcons";
 import { IRow } from "../../../constants/types/appTypes";
-import { useAppDispatch, useAppSelector } from "../../../configs/redux";
+import { useAppDispatch } from "../../../configs/redux";
 import { toggleSelected } from "../mainSlice";
 
 type Props = {
@@ -23,9 +23,7 @@ const Tasks = ({
   };
 
   const toggleSideBar = (task: IRow) => {
-    dispatch(
-      toggleSelected({ task: task }),
-    );
+    dispatch(toggleSelected({ task: task }));
   };
 
   const elements = tasks.map((row) => (

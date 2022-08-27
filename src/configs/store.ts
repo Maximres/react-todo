@@ -5,7 +5,7 @@
   Dispatch,
   MiddlewareAPI,
 } from "@reduxjs/toolkit";
-import mainReducer from "../features/tasks/mainSlice";
+import mainReducer from "../features/main/mainSlice";
 import detailsReducer from "../features/details/detailsSlice";
 import listsReducer from "../features/lists/listsSlice";
 import { Middleware } from "redux";

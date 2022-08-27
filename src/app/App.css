@@ -108,14 +108,14 @@
   right: calc(1rem + 5px);
 }
 
-#list .list-group-item{
+#list .list-group-item {
   padding: 0.75rem 0.5rem 0.75rem 1.5rem;
 }
 
 #list .accordion-button {
   padding: 0.75rem 1.5rem 0.75rem 1.5rem;
-
 }
+
 #list .accordion-button::after {
   width: 1rem;
   height: 1rem;

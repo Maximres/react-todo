@@ -48,7 +48,9 @@ const RepeatInput = forwardRef(
           aria-expanded="false"
         >
           <span className="me-3">
-            <Icons.CalendarRepeat className={hasRepeatDate ? "text-primary" : ""} />
+            <Icons.CalendarRepeat
+              className={hasRepeatDate ? "text-primary" : ""}
+            />
           </span>
           <div className="form-control me-1 d-flex flex-column ">
             <span className={hasRepeatDate ? "text-primary" : ""}>

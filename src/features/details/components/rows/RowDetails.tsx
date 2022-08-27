@@ -3,7 +3,11 @@ import Icons from "../../../../components/AppIcons";
 import { useAppDispatch, useAppSelector } from "../../../../configs/redux";
 import selectCurrentRow from "../../../../utils/selectors/selectCurrentRow";
 import { IRow, ITask } from "../../../../constants/types/appTypes";
-import { toggleChecked, toggleFavorite, updateTask } from "../../../tasks/mainSlice";
+import {
+  toggleChecked,
+  toggleFavorite,
+  updateTask,
+} from "../../../main/mainSlice";
 import { handleEnterKeyPress } from "../../../../utils/helpers/enterKeyHandler";
 
 const RowDetails = () => {

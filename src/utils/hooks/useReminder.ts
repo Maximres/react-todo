@@ -2,7 +2,7 @@
 import reminderEnum from "../../constants/enums/reminderEnum";
 import { add, set } from "date-fns";
 import { useAppDispatch, useAppSelector } from "../../configs/redux";
-import { updateTask } from "../../features/tasks/mainSlice";
+import { updateTask } from "../../features/main/mainSlice";
 import selectCurrentRow from "../selectors/selectCurrentRow";
 
 const useReminder = () => {
@@ -49,7 +49,8 @@ const useReminder = () => {
           break;
         }
         case reminderEnum.REMINDER:
-          selectedTaskCopy.remindDate = value == null ? undefined : Number(value);
+          selectedTaskCopy.remindDate =
+            value == null ? undefined : Number(value);
           break;
         case reminderEnum.DUE_TODAY:
           selectedTaskCopy.dueDate = todayTicks;

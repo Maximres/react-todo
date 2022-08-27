@@ -2,7 +2,7 @@
 import { Tasks } from "./components/Tasks";
 import { IRow } from "../../constants/types/appTypes";
 import { useAppDispatch, useAppSelector } from "../../configs/redux";
-import Icons from "../../components/AppIcons"
+import Icons from "../../components/AppIcons";
 import {
   createTask,
   toggleChecked,
@@ -47,7 +47,10 @@ const Main = () => {
   };
 
   return (
-    <main className="bg-white flex-fill position-relative" style={{minWidth: 350}}>
+    <main
+      className="bg-white flex-fill position-relative"
+      style={{ minWidth: 350 }}
+    >
       <div className="container-fluid my-5 overflow-auto vh-100">
         <div className="row px-5">
           <div className="col-12">
@@ -73,7 +76,7 @@ const Main = () => {
                 </div>
               ) : (
                 <span className="input-group-text" id="add-task">
-                  <Icons.Plus/>
+                  <Icons.Plus />
                 </span>
               )}
               <input

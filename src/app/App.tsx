@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Main } from "../features/tasks/Main";
+import { Main } from "../features/main/Main";
 import { Details } from "../features/details/Details";
 import Lists from "../features/lists/Lists";
 
