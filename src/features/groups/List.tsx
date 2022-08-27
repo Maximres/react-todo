@@ -1,5 +1,7 @@
 ﻿import React from "react";
 import Icons from "../../components/AppIcons";
+import GroupItem from "./GroupItem";
+import ListItem from "./ListItem";
 
 const List = () => {
   return (
@@ -9,7 +11,7 @@ const List = () => {
       id="list"
     >
       <header>
-        <div className="navbar py-3">
+        <div className="navbar py-3 pb-0">
           <div className="d-flex align-items-center w-100 px-3">
             <span className="navbar-brand ">
               <span className="account-icon">
@@ -28,39 +30,62 @@ const List = () => {
               </span>
             </div>
           </div>
-          <div className="d-flex align-items-center w-100 px-3 my-3">
+          <div className="d-flex align-items-center w-100 px-3 my-2">
             <input
               className="form-control form-control-sm "
               type="search"
               placeholder="Search"
               aria-label="Search"
             />
-            <Icons.Search className="form-control-after-search"/>
+            <Icons.Search className="form-control-after-search" />
           </div>
           <hr className="w-100 m-0" />
         </div>
       </header>
       <section className="flex-grow-1 overflow-auto">
         <div className="w-100">
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
-          <div className="py-3 border border-1 border-success">Text</div>
+          <ul className="list-group list-group-flush">
+            <ListItem name={"My day"} Icon={<Icons.MyDay/>} />
+            <ListItem name={"Important"} Icon={<Icons.Favorite/>}/>
+            <ListItem name={"Planned"} Icon={<Icons.Planned/>}/>
+            <ListItem name={"All"} Icon={<Icons.All/>}/>
+            <ListItem name={"Tasks"} Icon={<Icons.Task/>} />
+          </ul>
+          <hr className="w-100 m-0" />
+          <ul className="list-group list-group-flush">
+            <ListItem />
+            <ListItem />
+            <ListItem />
+            <ListItem />
+
+            <GroupItem name="1">
+              {
+                <ul className="list-group list-group-flush">
+                  <ListItem isSubItem={true} />
+                  <ListItem isSubItem={true} />
+                  <ListItem isSubItem={true} />
+                </ul>
+              }
+            </GroupItem>
+            <GroupItem name="1">
+              {
+                <ul className="list-group list-group-flush">
+                  <ListItem />
+                  <ListItem />
+                  <ListItem />
+                </ul>
+              }
+            </GroupItem>
+            <GroupItem name="1">
+              {
+                <ul className="list-group list-group-flush">
+                  <ListItem />
+                  <ListItem />
+                  <ListItem />
+                </ul>
+              }
+            </GroupItem>
+          </ul>
         </div>
       </section>
       <footer>

@@ -47,7 +47,7 @@ const Tasks = () => {
   };
 
   return (
-    <main className="bg-white flex-fill position-relative">
+    <main className="bg-white flex-fill position-relative" style={{minWidth: 350}}>
       <div className="container-fluid my-5 overflow-auto vh-100">
         <div className="row px-5">
           <div className="col-12">

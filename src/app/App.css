@@ -1,8 +1,8 @@
 :root {
   --side-bar-width: 300px;
-  --default-font-size-number: 14;
-  --default-font-size: calc(var(--default-font-size-number) * 1px);
-  font-size: var(--default-font-size);
+  --default-font-size-number: 15;
+  --default-font-size-px: calc(var(--default-font-size-number) * 1px);
+  font-size: var(--default-font-size-px);
 }
 
 .App {
@@ -106,4 +106,39 @@
 .form-control-after-search {
   position: absolute;
   right: calc(1rem + 5px);
+}
+
+#list .list-group-item{
+  padding: 0.75rem 0.5rem 0.75rem 1.5rem;
+}
+
+#list .accordion-button {
+  padding: 0.75rem 1.5rem 0.75rem 1.5rem;
+
+}
+#list .accordion-button::after {
+  width: 1rem;
+  height: 1rem;
+  background-size: 1rem;
+  color: var(--bs-dark);
+}
+
+.bg-badge-light {
+  background-color: #d1d2d4;
+}
+
+.group-item-ms {
+  margin-left: 2.5rem !important;
+}
+
+#list .accordion-button:not(.collapsed) {
+  background-color: transparent !important;
+  box-shadow: unset !important;
+  color: var(--bs-body-color);
+}
+
+.list-group-item-action:active,
+.list-group-item-action:hover,
+.list-group-item-action:focus {
+  background-color: #e2e3e5 !important;
 }

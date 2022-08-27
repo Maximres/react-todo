@@ -35,9 +35,12 @@ const Trash = (props: any) => Icon(props, regular("trash-can"));
 const User = (props: any) => Icon(props, regular("user"));
 const Plus = (props: any) => Icon(props, solid("plus"));
 const NewGroup = (props: any) => Icon(props, regular("object-ungroup"));
-const Group = (props: any) => Icon(props, regular("object-group"));
-const List = (props: any) => Icon(props, solid("align-justify"));
+const Group = (props: any) => Icon(props, solid("bars-staggered"));
+const List = (props: any) => Icon(props, solid("bars"));
 const Search = (props: any) => Icon(props, solid("magnifying-glass"));
+const Planned = (props: any) => Icon(props, regular("rectangle-list"));
+const All = (props: any) => Icon(props, solid("infinity"));
+const Task = (props: any) => Icon(props, solid("house"));
 
 const Icons = {
   Options,
@@ -64,6 +67,9 @@ const Icons = {
   Group,
   List,
   Search,
+  Planned,
+  All,
+  Task,
 };
 
 export default Icons;
