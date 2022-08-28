@@ -5,6 +5,7 @@ export interface IIdentifier {
 }
 
 export interface ITask extends IIdentifier {
+  parentId: string;
   isChecked: boolean;
   text?: string;
   createdDate: number;
@@ -18,7 +19,7 @@ export interface IReminder {
 }
 
 export interface IRow extends ITask, IReminder {
-  isFavorite: boolean;
+  isImportant: boolean;
   subTasks: ITask[]; // todo remove
 }
 

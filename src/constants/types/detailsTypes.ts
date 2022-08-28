@@ -1,4 +1,4 @@
-﻿import { IIdentifier, IRow } from "./appTypes";
+﻿import { IIdentifier, IRow } from "./tasksTypes";
 
 export interface ITaskDetails extends IIdentifier {
   parentId: string;
