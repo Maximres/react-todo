@@ -3,8 +3,8 @@ import Icons from "../../../../components/AppIcons";
 import DueDateMenuItems from "./DueDateMenuItems";
 import { differenceInCalendarDays, format } from "date-fns";
 import reminderEnum from "../../../../constants/enums/reminderEnum";
-import useReminder from "../../../../utils/hooks/useReminder";
-import { useAppSelector } from "../../../../configs/redux";
+import useReminder from "../../hooks/useReminder";
+import { useAppSelector } from "../../../../constants/types/redux";
 import selectCurrentRow from "../../../../utils/selectors/selectCurrentRow";
 
 type Props = {

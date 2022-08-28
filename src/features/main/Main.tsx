@@ -1,7 +1,7 @@
 ﻿import React, { useState } from "react";
 import { Tasks } from "./components/Tasks";
-import { IRow } from "../../constants/types/appTypes";
-import { useAppDispatch, useAppSelector } from "../../configs/redux";
+import { IRow } from "../../constants/types/tasksTypes";
+import { useAppDispatch, useAppSelector } from "../../constants/types/redux";
 import Icons from "../../components/AppIcons";
 import {
   createTask,
@@ -33,7 +33,7 @@ const Main = () => {
   };
 
   const toggleFavorite = (task: IRow) => {
-    dispatch(toggleFavoriteTask({ task: task, isFavorite: !task.isFavorite }));
+    dispatch(toggleFavoriteTask({ task: task, isImportant: !task.isImportant }));
   };
 
   const renderRows = (tasks: IRow[]) => {

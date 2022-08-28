@@ -1,45 +1,8 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { IRow, IState } from "../../constants/types/appTypes";
-
-const rowsMockData: IRow[] = [
-  {
-    id: nanoid(),
-    isChecked: true,
-    text: "lorem10",
-    isFavorite: true,
-    isMyDay: false,
-    subTasks: [],
-    createdDate: Number(new Date()),
-  },
-  {
-    id: nanoid(),
-    isChecked: true,
-    text: "lorem11",
-    isFavorite: true,
-    isMyDay: false,
-    subTasks: [],
-    createdDate: Number(new Date()),
-  },
-  {
-    id: nanoid(),
-    isChecked: false,
-    text: "lorem12",
-    isFavorite: false,
-    isMyDay: false,
-    createdDate: Number(new Date(1995, 11, 17)),
-    subTasks: [
-      {
-        id: nanoid(),
-        isChecked: false,
-        text: "lorem15",
-        createdDate: Number(new Date(1995, 11, 19)),
-      },
-    ],
-  },
-];
+import { IRow, IState } from "../../constants/types/tasksTypes";
 
 const initialState: IState = {
-  tasks: rowsMockData,
+  tasks: [],
 };
 
 const mainSlice = createSlice({
@@ -53,10 +16,11 @@ const mainSlice = createSlice({
     createTask: {
       reducer(state, action: PayloadAction<{ text: string; id: string }>) {
         const newTask: IRow = {
+          parentId: "##########", //todo
           id: action.payload.id,
           isChecked: false,
           text: action.payload.text,
-          isFavorite: false,
+          isImportant: false,
           createdDate: Number(new Date()),
           subTasks: [],
           remindDate: undefined,
@@ -101,12 +65,12 @@ const mainSlice = createSlice({
     },
     toggleFavorite: (
       state,
-      action: PayloadAction<{ task: IRow; isFavorite: boolean }>,
+      action: PayloadAction<{ task: IRow; isImportant: boolean }>,
     ) => {
       const task = action.payload.task;
-      const isFavorite = action.payload.isFavorite;
+      const isImportant = action.payload.isImportant;
       const index = state.tasks.findIndex((x) => x.id === task.id);
-      state.tasks[index].isFavorite = isFavorite;
+      state.tasks[index].isImportant = isImportant;
     },
     toggleChecked: (
       state,

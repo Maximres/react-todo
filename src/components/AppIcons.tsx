@@ -13,8 +13,8 @@ const Icon = (props: any, icon: IconProp) => (
 
 const Options = (props: any) => Icon(props, solid("ellipsis-vertical"));
 const Favorite = (props: any) => {
-  const { isFavorite, ...rest } = props;
-  return Icon(rest, isFavorite ? solid("star") : regular("star"));
+  const { isImportant, ...rest } = props;
+  return Icon(rest, isImportant ? solid("star") : regular("star"));
 };
 const MyDay = (props: any) => Icon(props, regular("sun"));
 const Clock = (props: any) => Icon(props, regular("clock"));

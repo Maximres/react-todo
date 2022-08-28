@@ -1,18 +1,22 @@
 ﻿import { createSlice } from "@reduxjs/toolkit";
 import { IList, IListsState } from "../../constants/types/listsTypes";
 import Icons from "../../components/AppIcons";
+import { fetchLists } from "../../app/App";
+import { IRow, ITask } from "../../constants/types/tasksTypes";
+
 
 const initialState: IListsState = {
   defaultLists: [
-    { name: "My Day", Icon: Icons.MyDay({}), taskId: "1", tasksTotal: 1 },
-    { name: "Important", Icon: Icons.Favorite({}), taskId: "2", tasksTotal: 4 },
-    { name: "My Day", Icon: Icons.MyDay({}), taskId: "3", tasksTotal: 2 },
+    { name: "My Day", iconName: "MyDay", groupId: "1", tasksTotal: 1 },
+    {
+      name: "Important",
+      iconName: Icons.Favorite({}),
+      groupId: "2",
+      tasksTotal: 4,
+    },
+    { name: "My Day", iconName: "", groupId: "3", tasksTotal: 2 },
   ] as IList[],
-  customLists: [
-    { name: "Custom 1", taskId: "11", tasksTotal: 1 },
-    { name: "Custom 2", Icon: Icons.Favorite({}), taskId: "22", tasksTotal: 4 },
-    { name: "Custom 3", Icon: Icons.MyDay({}), taskId: "33", tasksTotal: 2 },
-  ] as IList[],
+  customLists: [],
   groups: [],
 };
 
@@ -20,6 +24,13 @@ const listsSlice = createSlice({
   name: "lists",
   initialState: initialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchLists.pending, () => {});
+    builder.addCase(fetchLists.fulfilled, (state, action) => {
+      const lists = action.payload;
+      state.customLists = lists;
+    });
+  },
 });
 
 export default listsSlice.reducer;

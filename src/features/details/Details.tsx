@@ -3,7 +3,7 @@ import Icons from "../../components/AppIcons";
 import RowDetailsEditor from "./components/RowDetailsEditor";
 import RowDetailsReminder from "./components/RowDetailsReminder";
 import RowDetailsMyDay from "./components/RowDetailsMyDay";
-import { useAppDispatch, useAppSelector } from "../../configs/redux";
+import { useAppDispatch, useAppSelector } from "../../constants/types/redux";
 import { closeSidebar } from "../main/mainSlice";
 import Footer from "./components/Footer";
 

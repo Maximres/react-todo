@@ -1,8 +1,8 @@
 ﻿import React, { useState } from "react";
 import { createSubTask } from "../../detailsSlice";
-import { useAppDispatch, useAppSelector } from "../../../../configs/redux";
+import { useAppDispatch, useAppSelector } from "../../../../constants/types/redux";
 import selectCurrentRow from "../../../../utils/selectors/selectCurrentRow";
-import { IRow } from "../../../../constants/types/appTypes";
+import { IRow } from "../../../../constants/types/tasksTypes";
 
 const SubRowDetailsCreator = () => {
   const dispatch = useAppDispatch();

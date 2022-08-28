@@ -2,7 +2,9 @@
 import Icons from "../../components/AppIcons";
 import GroupItem from "./components/GroupItem";
 import ListItem from "./components/ListItem";
-import { useAppSelector } from "../../configs/redux";
+import { useAppSelector } from "../../constants/types/redux";
+import { getListIcon } from "../../utils/helpers/getIcon";
+
 
 const Lists = () => {
   const defaultLists = useAppSelector((x) => x.lists.defaultLists);
@@ -52,10 +54,10 @@ const Lists = () => {
             {defaultLists.map((item) => {
               return (
                 <ListItem
-                  key={item.taskId}
+                  key={item.id}
                   name={item.name}
                   total={item.tasksTotal}
-                  Icon={item.Icon}
+                  Icon={getListIcon(item.iconName)}
                 />
               );
             })}
@@ -70,10 +72,10 @@ const Lists = () => {
             {customLists.map((item) => {
               return (
                 <ListItem
-                  key={item.taskId}
+                  key={item.id}
                   name={item.name}
                   total={item.tasksTotal}
-                  Icon={item.Icon}
+                  Icon={getListIcon(item.iconName)}
                 />
               );
             })}

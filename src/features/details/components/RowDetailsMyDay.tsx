@@ -1,8 +1,8 @@
 ﻿import React from "react";
 import Icons from "../../../components/AppIcons";
-import { useAppDispatch, useAppSelector } from "../../../configs/redux";
+import { useAppDispatch, useAppSelector } from "../../../constants/types/redux";
 import selectCurrentRow from "../../../utils/selectors/selectCurrentRow";
-import { IRow } from "../../../constants/types/appTypes";
+import { IRow } from "../../../constants/types/tasksTypes";
 import { updateTask } from "../../main/mainSlice";
 import classNames from "classnames";
 

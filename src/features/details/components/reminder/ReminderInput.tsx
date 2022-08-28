@@ -2,9 +2,9 @@
 import Icons from "../../../../components/AppIcons";
 import ReminderMenuItems from "./ReminderMenuItems";
 import { format } from "date-fns";
-import useReminder from "../../../../utils/hooks/useReminder";
+import useReminder from "../../hooks/useReminder";
 import reminderEnum from "../../../../constants/enums/reminderEnum";
-import { useAppSelector } from "../../../../configs/redux";
+import { useAppSelector } from "../../../../constants/types/redux";
 import selectCurrentRow from "../../../../utils/selectors/selectCurrentRow";
 
 type Props = {

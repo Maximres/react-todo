@@ -1,8 +1,8 @@
 ﻿import React from "react";
 import Icons from "../../../../components/AppIcons";
-import { useAppDispatch, useAppSelector } from "../../../../configs/redux";
+import { useAppDispatch, useAppSelector } from "../../../../constants/types/redux";
 import selectCurrentRow from "../../../../utils/selectors/selectCurrentRow";
-import { IRow, ITask } from "../../../../constants/types/appTypes";
+import { IRow, ITask } from "../../../../constants/types/tasksTypes";
 import {
   toggleChecked,
   toggleFavorite,
@@ -24,7 +24,7 @@ const RowDetails = () => {
 
   const toggleFavoriteTask = () => {
     const row = selectedRow;
-    dispatch(toggleFavorite({ task: row, isFavorite: !row.isFavorite }));
+    dispatch(toggleFavorite({ task: row, isImportant: !row.isImportant }));
   };
   return (
     <li className="list-group-item group-item-height d-flex justify-content-between align-items-center flex-fill">
@@ -44,7 +44,7 @@ const RowDetails = () => {
 
       <Icons.Favorite
         onClick={() => toggleFavoriteTask()}
-        isFavorite={selectedRow.isFavorite}
+        isImportant={selectedRow.isImportant}
       />
     </li>
   );

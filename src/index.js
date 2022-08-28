@@ -5,7 +5,7 @@ import "./index.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { Provider } from "react-redux";
-import store from "./configs/store";
+import store from "./app/configs/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

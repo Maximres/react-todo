@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import Icons from "../../../components/AppIcons";
-import { IRow } from "../../../constants/types/appTypes";
-import { useAppDispatch } from "../../../configs/redux";
+import { IRow } from "../../../constants/types/tasksTypes";
+import { useAppDispatch } from "../../../constants/types/redux";
 import { toggleSelected } from "../mainSlice";
 
 type Props = {
@@ -44,7 +44,7 @@ const Tasks = ({
       <td className="px-1 col">{row.text}</td>
       <td className="px-1 col-1">
         <Icons.Favorite
-          isFavorite={row.isFavorite}
+          isImportant={row.isImportant}
           onClick={(e: any) => handleToggleFavorite(e, row)}
         />
       </td>

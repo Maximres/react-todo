@@ -1,8 +1,12 @@
-﻿export interface IList {
-  taskId: string;
+﻿import { IRow } from "./tasksTypes";
+
+export interface IList {
+  id: string;
   name: string;
-  Icon?: JSX.Element;
+  groupId: string;
+  iconName?: string;
   tasksTotal: number;
+  tasks: IRow[]
 }
 
 export interface IGroup {

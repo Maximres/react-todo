@@ -1,4 +1,4 @@
-﻿import { RootState } from "../../configs/redux";
+﻿import { RootState } from "../../constants/types/redux";
 
 const selectCurrentRow = (state: RootState) => {
   return state.details.task;

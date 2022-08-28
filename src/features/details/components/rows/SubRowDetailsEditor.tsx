@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import Icons from "../../../../components/AppIcons";
-import { useAppDispatch, useAppSelector } from "../../../../configs/redux";
-import { ITask } from "../../../../constants/types/appTypes";
+import { useAppDispatch, useAppSelector } from "../../../../constants/types/redux";
+import { ITask } from "../../../../constants/types/tasksTypes";
 import { toggleSubTaskChecked } from "../../detailsSlice";
 import { handleEnterKeyPress } from "../../../../utils/helpers/enterKeyHandler";
 

@@ -3,13 +3,13 @@
   AnyAction,
   configureStore,
   Dispatch,
+  Middleware,
   MiddlewareAPI,
 } from "@reduxjs/toolkit";
-import mainReducer from "../features/main/mainSlice";
-import detailsReducer from "../features/details/detailsSlice";
-import listsReducer from "../features/lists/listsSlice";
-import { Middleware } from "redux";
-import { detailsListenerMiddleware } from "../features/details/detailsMiddleware";
+import mainReducer from "../../features/main/mainSlice";
+import detailsReducer from "../../features/details/detailsSlice";
+import listsReducer from "../../features/lists/listsSlice";
+import { detailsListenerMiddleware } from "../../features/details/middleware/detailsMiddleware";
 
 const consoleLogger = (api: MiddlewareAPI<Dispatch, any>) => {
   const { app } = api.getState();

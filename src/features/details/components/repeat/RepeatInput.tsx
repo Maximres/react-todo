@@ -1,10 +1,10 @@
 ﻿import React, { forwardRef } from "react";
 import Icons from "../../../../components/AppIcons";
 import reminderEnum from "../../../../constants/enums/reminderEnum";
-import useReminder from "../../../../utils/hooks/useReminder";
+import useReminder from "../../hooks/useReminder";
 import RepeatMenuItems from "./RepeatMenuItems";
-import getRepeatName from "../../../../utils/helpers/getRepeatName";
-import { useAppSelector } from "../../../../configs/redux";
+import getRepeatName from "../../helpers/getRepeatName";
+import { useAppSelector } from "../../../../constants/types/redux";
 import selectCurrentRow from "../../../../utils/selectors/selectCurrentRow";
 
 type Props = {
