@@ -1,8 +1,8 @@
 ﻿import React, { useState } from "react";
 import { Tasks } from "./components/Tasks";
-import { IRow } from "../../constants/types/tasksTypes";
-import { useAppDispatch, useAppSelector } from "../../constants/types/redux";
-import Icons from "../../components/AppIcons";
+import { IRow } from "constants/types/tasksTypes";
+import { useAppDispatch, useAppSelector } from "constants/types/redux";
+import Icons from "components/AppIcons";
 import {
   createTask,
   toggleChecked,

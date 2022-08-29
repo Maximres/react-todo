@@ -2,9 +2,9 @@
 import {
   IDetailsState,
   ITaskDetails,
-} from "../../constants/types/detailsTypes";
-import type { AppStartListening } from "../../constants/types/redux";
-import { IRow } from "../../constants/types/tasksTypes";
+} from "constants/types/detailsTypes";
+import type { AppStartListening } from "constants/types/redux";
+import { IRow } from "constants/types/tasksTypes";
 
 const initialState: IDetailsState = {
   subTasks: [],

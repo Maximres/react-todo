@@ -1,11 +1,11 @@
 ﻿import React, { forwardRef } from "react";
-import Icons from "../../../../components/AppIcons";
+import Icons from "components/AppIcons";
 import ReminderMenuItems from "./ReminderMenuItems";
 import { format } from "date-fns";
 import useReminder from "../../hooks/useReminder";
-import reminderEnum from "../../../../constants/enums/reminderEnum";
-import { useAppSelector } from "../../../../constants/types/redux";
-import selectCurrentRow from "../../../../utils/selectors/selectCurrentRow";
+import reminderEnum from "constants/enums/reminderEnum";
+import { useAppSelector } from "constants/types/redux";
+import selectCurrentRow from "utils/selectors/selectCurrentRow";
 
 type Props = {
   isOpen: boolean;

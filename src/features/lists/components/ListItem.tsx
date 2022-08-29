@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import Icons from "../../../components/AppIcons";
+import Icons from "components/AppIcons";
 import cn from "classnames";
 
 type Props = {

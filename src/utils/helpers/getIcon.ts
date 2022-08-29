@@ -1,4 +1,4 @@
-﻿import Icons from "../../components/AppIcons";
+﻿import Icons from "components/AppIcons";
 
 type IconKey = keyof typeof Icons;
 

@@ -1,5 +1,5 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { IRow, IState } from "../../constants/types/tasksTypes";
+import { IRow, IState } from "constants/types/tasksTypes";
 
 const initialState: IState = {
   tasks: [],

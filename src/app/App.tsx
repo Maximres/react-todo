@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { Main } from "../features/main/Main";
-import { Details } from "../features/details/Details";
-import Lists from "../features/lists/Lists";
-import ApiActions from "../constants/enums/firebaseActionsEnum";
+import { Main } from "features/main/Main";
+import { Details } from "features/details/Details";
+import Lists from "features/lists/Lists";
+import ApiActions from "constants/enums/firebaseActionsEnum";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { useAppDispatch } from "../constants/types/redux";
-import { useDataService } from "../services/data/useDataService";
+import { useAppDispatch } from "constants/types/redux";
+import { useDataService } from "services/data/useDataService";
 
 export const fetchLists = createAsyncThunk(
   ApiActions.InitialFetch,

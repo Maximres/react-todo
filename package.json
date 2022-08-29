@@ -73,8 +73,5 @@
     "fontawesome-svg-core": {
       "license": "free"
     }
-  },
-  "compilerOptions": {
-    "esModuleInterop": true
   }
 }

@@ -1,4 +1,4 @@
-﻿import reminderEnum from "../../../constants/enums/reminderEnum";
+﻿import reminderEnum from "constants/enums/reminderEnum";
 
 const getRepeatName = (type?: reminderEnum) => {
   switch (type) {

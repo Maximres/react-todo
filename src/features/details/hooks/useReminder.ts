@@ -1,9 +1,9 @@
 ﻿import { useCallback } from "react";
-import reminderEnum from "../../../constants/enums/reminderEnum";
+import reminderEnum from "constants/enums/reminderEnum";
 import { add, set } from "date-fns";
-import { useAppDispatch, useAppSelector } from "../../../constants/types/redux";
-import { updateTask } from "../../main/mainSlice";
-import selectCurrentRow from "../../../utils/selectors/selectCurrentRow";
+import { useAppDispatch, useAppSelector } from "constants/types/redux";
+import { updateTask } from "features/main/mainSlice";
+import selectCurrentRow from "utils/selectors/selectCurrentRow";
 
 const useReminder = () => {
   const dispatch = useAppDispatch();
