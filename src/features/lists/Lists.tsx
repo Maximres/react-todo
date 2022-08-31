@@ -1,10 +1,9 @@
 ﻿import React from "react";
-import Icons from "components/AppIcons";
+import Icons from "@/components/AppIcons";
 import GroupItem from "./components/GroupItem";
 import ListItem from "./components/ListItem";
-import { useAppSelector } from "constants/types/redux";
-import { getListIcon } from "utils/helpers/getIcon";
-
+import { useAppSelector } from "@/constants/types/redux";
+import { getListIcon } from "@/utils/helpers/getIcon";
 
 const Lists = () => {
   const defaultLists = useAppSelector((x) => x.lists.defaultLists);
@@ -128,4 +127,4 @@ const Lists = () => {
   );
 };
 
-export default Lists;
+export { Lists };

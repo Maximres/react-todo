@@ -1,10 +1,10 @@
 ﻿import React from "react";
-import Icons from "components/AppIcons";
+import Icons from "@/components/AppIcons";
 import RowDetailsEditor from "./components/RowDetailsEditor";
 import RowDetailsReminder from "./components/RowDetailsReminder";
 import RowDetailsMyDay from "./components/RowDetailsMyDay";
-import { useAppDispatch, useAppSelector } from "constants/types/redux";
-import { closeSidebar } from "features/main/mainSlice";
+import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
+import { closeSidebar } from "@features/main";
 import Footer from "./components/Footer";
 
 export const Details = (): JSX.Element | null => {

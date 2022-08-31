@@ -1,9 +1,9 @@
 ﻿import React from "react";
-import Icons from "../../../../components/AppIcons";
-import { useAppDispatch, useAppSelector } from "../../../../constants/types/redux";
-import { ITask } from "../../../../constants/types/tasksTypes";
-import { toggleSubTaskChecked } from "../../detailsSlice";
-import { handleEnterKeyPress } from "../../../../utils/helpers/enterKeyHandler";
+import Icons from "@/components/AppIcons";
+import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
+import { ITask } from "@/constants/types/tasksTypes";
+import { toggleSubTaskChecked } from "@features/details";
+import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
 
 const SubRowDetailsEditor = () => {
   const subTasks = useAppSelector((s) => s.details.subTasks);

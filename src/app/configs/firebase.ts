@@ -13,4 +13,3 @@ const firebaseConfig = {
 } as FirebaseOptions;
 
 export const firebaseApp = initializeApp(firebaseConfig);
-

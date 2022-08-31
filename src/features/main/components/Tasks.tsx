@@ -1,8 +1,8 @@
 ﻿import React from "react";
-import Icons from "components/AppIcons";
-import { IRow } from "constants/types/tasksTypes";
-import { useAppDispatch } from "constants/types/redux";
-import { toggleSelected } from "../mainSlice";
+import Icons from "@/components/AppIcons";
+import { IRow } from "@/constants/types/tasksTypes";
+import { useAppDispatch } from "@/constants/types/redux";
+import { toggleSelected } from "@features/main";
 
 type Props = {
   tasks: IRow[];

@@ -1,14 +1,10 @@
 ﻿import React from "react";
-import Icons from "../../../../components/AppIcons";
-import { useAppDispatch, useAppSelector } from "../../../../constants/types/redux";
-import selectCurrentRow from "../../../../utils/selectors/selectCurrentRow";
-import { IRow, ITask } from "../../../../constants/types/tasksTypes";
-import {
-  toggleChecked,
-  toggleFavorite,
-  updateTask,
-} from "../../../main/mainSlice";
-import { handleEnterKeyPress } from "../../../../utils/helpers/enterKeyHandler";
+import Icons from "@/components/AppIcons";
+import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
+import selectCurrentRow from "@/utils/selectors/selectCurrentRow";
+import { IRow, ITask } from "@/constants/types/tasksTypes";
+import { toggleChecked, toggleFavorite, updateTask } from "@features/main";
+import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
 
 const RowDetails = () => {
   const selectedRow = useAppSelector(selectCurrentRow) as IRow;

@@ -6,10 +6,9 @@
   Middleware,
   MiddlewareAPI,
 } from "@reduxjs/toolkit";
-import mainReducer from "../../features/main/mainSlice";
-import detailsReducer from "../../features/details/detailsSlice";
-import listsReducer from "../../features/lists/listsSlice";
-import { detailsListenerMiddleware } from "../../features/details/middleware/detailsMiddleware";
+import { mainReducer } from "@features/main";
+import { detailsListenerMiddleware, detailsReducer } from "@features/details";
+import { listsReducer } from "@features/lists";
 
 const consoleLogger = (api: MiddlewareAPI<Dispatch, any>) => {
   const { app } = api.getState();

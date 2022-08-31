@@ -88,7 +88,7 @@ const mainSlice = createSlice({
   },
 });
 
-export default mainSlice.reducer;
+export const mainReducer = mainSlice.reducer;
 export const {
   selectRow,
   toggleChecked,

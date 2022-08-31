@@ -1,5 +1,5 @@
 ﻿import React, { useMemo } from "react";
-import reminderEnum from "constants/enums/reminderEnum";
+import reminderEnum from "@/constants/enums/reminderEnum";
 import ReminderInput from "./reminder/ReminderInput";
 import ReminderDatePickerDropdown from "./common/ReminderGroupItem";
 import DueDateInput from "./dueDate/DueDateInput";

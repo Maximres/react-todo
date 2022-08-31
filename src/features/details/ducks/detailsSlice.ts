@@ -1,8 +1,5 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import {
-  IDetailsState,
-  ITaskDetails,
-} from "constants/types/detailsTypes";
+import { IDetailsState, ITaskDetails } from "constants/types/detailsTypes";
 import type { AppStartListening } from "constants/types/redux";
 import { IRow } from "constants/types/tasksTypes";
 
@@ -96,4 +93,4 @@ export const sidebarVisibilityListener = (
 export const { createSubTask, deleteSubTask, toggleSubTaskChecked } =
   detailsSlice.actions;
 
-export default detailsSlice.reducer;
+export const detailsReducer = detailsSlice.reducer;

@@ -6,7 +6,7 @@ export interface IList {
   groupId: string;
   iconName?: string;
   tasksTotal: number;
-  tasks: IRow[]
+  tasks: IRow[];
 }
 
 export interface IGroup {

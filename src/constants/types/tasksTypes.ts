@@ -1,4 +1,4 @@
-﻿import reminderEnum from "../enums/reminderEnum";
+﻿import reminderEnum from "constants/enums/reminderEnum";
 
 export interface IIdentifier {
   id: string;

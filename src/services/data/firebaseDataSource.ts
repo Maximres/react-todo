@@ -10,25 +10,24 @@ import {
   ListDto,
   SubTaskDto,
   TaskDto,
-} from "constants/types/firebaseDocumentsDto";
-import { IList } from "constants/types/listsTypes";
-import scheme from "constants/enums/firebaseCollectionScheme";
-import { isFulfilled, isRejected } from "utils/helpers/promiseResolver";
+} from "@/constants/types/firebaseDocumentsDto";
+import { IList } from "@/constants/types/listsTypes";
+import scheme from "@/constants/enums/firebaseCollectionScheme";
+import { isFulfilled, isRejected } from "@/utils/helpers/promiseResolver";
 import flattenDeep from "lodash/flattenDeep";
-import { IRow, ITask } from "constants/types/tasksTypes";
+import { IRow, ITask } from "@/constants/types/tasksTypes";
 
-function getCollectionGroup(
+const getCollectionGroup = (
   firestore: Firestore,
   documentId: string,
   collectionName: string,
-) {
-  return getDocs(
+) =>
+  getDocs(
     query(
       collectionGroup(firestore, collectionName),
       where("parentId", "==", documentId),
     ),
   );
-}
 
 const getLists = (db: Firestore) => {
   const lists = [] as ListDto[];
@@ -139,6 +138,6 @@ const getLists = (db: Firestore) => {
   });
 };
 
-export const FirebaseDataAPI = {
+export const FirebaseDataSource = {
   getLists,
 };
