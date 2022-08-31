@@ -4,7 +4,7 @@ import RowDetailsEditor from "./components/RowDetailsEditor";
 import RowDetailsReminder from "./components/RowDetailsReminder";
 import RowDetailsMyDay from "./components/RowDetailsMyDay";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
-import { closeSidebar } from "@features/main";
+import { closeSidebar } from "@/features/tasks";
 import Footer from "./components/Footer";
 
 export const Details = (): JSX.Element | null => {
@@ -14,7 +14,9 @@ export const Details = (): JSX.Element | null => {
     dispatch(closeSidebar());
   };
 
-  return isVisible ? (
+  if (!isVisible) return null;
+
+  return (
     <aside
       className="d-flex flex-column align-items-stretch flex-shrink-0 overflow-auto bg-light"
       style={{ width: "380px" }}
@@ -39,7 +41,8 @@ export const Details = (): JSX.Element | null => {
         <div className="list-group ">
           <label className="list-group-item group-item-height d-flex justify-content-between align-items-center">
             <span className="me-3">
-              <Icons.File onClick={() => {}} />
+              <Icons.File onClick={() => {
+              }} />
             </span>
             <span className="form-control me-1" onFocus={() => ({})}>
               Add file
@@ -65,5 +68,5 @@ export const Details = (): JSX.Element | null => {
 
       <Footer />
     </aside>
-  ) : null;
+  );
 };

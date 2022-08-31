@@ -6,7 +6,7 @@
   Middleware,
   MiddlewareAPI,
 } from "@reduxjs/toolkit";
-import { mainReducer } from "@features/main";
+import { mainReducer } from "@/features/tasks";
 import { detailsListenerMiddleware, detailsReducer } from "@features/details";
 import { listsReducer } from "@features/lists";
 

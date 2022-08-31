@@ -3,7 +3,7 @@ import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import selectCurrentRow from "@/utils/selectors/selectCurrentRow";
 import { IRow, ITask } from "@/constants/types/tasksTypes";
-import { toggleChecked, toggleFavorite, updateTask } from "@features/main";
+import { toggleChecked, toggleFavorite, updateTask } from "@/features/tasks";
 import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
 
 const RowDetails = () => {

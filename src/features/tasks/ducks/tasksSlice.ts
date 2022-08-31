@@ -5,7 +5,7 @@ const initialState: IState = {
   tasks: [],
 };
 
-const mainSlice = createSlice({
+const tasksSlice = createSlice({
   name: "main",
   initialState,
   reducers: {
@@ -88,7 +88,7 @@ const mainSlice = createSlice({
   },
 });
 
-export const mainReducer = mainSlice.reducer;
+export const mainReducer = tasksSlice.reducer;
 export const {
   selectRow,
   toggleChecked,
@@ -98,4 +98,4 @@ export const {
   updateTask,
   createTask,
   deleteTask,
-} = mainSlice.actions;
+} = tasksSlice.actions;

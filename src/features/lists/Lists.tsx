@@ -64,7 +64,7 @@ const Lists = () => {
             {/*<ListItem name={"Important"} Icon={<Icons.Favorite/>}/>*/}
             {/*<ListItem name={"Planned"} Icon={<Icons.Planned/>}/>*/}
             {/*<ListItem name={"All"} Icon={<Icons.All/>}/>*/}
-            {/*<ListItem name={"Main"} Icon={<Icons.Task/>} />*/}
+            {/*<ListItem name={"Tasks"} Icon={<Icons.Task/>} />*/}
           </ul>
           <hr className="w-100 m-0" />
           <ul className="list-group list-group-flush">

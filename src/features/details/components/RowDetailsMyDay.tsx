@@ -3,7 +3,7 @@ import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import selectCurrentRow from "@/utils/selectors/selectCurrentRow";
 import { IRow } from "@/constants/types/tasksTypes";
-import { updateTask } from "@features/main";
+import { updateTask } from "@/features/tasks";
 import classNames from "classnames";
 
 const RowDetailsMyDay = () => {

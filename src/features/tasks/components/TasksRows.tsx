@@ -1,25 +1,29 @@
-﻿import React from "react";
+﻿import React, { memo } from "react";
 import Icons from "@/components/AppIcons";
 import { IRow } from "@/constants/types/tasksTypes";
 import { useAppDispatch } from "@/constants/types/redux";
-import { toggleSelected } from "@features/main";
+import {
+  toggleChecked,
+  toggleFavorite as toggleFavoriteTask,
+  toggleSelected,
+} from "@/features/tasks";
 
 type Props = {
   tasks: IRow[];
-  toggleFavorite: (arg: IRow) => void;
-  handleCheck: (arg: IRow) => void;
 };
 
-const Tasks = ({
-  tasks,
-  toggleFavorite,
-  handleCheck,
-}: Props): JSX.Element | null => {
+const TasksComponent = ({ tasks }: Props): JSX.Element | null => {
   const dispatch = useAppDispatch();
 
-  const handleToggleFavorite = (e: any, row: IRow) => {
+  const handleCheck = (task: IRow) => {
+    dispatch(toggleChecked({ task: task, isChecked: !task.isChecked }));
+  };
+
+  const handleToggleFavorite = (e: any, task: IRow) => {
     e.stopPropagation();
-    toggleFavorite(row);
+    dispatch(
+      toggleFavoriteTask({ task: task, isImportant: !task.isImportant }),
+    );
   };
 
   const toggleSideBar = (task: IRow) => {
@@ -54,4 +58,4 @@ const Tasks = ({
   return tasks ? <>{elements}</> : null;
 };
 
-export { Tasks };
+export const TasksRows = memo(TasksComponent);

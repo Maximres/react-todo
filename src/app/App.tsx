@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { Main } from "@features/main";
+import { Tasks } from "@/features/tasks";
 import { Details } from "@features/details";
 import { Lists } from "@features/lists";
 import ApiActions from "@/constants/enums/firebaseActionsEnum";
@@ -28,7 +28,7 @@ function App() {
   return (
     <>
       <Lists />
-      <Main />
+      <Tasks />
       <Details />
     </>
   );
