@@ -10,5 +10,5 @@ export interface ITaskDetails extends IIdentifier {
 export interface IDetailsState {
   isVisible: boolean;
   task?: IRow;
-  subTasks: ITaskDetails[];
+  subTasks?: ITaskDetails[];
 }

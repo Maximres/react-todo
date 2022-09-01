@@ -19,11 +19,15 @@ export const fetchLists = createAsyncThunk(
 
 function App() {
   const dispatch = useAppDispatch();
-  const { getLists } = useDataService();
+  const { getListsWithTasks, getListsWithSubtasks } = useDataService();
 
   useEffect(() => {
-    dispatch(fetchLists(getLists));
-  }, [getLists, dispatch]);
+    (async () => {
+      const result = await getListsWithSubtasks();
+    })()
+
+    dispatch(fetchLists(getListsWithTasks));
+  }, [getListsWithTasks, dispatch]);
 
   return (
     <>

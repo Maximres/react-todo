@@ -4,10 +4,20 @@ import GroupItem from "./components/GroupItem";
 import ListItem from "./components/ListItem";
 import { useAppSelector } from "@/constants/types/redux";
 import { getListIcon } from "@/utils/helpers/getIcon";
+import { useDispatch } from "react-redux";
+import { selectList } from "@features/tasks";
 
 const Lists = () => {
   const defaultLists = useAppSelector((x) => x.lists.defaultLists);
   const customLists = useAppSelector((x) => x.lists.customLists);
+  const dispatch = useDispatch();
+
+  const handleItemClick = (uid: string) => {
+    const selectedList = customLists.find((i) => i.id === uid);
+    if (!selectedList) return;
+
+    dispatch(selectList(selectedList));
+  };
 
   return (
     <aside
@@ -53,10 +63,12 @@ const Lists = () => {
             {defaultLists.map((item) => {
               return (
                 <ListItem
+                  uid={item.id}
                   key={item.id}
                   name={item.name}
                   total={item.tasksTotal}
                   Icon={getListIcon(item.iconName)}
+                  onClick={handleItemClick}
                 />
               );
             })}
@@ -72,45 +84,26 @@ const Lists = () => {
               return (
                 <ListItem
                   key={item.id}
+                  uid={item.id}
                   name={item.name}
                   total={item.tasksTotal}
                   Icon={getListIcon(item.iconName)}
+                  onClick={handleItemClick}
                 />
               );
             })}
 
-            <ListItem />
-            <ListItem />
-            <ListItem />
-            <ListItem />
 
             <GroupItem name="1">
               {
                 <ul className="list-group list-group-flush">
-                  <ListItem isSubItem={true} />
-                  <ListItem isSubItem={true} />
-                  <ListItem isSubItem={true} />
+                  <ListItem onClick={handleItemClick} isSubItem={true} />
+                  <ListItem onClick={handleItemClick} isSubItem={true} />
+                  <ListItem onClick={handleItemClick} isSubItem={true} />
                 </ul>
               }
             </GroupItem>
-            <GroupItem name="1">
-              {
-                <ul className="list-group list-group-flush">
-                  <ListItem />
-                  <ListItem />
-                  <ListItem />
-                </ul>
-              }
-            </GroupItem>
-            <GroupItem name="1">
-              {
-                <ul className="list-group list-group-flush">
-                  <ListItem />
-                  <ListItem />
-                  <ListItem />
-                </ul>
-              }
-            </GroupItem>
+
           </ul>
         </div>
       </section>

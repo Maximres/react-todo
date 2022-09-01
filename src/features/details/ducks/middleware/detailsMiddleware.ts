@@ -1,6 +1,7 @@
 ﻿import { createListenerMiddleware } from "@reduxjs/toolkit";
 import { AppStartListening } from "constants/types/redux";
-import { sidebarVisibilityListener } from "../detailsSlice";
+
+import {selectedTasksListener} from "./selectedTasksListener"
 
 export const detailsListenerMiddleware = createListenerMiddleware();
 export const taskUpdatesListenerMiddleware = createListenerMiddleware();
@@ -11,4 +12,4 @@ const startAppListeningDetails =
 const startAppListeningTaskUpdates =
   taskUpdatesListenerMiddleware.startListening as AppStartListening;
 
-sidebarVisibilityListener(startAppListeningDetails);
+selectedTasksListener(startAppListeningDetails);

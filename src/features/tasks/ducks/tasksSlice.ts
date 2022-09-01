@@ -1,12 +1,16 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { IRow, IState } from "constants/types/tasksTypes";
+import { IRow, IState, ITask } from "constants/types/tasksTypes";
+import { IList } from "@/constants/types/listsTypes";
 
 const initialState: IState = {
   tasks: [],
+  listId: "",
+  listIcon: "",
+  listName: "",
 };
 
 const tasksSlice = createSlice({
-  name: "main",
+  name: "tasks",
   initialState,
   reducers: {
     updateTask: (state, action: PayloadAction<IRow>) => {
@@ -16,16 +20,16 @@ const tasksSlice = createSlice({
     createTask: {
       reducer(state, action: PayloadAction<{ text: string; id: string }>) {
         const newTask: IRow = {
-          parentId: "##########", //todo
+          parentId: state.listId,
           id: action.payload.id,
           isChecked: false,
           text: action.payload.text,
           isImportant: false,
           createdDate: Number(new Date()),
-          subTasks: [],
           remindDate: undefined,
           isMyDay: false,
           dueDate: undefined,
+          subTasks: [],
         };
         state.tasks.push(newTask);
       },
@@ -82,15 +86,26 @@ const tasksSlice = createSlice({
       const tasks = [...filtered, { ...task, isChecked: isChecked }];
       state.tasks = tasks;
     },
-    selectRow: (state, action: PayloadAction<IRow>) => {
-      state.selectedRowId = action.payload.id;
+    selectList: (state, action: PayloadAction<IList>) => {
+      state.tasks = action.payload.tasks;
+      state.listId = action.payload.id;
+      state.listName = action.payload.name;
+      state.listIcon = action.payload.iconName;
+    },
+    setSubtasks: (state, action: PayloadAction<ITask[]>) => {
+      const subTasks = action.payload;
+      if (subTasks == null) return;
+
+      state.tasks.forEach((task) => {
+        const subs = subTasks.filter((s) => s.parentId === task.id);
+        task.subTasks = subs;
+      });
     },
   },
 });
 
-export const mainReducer = tasksSlice.reducer;
+export const tasksReducer = tasksSlice.reducer;
 export const {
-  selectRow,
   toggleChecked,
   toggleFavorite,
   toggleSelected,
@@ -98,4 +113,6 @@ export const {
   updateTask,
   createTask,
   deleteTask,
+  selectList,
+  setSubtasks,
 } = tasksSlice.actions;

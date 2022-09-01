@@ -6,9 +6,10 @@
   Middleware,
   MiddlewareAPI,
 } from "@reduxjs/toolkit";
-import { mainReducer } from "@/features/tasks";
+import { tasksReducer } from "@/features/tasks";
 import { detailsListenerMiddleware, detailsReducer } from "@features/details";
 import { listsReducer } from "@features/lists";
+import { tasksListenerMiddleware } from "@/features/tasks/ducks/middleware/tasksMiddleware";
 
 const consoleLogger = (api: MiddlewareAPI<Dispatch, any>) => {
   const { app } = api.getState();
@@ -22,14 +23,15 @@ const consoleLogger = (api: MiddlewareAPI<Dispatch, any>) => {
 
 const store = configureStore({
   reducer: {
-    main: mainReducer,
+    tasks: tasksReducer,
     details: detailsReducer,
     lists: listsReducer,
   },
   middleware: (defaultMiddleware) =>
     defaultMiddleware()
       .concat(consoleLogger as Middleware)
-      .concat(detailsListenerMiddleware.middleware),
+      .concat(detailsListenerMiddleware.middleware)
+      .concat(tasksListenerMiddleware.middleware),
 });
 
 export default store;

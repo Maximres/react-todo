@@ -4,7 +4,7 @@ export interface IList {
   id: string;
   name: string;
   groupId: string;
-  iconName?: string;
+  iconName: string;
   tasksTotal: number;
   tasks: IRow[];
 }

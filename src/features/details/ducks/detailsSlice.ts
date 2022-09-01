@@ -1,6 +1,5 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { IDetailsState, ITaskDetails } from "constants/types/detailsTypes";
-import type { AppStartListening } from "constants/types/redux";
 import { IRow } from "constants/types/tasksTypes";
 
 const initialState: IDetailsState = {
@@ -21,6 +20,8 @@ const detailsSlice = createSlice({
           subId: string;
         }>,
       ) {
+        state.subTasks ??= [];
+
         const newSubTask: ITaskDetails = {
           id: action.payload.subId,
           isChecked: false,
@@ -42,6 +43,8 @@ const detailsSlice = createSlice({
       },
     },
     deleteSubTask: (state, action: PayloadAction<string>) => {
+      if (state.subTasks == null) return;
+
       const index = state.subTasks.findIndex((x) => x.id === action.payload);
 
       state.subTasks.splice(index, 1);
@@ -53,6 +56,8 @@ const detailsSlice = createSlice({
         isChecked: boolean;
       }>,
     ) => {
+      if (state.subTasks == null) return;
+
       const payload = action.payload;
       const isChecked = payload.isChecked;
       const subTask = state.subTasks.find((p) => p.id === payload.subTaskId);
@@ -64,33 +69,18 @@ const detailsSlice = createSlice({
       const task = action.payload;
       state.isVisible = task != null;
       state.task = task;
+      if (task) {
+        state.subTasks = task.subTasks;
+      }
     },
   },
 });
 
-const updateDetails = detailsSlice.actions.updateDetails;
-export const sidebarVisibilityListener = (
-  startListening: AppStartListening,
-) => {
-  startListening({
-    predicate: (action, currentState, originalState) => {
-      const currState = currentState.main;
-      const prevState = originalState.main;
-      return (
-        currState.selectedRowId !== prevState.selectedRowId ||
-        currState.tasks !== prevState.tasks
-      );
-    },
-    effect: (action, api) => {
-      const app = api.getState().main;
-      const rowId = app.selectedRowId;
-      const task = app.tasks.find((t) => t.id === rowId);
-      api.dispatch(updateDetails(task));
-    },
-  });
-};
-
-export const { createSubTask, deleteSubTask, toggleSubTaskChecked } =
-  detailsSlice.actions;
+export const {
+  createSubTask,
+  deleteSubTask,
+  toggleSubTaskChecked,
+  updateDetails,
+} = detailsSlice.actions;
 
 export const detailsReducer = detailsSlice.reducer;

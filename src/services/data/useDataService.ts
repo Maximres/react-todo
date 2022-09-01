@@ -1,19 +1,10 @@
-﻿import { getFirestore } from "firebase/firestore";
-import { firebaseApp } from "@/app/configs/firebase";
-import { FirebaseDataSource } from "./firebaseDataSource";
-import { useMemo } from "react";
+﻿import { useMemo } from "react";
+import {dataService} from "./dataService";
 
 const useDataService = () => {
-  const api = useMemo(() => {
-    const db = getFirestore(firebaseApp);
-
-    return {
-      getLists: () => FirebaseDataSource.getLists(db),
-    };
+  return useMemo(() => {
+    return dataService;
   }, []);
-
-  return api;
 };
 
-
-export { useDataService }  ;
+export { useDataService };

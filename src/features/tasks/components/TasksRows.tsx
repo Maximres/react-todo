@@ -4,7 +4,7 @@ import { IRow } from "@/constants/types/tasksTypes";
 import { useAppDispatch } from "@/constants/types/redux";
 import {
   toggleChecked,
-  toggleFavorite as toggleFavoriteTask,
+  toggleFavorite,
   toggleSelected,
 } from "@/features/tasks";
 
@@ -21,9 +21,7 @@ const TasksComponent = ({ tasks }: Props): JSX.Element | null => {
 
   const handleToggleFavorite = (e: any, task: IRow) => {
     e.stopPropagation();
-    dispatch(
-      toggleFavoriteTask({ task: task, isImportant: !task.isImportant }),
-    );
+    dispatch(toggleFavorite({ task: task, isImportant: !task.isImportant }));
   };
 
   const toggleSideBar = (task: IRow) => {

@@ -3,7 +3,7 @@ import { TasksRows } from "@/features/tasks/components/TasksRows";
 import { useAppSelector } from "@/constants/types/redux";
 
 const TasksTable = () => {
-  const tasks = useAppSelector((s) => s.main.tasks);
+  const tasks = useAppSelector((s) => s.tasks.tasks);
 
   return (
     <div className="row px-5">

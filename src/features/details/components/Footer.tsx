@@ -27,7 +27,7 @@ const Footer = () => {
           )}
         </span>
       </div>
-      <Icons.Trash className="p-4 fs-5" onClick={clickHandler} />
+      <Icons.Trash className="p-3 fs-5" onClick={clickHandler} />
     </div>
   );
 };

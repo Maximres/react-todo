@@ -8,7 +8,6 @@ import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
 const SubRowDetailsEditor = () => {
   const subTasks = useAppSelector((s) => s.details.subTasks);
   const dispatch = useAppDispatch();
-
   const handleSubTextChange = (e: any, subTask: ITask) => {
     //todo: handle sub task change
   };

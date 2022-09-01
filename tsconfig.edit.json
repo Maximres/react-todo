@@ -9,8 +9,8 @@
       "@features/lists": [
         "features/lists/index.ts"
       ],
-      "@features/main": [
-        "features/main/index.ts"
+      "@features/tasks": [
+        "features/tasks/index.ts"
       ]
     }
   }

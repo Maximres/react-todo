@@ -20,10 +20,13 @@ export interface IReminder {
 
 export interface IRow extends ITask, IReminder {
   isImportant: boolean;
-  subTasks: ITask[]; // todo remove
+  subTasks?: ITask[]
 }
 
 export interface IState {
+  listId: string;
+  listName: string;
+  listIcon: string;
   tasks: IRow[];
   selectedRowId?: string;
 }
