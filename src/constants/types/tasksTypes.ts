@@ -9,6 +9,7 @@ export interface ITask extends IIdentifier {
   isChecked: boolean;
   text?: string;
   createdDate: number;
+  isNewOne?: boolean
 }
 
 export interface IReminder {

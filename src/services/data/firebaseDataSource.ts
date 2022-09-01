@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import {
@@ -17,6 +18,7 @@ import { IList } from "@/constants/types/listsTypes";
 import scheme from "@/constants/enums/firebaseCollectionScheme";
 import { isFulfilled, isRejected } from "@/utils/helpers/promiseResolver";
 import flattenDeep from "lodash/flattenDeep";
+import _orderBy from "lodash/orderBy";
 import { IRow, ITask } from "@/constants/types/tasksTypes";
 import reminderEnum from "@/constants/enums/reminderEnum";
 
@@ -355,23 +357,33 @@ const getSubtasks = (db: Firestore, taskIdList: string[]) => {
         });
       })
       .then(() => {
-        const result = subTaskDtoList.map((subDto) => {
-          const subTask = {} as ITask;
-          subTask.id = subDto.id;
-          subTask.parentId = subDto.parentId;
-          subTask.createdDate = Number(subDto.createdDate);
-          subTask.text = subDto.text;
+        const result = _orderBy(
+          subTaskDtoList.map((subDto) => {
+            const subTask = {} as ITask;
+            subTask.id = subDto.id;
+            subTask.parentId = subDto.parentId;
+            subTask.createdDate = Number(subDto.createdDate);
+            subTask.text = subDto.text;
 
-          return subTask;
-        });
+            return subTask;
+          }),
+          ["createdDate"],
+          ["asc"],
+        );
 
         resolve(result);
       });
   });
 };
 
+const setSubtask = (db: Firestore, task: ITask) => {
+  debugger;
+  return setDoc(doc(db, scheme.SubTasks, task.id), task, { merge: true });
+};
+
 export const FirebaseDataSource = {
   getListsWithSubtasks,
   getListsWithTasks,
   getSubtasks,
+  setSubtask,
 };

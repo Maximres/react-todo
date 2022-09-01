@@ -97,7 +97,9 @@ const tasksSlice = createSlice({
       if (subTasks == null) return;
 
       state.tasks.forEach((task) => {
+        task.subTasks ??= [];
         const subs = subTasks.filter((s) => s.parentId === task.id);
+
         task.subTasks = subs;
       });
     },

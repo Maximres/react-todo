@@ -1,6 +1,6 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { IDetailsState, ITaskDetails } from "constants/types/detailsTypes";
-import { IRow } from "constants/types/tasksTypes";
+import { IDetailsState } from "constants/types/detailsTypes";
+import { IRow, ITask } from "constants/types/tasksTypes";
 
 const initialState: IDetailsState = {
   subTasks: [],
@@ -22,12 +22,13 @@ const detailsSlice = createSlice({
       ) {
         state.subTasks ??= [];
 
-        const newSubTask: ITaskDetails = {
+        const newSubTask: ITask = {
           id: action.payload.subId,
           isChecked: false,
           text: action.payload.text,
           createdDate: Number(new Date()),
           parentId: action.payload.parentId,
+          isNewOne: true
         };
 
         state.subTasks.push(newSubTask);
