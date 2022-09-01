@@ -30,6 +30,7 @@ export interface IState {
   listIcon: string;
   tasks: IRow[];
   selectedRowId?: string;
+  needSubTasksLoad: boolean;
 }
 
 export interface IAction {

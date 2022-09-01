@@ -1,12 +1,14 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { IRow, IState, ITask } from "constants/types/tasksTypes";
 import { IList } from "@/constants/types/listsTypes";
+import { fetchSubtasks } from "@/features/tasks";
 
 const initialState: IState = {
   tasks: [],
   listId: "",
   listIcon: "",
   listName: "",
+  needSubTasksLoad: false,
 };
 
 const tasksSlice = createSlice({
@@ -51,6 +53,74 @@ const tasksSlice = createSlice({
       if (state.selectedRowId === action.payload) {
         state.selectedRowId = undefined;
       }
+    },
+    createSubTask: {
+      reducer(
+        state,
+        action: PayloadAction<{
+          parentId: string;
+          text: string;
+          subId: string;
+        }>,
+      ) {
+        const parentTask = state.tasks.find(
+          (t) => t.id === action.payload.parentId,
+        );
+        if (parentTask == null) return;
+
+        const newSubTask: ITask = {
+          id: action.payload.subId,
+          isChecked: false,
+          text: action.payload.text,
+          createdDate: Number(new Date()),
+          parentId: action.payload.parentId,
+          isNewOne: true,
+        };
+        state.needSubTasksLoad = true;
+        parentTask.subTasks ??= [];
+        parentTask.subTasks.push(newSubTask);
+      },
+      prepare(parentId: string, text: string) {
+        return {
+          payload: {
+            parentId,
+            text,
+            subId: nanoid(),
+          },
+        };
+      },
+    },
+    deleteSubTask: (state, action: PayloadAction<string>) => {
+      if (state.tasks == null) return;
+
+      const index = state.tasks.findIndex((x) => x.id === state.selectedRowId);
+      if (index < 0) return;
+
+      const subIndex = state.tasks[index]!.subTasks?.findIndex(
+        (x) => x.id === action.payload,
+      );
+      if (subIndex == null || subIndex < 0) return;
+
+      state.tasks[index]!.subTasks!.splice(subIndex, 1);
+    },
+    toggleSubTaskChecked: (
+      state,
+      action: PayloadAction<{
+        subTaskId: string;
+        isChecked: boolean;
+      }>,
+    ) => {
+      const index = state.tasks.findIndex((x) => x.id === state.selectedRowId);
+      if (index < 0) return;
+
+      const payload = action.payload;
+      const isChecked = payload.isChecked;
+      const subTask = state.tasks[index]!.subTasks?.find(
+        (p) => p.id === payload.subTaskId,
+      );
+      if (subTask == null) return;
+
+      subTask.isChecked = isChecked;
     },
     toggleSelected: (state, action: PayloadAction<{ task: IRow }>) => {
       const currentId = action.payload.task.id;
@@ -104,6 +174,17 @@ const tasksSlice = createSlice({
       });
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchSubtasks.fulfilled, (state, action) => {
+      console.log("fetchSubtasks")
+      state.needSubTasksLoad = false;
+
+      const currentTask = state.tasks.find((x) => x.id === state.selectedRowId);
+      if (currentTask == null) return;
+
+      currentTask.subTasks = action.payload;
+    });
+  },
 });
 
 export const tasksReducer = tasksSlice.reducer;
@@ -117,4 +198,7 @@ export const {
   deleteTask,
   selectList,
   setSubtasks,
+  deleteSubTask,
+  toggleSubTaskChecked,
+  createSubTask,
 } = tasksSlice.actions;

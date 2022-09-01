@@ -29,6 +29,7 @@ type SubTaskDto = {
   id: string;
   text: string;
   createdDate: number;
+  isChecked: boolean;
 };
 
 export type { ListDto, TaskDto, SubTaskDto };

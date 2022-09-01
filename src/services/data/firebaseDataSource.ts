@@ -334,7 +334,7 @@ const getListsWithTasks = (db: Firestore) => {
   });
 };
 
-const getSubtasks = (db: Firestore, taskIdList: string[]) => {
+const getSubtasksMany = (db: Firestore, taskIdList: string[]) => {
   const subTaskDtoList = [] as SubTaskDto[];
 
   return new Promise<ITask[]>((resolve) => {
@@ -376,14 +376,59 @@ const getSubtasks = (db: Firestore, taskIdList: string[]) => {
   });
 };
 
-const setSubtask = (db: Firestore, task: ITask) => {
-  debugger;
-  return setDoc(doc(db, scheme.SubTasks, task.id), task, { merge: true });
+const getSubtasks = (db: Firestore, taskId: string) => {
+  const subTaskDtoList = [] as SubTaskDto[];
+
+  return new Promise<ITask[]>((resolve) => {
+    const subTasksQueries = getCollectionGroup(db, taskId, scheme.SubTasks);
+    subTasksQueries
+      .then((subTaskSnap) => {
+        subTaskSnap.docs.forEach((subTaskDoc) => {
+          subTaskDtoList.push({
+            ...(subTaskDoc.data() as SubTaskDto),
+            id: subTaskDoc.id,
+          });
+        });
+      })
+      .then(() => {
+        const result = _orderBy(
+          subTaskDtoList.map((subDto) => {
+            const subTask = {} as ITask;
+            subTask.id = subDto.id;
+            subTask.parentId = subDto.parentId;
+            subTask.createdDate = Number(subDto.createdDate);
+            subTask.text = subDto.text;
+            subTask.isChecked = subDto.isChecked;
+
+            return subTask;
+          }),
+          ["createdDate"],
+          ["asc"],
+        );
+
+        resolve(result);
+      });
+  });
+};
+
+const setSubtask = (db: Firestore, task: IRow, subTask: ITask) => {
+  const reference = doc(
+    db,
+    scheme.Lists,
+    task.parentId,
+    scheme.Tasks,
+    task.id,
+    scheme.SubTasks,
+    subTask.id,
+  );
+  return setDoc(reference, subTask, { merge: true });
 };
 
 export const FirebaseDataSource = {
   getListsWithSubtasks,
   getListsWithTasks,
+  getSubtasksMany,
   getSubtasks,
+
   setSubtask,
 };

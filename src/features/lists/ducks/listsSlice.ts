@@ -1,14 +1,14 @@
 ﻿import { createSlice } from "@reduxjs/toolkit";
 import { IList, IListsState } from "@/constants/types/listsTypes";
 import Icons from "@/components/AppIcons";
-import { fetchLists } from "@/app/App";
+import { initialFetchLists } from "@/app/App";
 
 const initialState: IListsState = {
   defaultLists: [
     { name: "My Day", iconName: "MyDay", groupId: "1", tasksTotal: 1 },
     {
       name: "Important",
-      iconName: Icons.Favorite({}),
+      iconName: "Favorite",
       groupId: "2",
       tasksTotal: 4,
     },
@@ -23,8 +23,7 @@ const listsSlice = createSlice({
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchLists.pending, () => {});
-    builder.addCase(fetchLists.fulfilled, (state, action) => {
+    builder.addCase(initialFetchLists.fulfilled, (state, action) => {
       const lists = action.payload;
       state.customLists = lists;
     });

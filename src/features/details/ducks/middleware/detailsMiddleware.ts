@@ -1,7 +1,7 @@
 ﻿import { createListenerMiddleware } from "@reduxjs/toolkit";
 import { AppStartListening } from "constants/types/redux";
 
-import { selectedTasksListener, subTaskCreatedListener } from "./selectedTasksListener";
+import { selectedTasksListener } from "./selectedTasksListener";
 
 export const detailsListenerMiddleware = createListenerMiddleware();
 export const taskUpdatesListenerMiddleware = createListenerMiddleware();
@@ -13,4 +13,3 @@ const startAppListeningTaskUpdates =
   taskUpdatesListenerMiddleware.startListening as AppStartListening;
 
 selectedTasksListener(startAppListeningDetails);
-subTaskCreatedListener(startAppListeningDetails);

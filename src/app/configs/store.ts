@@ -12,11 +12,9 @@ import { listsReducer } from "@features/lists";
 import { tasksListenerMiddleware } from "@/features/tasks/ducks/middleware/tasksMiddleware";
 
 const consoleLogger = (api: MiddlewareAPI<Dispatch, any>) => {
-  const { app } = api.getState();
   return (next: Dispatch<AnyAction>) => (action: Action) => {
     console.log("will dispatch", action);
     const result = next(action);
-    console.log("app", app);
     return result;
   };
 };

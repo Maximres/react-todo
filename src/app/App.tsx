@@ -9,7 +9,7 @@ import { useAppDispatch } from "@/constants/types/redux";
 import { useDataService } from "@/services/data/useDataService";
 import { IList } from "@/constants/types/listsTypes";
 
-export const fetchLists = createAsyncThunk(
+export const initialFetchLists = createAsyncThunk(
   ApiActions.InitialFetch,
   async (getListsCall: () => Promise<IList[]>) => {
     const result = await getListsCall();
@@ -22,7 +22,7 @@ function App() {
   const { getListsWithTasks } = useDataService();
 
   useEffect(() => {
-    dispatch(fetchLists(getListsWithTasks));
+    dispatch(initialFetchLists(getListsWithTasks));
   }, [getListsWithTasks, dispatch]);
 
   return (

@@ -1,15 +1,23 @@
-﻿import React from "react";
+﻿import React, { useEffect } from "react";
 import Icons from "@/components/AppIcons";
 import RowDetailsEditor from "./components/RowDetailsEditor";
 import RowDetailsReminder from "./components/RowDetailsReminder";
 import RowDetailsMyDay from "./components/RowDetailsMyDay";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
-import { closeSidebar } from "@/features/tasks";
+import { closeSidebar, fetchSubtasks } from "@/features/tasks";
 import Footer from "./components/Footer";
 
 export const Details = (): JSX.Element | null => {
   const isVisible = useAppSelector((state) => state.details.isVisible);
+  const needLoad = useAppSelector((state) => state.tasks.needSubTasksLoad);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (isVisible && needLoad) {
+      dispatch(fetchSubtasks());
+    }
+  }, [isVisible, needLoad]);
+
   const closeDetails = () => {
     dispatch(closeSidebar());
   };

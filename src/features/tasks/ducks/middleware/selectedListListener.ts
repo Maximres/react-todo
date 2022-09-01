@@ -1,8 +1,8 @@
 ﻿import { AppStartListening } from "@/constants/types/redux";
-import { selectList, setSubtasks } from "@features/tasks";
+import { createSubTask, selectList, setSubtasks } from "@features/tasks";
 import isEmpty from "lodash/isEmpty";
 import { dataService } from "@/services/data";
-import { createSubTask } from "@features/details";
+import { ITask } from "@/constants/types/tasksTypes";
 
 export const selectedListListener = (startListening: AppStartListening) => {
   startListening({
@@ -16,21 +16,40 @@ export const selectedListListener = (startListening: AppStartListening) => {
 
       if (isEmpty(ids)) return;
 
-      const subTasks = await dataService.getSubtasks(ids);
+      const subTasks = await dataService.getSubtasksMany(ids);
       dispatch(setSubtasks(subTasks));
     },
   });
 };
 
-export const syncSubTaskListener = (startListening: AppStartListening) => {
+// export const syncSubTaskListener = (startListening: AppStartListening) => {
+//   startListening({
+//     matcher: createSubTask.match,
+//     effect: (action, { dispatch, cancelActiveListeners, getState }) => {
+//       const state = getState().details;
+//
+//       if (isEmpty(state.subTasks)) return;
+//
+//       dispatch(setSubtasks(state.subTasks!));
+//     },
+//   });
+// };
+
+export const subTaskCreatedListener = (startListening: AppStartListening) => {
   startListening({
     matcher: createSubTask.match,
-    effect: (action, { dispatch, cancelActiveListeners, getState }) => {
-      const state = getState().details;
+    effect: async (action, { getState, dispatch }) => {
+      const subTaskId = action.payload.subId;
+      const tasks = getState().tasks.tasks;
+      const index = tasks.findIndex(
+        (t) => t.subTasks?.find((s) => s.id === subTaskId) != null,
+      );
+      if (index < 0) return;
+      const sub = tasks[index]!.subTasks?.find((s) => s.id === subTaskId);
+      if (!isEmpty(sub)) {
+        await dataService.setSubtask(tasks[index], sub as ITask);
 
-      if (isEmpty(state.subTasks)) return;
-
-      dispatch(setSubtasks(state.subTasks!));
+      }
     },
   });
 };

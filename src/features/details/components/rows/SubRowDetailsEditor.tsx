@@ -2,8 +2,9 @@
 import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { ITask } from "@/constants/types/tasksTypes";
-import { toggleSubTaskChecked } from "@features/details";
+import { toggleSubTaskChecked } from "@features/tasks";
 import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
+import isEmpty from "lodash/isEmpty";
 
 const SubRowDetailsEditor = () => {
   const subTasks = useAppSelector((s) => s.details.subTasks);
@@ -20,11 +21,10 @@ const SubRowDetailsEditor = () => {
       }),
     );
   };
-
   return (
     <>
-      {subTasks &&
-        subTasks.map((subTask) => {
+      {!isEmpty(subTasks) &&
+        subTasks!.map((subTask) => {
           return (
             <li
               className="list-group-item d-flex justify-content-between align-items-center"

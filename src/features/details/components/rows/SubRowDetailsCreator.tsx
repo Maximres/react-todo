@@ -1,5 +1,5 @@
 ﻿import React, { useState } from "react";
-import { createSubTask } from "@features/details";
+import { createSubTask } from "@features/tasks";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import selectCurrentRow from "@/utils/selectors/selectCurrentRow";
 import { IRow } from "@/constants/types/tasksTypes";
