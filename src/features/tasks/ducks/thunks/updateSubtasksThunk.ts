@@ -1,11 +1,11 @@
 ﻿import { createAsyncThunk } from "@reduxjs/toolkit";
 import ThunkApiActionsType from "@/constants/enums/firebaseActionsEnum";
 import { dataService } from "@/services/data";
-import { ITask } from "@/constants/types/tasksTypes";
+import { ISubTask } from "@/constants/types/tasksTypes";
 import { RootState } from "@/constants/types/redux";
 
 export const fetchSubtasks = createAsyncThunk<
-  ITask[],
+  ISubTask[],
   void,
   { state: RootState }
 >(ThunkApiActionsType.GetSubtasks, async (_, thunkAPI) => {

@@ -4,7 +4,7 @@ export interface IIdentifier {
   id: string;
 }
 
-export interface ITask extends IIdentifier {
+export interface ISubTask extends IIdentifier {
   parentId: string;
   isChecked: boolean;
   text?: string;
@@ -19,16 +19,16 @@ export interface IReminder {
   repeatPeriod?: [number, keyof typeof reminderEnum];
 }
 
-export interface IRow extends ITask, IReminder {
+export interface ITask extends ISubTask, IReminder {
   isImportant: boolean;
-  subTasks?: ITask[]
+  subTasks?: ISubTask[]
 }
 
 export interface IState {
   listId: string;
   listName: string;
   listIcon: string;
-  tasks: IRow[];
+  tasks: ITask[];
   selectedRowId?: string;
   needSubTasksLoad: boolean;
 }

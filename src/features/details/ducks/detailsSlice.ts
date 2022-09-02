@@ -1,6 +1,6 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { IDetailsState } from "constants/types/detailsTypes";
-import { IRow, ITask } from "constants/types/tasksTypes";
+import { ITask, ISubTask } from "constants/types/tasksTypes";
 
 const initialState: IDetailsState = {
   subTasks: [],
@@ -12,7 +12,7 @@ const detailsSlice = createSlice({
   initialState: initialState,
   reducers: {
 
-    updateDetails: (state, action: PayloadAction<IRow | undefined>) => {
+    updateDetails: (state, action: PayloadAction<ITask | undefined>) => {
       const task = action.payload;
       state.isVisible = task != null;
       state.task = task;

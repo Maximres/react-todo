@@ -2,7 +2,7 @@
 import { createSubTask, selectList, setSubtasks } from "@features/tasks";
 import isEmpty from "lodash/isEmpty";
 import { dataService } from "@/services/data";
-import { ITask } from "@/constants/types/tasksTypes";
+import { ISubTask } from "@/constants/types/tasksTypes";
 
 export const selectedListListener = (startListening: AppStartListening) => {
   startListening({
@@ -34,7 +34,7 @@ export const subTaskCreatedListener = (startListening: AppStartListening) => {
       if (index < 0) return;
       const sub = tasks[index]!.subTasks?.find((s) => s.id === subTaskId);
       if (!isEmpty(sub)) {
-        await dataService.setSubtask(tasks[index], sub as ITask);
+        await dataService.setSubtask(tasks[index], sub as ISubTask);
       }
     },
   });

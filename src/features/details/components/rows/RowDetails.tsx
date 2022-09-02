@@ -2,20 +2,20 @@
 import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
-import { IRow, ITask } from "@/constants/types/tasksTypes";
+import { ITask, ISubTask } from "@/constants/types/tasksTypes";
 import { toggleChecked, toggleFavorite, updateTask } from "@/features/tasks";
 import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
 
 const RowDetails = () => {
-  const selectedRow = useAppSelector(selectCurrentTask) as IRow;
+  const selectedRow = useAppSelector(selectCurrentTask) as ITask;
   const dispatch = useAppDispatch();
 
-  const handleCheck = (task: IRow) => {
+  const handleCheck = (task: ITask) => {
     dispatch(toggleChecked({ task: task, isChecked: !task.isChecked }));
   };
 
-  const handleTextChange = (e: any, task: ITask) => {
-    dispatch(updateTask({ ...(task as IRow), text: e.target.value }));
+  const handleTextChange = (e: any, task: ISubTask) => {
+    dispatch(updateTask({ ...(task as ITask), text: e.target.value }));
   };
 
   const toggleFavoriteTask = () => {

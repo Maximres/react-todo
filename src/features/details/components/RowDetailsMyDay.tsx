@@ -2,12 +2,12 @@
 import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
-import { IRow } from "@/constants/types/tasksTypes";
+import { ITask } from "@/constants/types/tasksTypes";
 import { updateTask } from "@/features/tasks";
 import classNames from "classnames";
 
 const RowDetailsMyDay = () => {
-  const selectedTask = useAppSelector(selectCurrentTask) as IRow;
+  const selectedTask = useAppSelector(selectCurrentTask) as ITask;
   const dispatch = useAppDispatch();
   const addToMyDay = () => {
     dispatch(updateTask({ ...selectedTask, isMyDay: !selectedTask.isMyDay }));

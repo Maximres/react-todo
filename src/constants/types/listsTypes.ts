@@ -1,4 +1,4 @@
-﻿import { IRow } from "./tasksTypes";
+﻿import { ITask } from "./tasksTypes";
 
 export interface IList {
   id: string;
@@ -6,7 +6,7 @@ export interface IList {
   groupId: string;
   iconName: string;
   tasksTotal: number;
-  tasks: IRow[];
+  tasks: ITask[];
 }
 
 export interface IGroup {

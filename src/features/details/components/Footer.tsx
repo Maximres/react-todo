@@ -1,13 +1,13 @@
 ﻿import React from "react";
 import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
-import { IRow } from "@/constants/types/tasksTypes";
+import { ITask } from "@/constants/types/tasksTypes";
 import { deleteTask } from "@/features/tasks";
 import { differenceInYears, format } from "date-fns";
 import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
 
 const Footer = () => {
-  const selectedRow = useAppSelector(selectCurrentTask) as IRow;
+  const selectedRow = useAppSelector(selectCurrentTask) as ITask;
   const dispatch = useAppDispatch();
   const clickHandler = () => {
     dispatch(deleteTask(selectedRow.id));

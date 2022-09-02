@@ -1,5 +1,5 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { IRow, IState, ITask } from "constants/types/tasksTypes";
+import { ITask, IState, ISubTask } from "constants/types/tasksTypes";
 import { IList } from "@/constants/types/listsTypes";
 import { fetchSubtasks } from "@/features/tasks";
 
@@ -15,13 +15,13 @@ const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    updateTask: (state, action: PayloadAction<IRow>) => {
+    updateTask: (state, action: PayloadAction<ITask>) => {
       const index = state.tasks.findIndex((x) => x.id === action.payload.id);
       state.tasks[index] = action.payload;
     },
     createTask: {
       reducer(state, action: PayloadAction<{ text: string; id: string }>) {
-        const newTask: IRow = {
+        const newTask: ITask = {
           parentId: state.listId,
           id: action.payload.id,
           isChecked: false,
@@ -68,7 +68,7 @@ const tasksSlice = createSlice({
         );
         if (parentTask == null) return;
 
-        const newSubTask: ITask = {
+        const newSubTask: ISubTask = {
           id: action.payload.subId,
           isChecked: false,
           text: action.payload.text,
@@ -122,7 +122,7 @@ const tasksSlice = createSlice({
 
       subTask.isChecked = isChecked;
     },
-    toggleSelected: (state, action: PayloadAction<{ task: IRow }>) => {
+    toggleSelected: (state, action: PayloadAction<{ task: ITask }>) => {
       const currentId = action.payload.task.id;
       const toggleWithoutClose =
         currentId !== state.selectedRowId && state.selectedRowId != null;
@@ -139,7 +139,7 @@ const tasksSlice = createSlice({
     },
     toggleFavorite: (
       state,
-      action: PayloadAction<{ task: IRow; isImportant: boolean }>,
+      action: PayloadAction<{ task: ITask; isImportant: boolean }>,
     ) => {
       const task = action.payload.task;
       const isImportant = action.payload.isImportant;
@@ -148,7 +148,7 @@ const tasksSlice = createSlice({
     },
     toggleChecked: (
       state,
-      action: PayloadAction<{ task: IRow; isChecked: boolean }>,
+      action: PayloadAction<{ task: ITask; isChecked: boolean }>,
     ) => {
       const task = action.payload.task;
       const isChecked = action.payload.isChecked;
@@ -162,7 +162,7 @@ const tasksSlice = createSlice({
       state.listName = action.payload.name;
       state.listIcon = action.payload.iconName;
     },
-    setSubtasks: (state, action: PayloadAction<ITask[]>) => {
+    setSubtasks: (state, action: PayloadAction<ISubTask[]>) => {
       const subTasks = action.payload;
       if (subTasks == null) return;
 

@@ -1,6 +1,6 @@
 ﻿import React, { memo } from "react";
 import Icons from "@/components/AppIcons";
-import { IRow } from "@/constants/types/tasksTypes";
+import { ITask } from "@/constants/types/tasksTypes";
 import { useAppDispatch } from "@/constants/types/redux";
 import {
   toggleChecked,
@@ -9,22 +9,22 @@ import {
 } from "@/features/tasks";
 
 type Props = {
-  tasks: IRow[];
+  tasks: ITask[];
 };
 
 const TasksComponent = ({ tasks }: Props): JSX.Element | null => {
   const dispatch = useAppDispatch();
 
-  const handleCheck = (task: IRow) => {
+  const handleCheck = (task: ITask) => {
     dispatch(toggleChecked({ task: task, isChecked: !task.isChecked }));
   };
 
-  const handleToggleFavorite = (e: any, task: IRow) => {
+  const handleToggleFavorite = (e: any, task: ITask) => {
     e.stopPropagation();
     dispatch(toggleFavorite({ task: task, isImportant: !task.isImportant }));
   };
 
-  const toggleSideBar = (task: IRow) => {
+  const toggleSideBar = (task: ITask) => {
     dispatch(toggleSelected({ task: task }));
   };
 

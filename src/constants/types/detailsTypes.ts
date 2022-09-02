@@ -1,7 +1,7 @@
-﻿import { IIdentifier, IRow, ITask } from "./tasksTypes";
+﻿import { IIdentifier, ITask, ISubTask } from "./tasksTypes";
 
 export interface IDetailsState {
   isVisible: boolean;
-  task?: IRow;
-  subTasks?: ITask[];
+  task?: ITask;
+  subTasks?: ISubTask[];
 }

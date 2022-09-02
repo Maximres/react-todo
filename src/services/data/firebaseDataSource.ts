@@ -19,7 +19,7 @@ import scheme from "@/constants/enums/firebaseCollectionScheme";
 import { isFulfilled, isRejected } from "@/utils/helpers/promiseResolver";
 import flattenDeep from "lodash/flattenDeep";
 import _orderBy from "lodash/orderBy";
-import { IRow, ITask } from "@/constants/types/tasksTypes";
+import { ITask, ISubTask } from "@/constants/types/tasksTypes";
 import reminderEnum from "@/constants/enums/reminderEnum";
 
 function getCollectionGroup(
@@ -115,7 +115,7 @@ const getListsWithSubtasks = (db: Firestore) => {
           list.tasksTotal = listDto.tasks.length;
 
           list.tasks = (listDto.tasks ||= []).map((taskDto) => {
-            const task = {} as IRow;
+            const task = {} as ITask;
             task.id = taskDto.id;
             task.isImportant = taskDto.isImportant;
             task.text = taskDto.text;
@@ -133,7 +133,7 @@ const getListsWithSubtasks = (db: Firestore) => {
             ];
 
             task.subTasks = (taskDto.subTasks ||= []).map((subDto) => {
-              const subTask = {} as ITask;
+              const subTask = {} as ISubTask;
               subTask.id = subDto.id;
               subTask.parentId = subDto.parentId;
               subTask.createdDate = Number(subDto.createdDate);
@@ -219,7 +219,7 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
         list.tasksTotal = listDto.tasks.length;
 
         list.tasks = (listDto.tasks ||= []).map((taskDto) => {
-          const task = {} as IRow;
+          const task = {} as ITask;
           task.id = taskDto.id;
           task.isImportant = taskDto.isImportant;
           task.text = taskDto.text;
@@ -237,7 +237,7 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
           ];
 
           task.subTasks = (taskDto.subTasks ||= []).map((subDto) => {
-            const subTask = {} as ITask;
+            const subTask = {} as ISubTask;
             subTask.id = subDto.id;
             subTask.parentId = subDto.parentId;
             subTask.createdDate = Number(subDto.createdDate);
@@ -303,7 +303,7 @@ const getListsWithTasks = (db: Firestore) => {
           list.tasksTotal = listDto.tasks.length;
 
           list.tasks = (listDto.tasks ||= []).map((taskDto) => {
-            const task = {} as IRow;
+            const task = {} as ITask;
             task.id = taskDto.id;
             task.isImportant = taskDto.isImportant;
             task.text = taskDto.text;
@@ -337,7 +337,7 @@ const getListsWithTasks = (db: Firestore) => {
 const getSubtasksMany = (db: Firestore, taskIdList: string[]) => {
   const subTaskDtoList = [] as SubTaskDto[];
 
-  return new Promise<ITask[]>((resolve) => {
+  return new Promise<ISubTask[]>((resolve) => {
     const subTasksQueries = taskIdList.map((taskId) => {
       return getCollectionGroup(db, taskId, scheme.SubTasks);
     });
@@ -359,7 +359,7 @@ const getSubtasksMany = (db: Firestore, taskIdList: string[]) => {
       .then(() => {
         const result = _orderBy(
           subTaskDtoList.map((subDto) => {
-            const subTask = {} as ITask;
+            const subTask = {} as ISubTask;
             subTask.id = subDto.id;
             subTask.parentId = subDto.parentId;
             subTask.createdDate = Number(subDto.createdDate);
@@ -379,7 +379,7 @@ const getSubtasksMany = (db: Firestore, taskIdList: string[]) => {
 const getSubtasks = (db: Firestore, taskId: string) => {
   const subTaskDtoList = [] as SubTaskDto[];
 
-  return new Promise<ITask[]>((resolve) => {
+  return new Promise<ISubTask[]>((resolve) => {
     const subTasksQueries = getCollectionGroup(db, taskId, scheme.SubTasks);
     subTasksQueries
       .then((subTaskSnap) => {
@@ -393,7 +393,7 @@ const getSubtasks = (db: Firestore, taskId: string) => {
       .then(() => {
         const result = _orderBy(
           subTaskDtoList.map((subDto) => {
-            const subTask = {} as ITask;
+            const subTask = {} as ISubTask;
             subTask.id = subDto.id;
             subTask.parentId = subDto.parentId;
             subTask.createdDate = Number(subDto.createdDate);
@@ -411,7 +411,7 @@ const getSubtasks = (db: Firestore, taskId: string) => {
   });
 };
 
-const setSubtask = (db: Firestore, task: IRow, subTask: ITask) => {
+const setSubtask = (db: Firestore, task: ITask, subTask: ISubTask) => {
   const reference = doc(
     db,
     scheme.Lists,
