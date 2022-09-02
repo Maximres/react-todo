@@ -3,14 +3,14 @@ import "./App.css";
 import { Tasks } from "@/features/tasks";
 import { Details } from "@features/details";
 import { Lists } from "@features/lists";
-import ApiActions from "@/constants/enums/firebaseActionsEnum";
+import ThunkApiActionsType from "@/constants/enums/firebaseActionsEnum";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { useAppDispatch } from "@/constants/types/redux";
 import { useDataService } from "@/services/data/useDataService";
 import { IList } from "@/constants/types/listsTypes";
 
 export const initialFetchLists = createAsyncThunk(
-  ApiActions.InitialFetch,
+  ThunkApiActionsType.InitialFetch,
   async (getListsCall: () => Promise<IList[]>) => {
     const result = await getListsCall();
     return result;

@@ -5,7 +5,7 @@ import { differenceInCalendarDays, format } from "date-fns";
 import reminderEnum from "@/constants/enums/reminderEnum";
 import useReminder from "../../ducks/hooks/useReminder";
 import { useAppSelector } from "@/constants/types/redux";
-import selectCurrentRow from "@/utils/selectors/selectCurrentRow";
+import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
 
 type Props = {
   isOpen: boolean;
@@ -14,7 +14,7 @@ type Props = {
 
 const DueDateInput = forwardRef(
   ({ isOpen, setIsOpen }: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
-    const selectedTask = useAppSelector(selectCurrentRow);
+    const selectedTask = useAppSelector(selectCurrentTask);
     const [setReminder, clearReminder] = useReminder();
     const weeks = "EEEE";
     const weekMonthDayFormat = "iii, LLL d";

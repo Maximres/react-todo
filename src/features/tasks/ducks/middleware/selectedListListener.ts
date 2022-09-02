@@ -22,19 +22,6 @@ export const selectedListListener = (startListening: AppStartListening) => {
   });
 };
 
-// export const syncSubTaskListener = (startListening: AppStartListening) => {
-//   startListening({
-//     matcher: createSubTask.match,
-//     effect: (action, { dispatch, cancelActiveListeners, getState }) => {
-//       const state = getState().details;
-//
-//       if (isEmpty(state.subTasks)) return;
-//
-//       dispatch(setSubtasks(state.subTasks!));
-//     },
-//   });
-// };
-
 export const subTaskCreatedListener = (startListening: AppStartListening) => {
   startListening({
     matcher: createSubTask.match,
@@ -48,7 +35,6 @@ export const subTaskCreatedListener = (startListening: AppStartListening) => {
       const sub = tasks[index]!.subTasks?.find((s) => s.id === subTaskId);
       if (!isEmpty(sub)) {
         await dataService.setSubtask(tasks[index], sub as ITask);
-
       }
     },
   });

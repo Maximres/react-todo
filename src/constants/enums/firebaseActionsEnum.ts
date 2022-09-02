@@ -1,7 +1,8 @@
-﻿enum ApiActions {
+﻿enum ThunkApiActionsType {
   InitialFetch = "InitialFetch",
   CreateSubtask = "CreateSubtask",
   UpdateSubtask = "UpdateSubtask",
+  GetSubtasks = "GetSubtasks",
 }
 
-export default ApiActions;
+export default ThunkApiActionsType;

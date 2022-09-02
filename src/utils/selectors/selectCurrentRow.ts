@@ -1,7 +1,20 @@
-﻿import { RootState } from "@/constants/types/redux";
+﻿import { createSelector } from "@reduxjs/toolkit";
+import { RootState } from "@/constants/types/redux";
 
-const selectCurrentRow = (state: RootState) => {
-  return state.details.task;
-};
+const selectCurrentTaskId = (state: RootState) => state.tasks.selectedRowId;
+const selectTasks = (state: RootState) => state.tasks.tasks;
 
-export default selectCurrentRow;
+const selectCurrentTask = createSelector(
+  selectCurrentTaskId,
+  selectTasks,
+  (currentTaskId, tasks) => {
+    return tasks.find((x) => x.id === currentTaskId);
+  },
+  {
+    memoizeOptions: {
+      maxSize: 10,
+    },
+  },
+);
+
+export { selectCurrentTask };

@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import useReminder from "../../ducks/hooks/useReminder";
 import reminderEnum from "@/constants/enums/reminderEnum";
 import { useAppSelector } from "@/constants/types/redux";
-import selectCurrentRow from "@/utils/selectors/selectCurrentRow";
+import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
 
 type Props = {
   isOpen: boolean;
@@ -14,7 +14,7 @@ type Props = {
 
 const ReminderInput = forwardRef(
   ({ isOpen, setIsOpen }: Props, ref: React.Ref<HTMLDivElement>) => {
-    const selectedTask = useAppSelector(selectCurrentRow);
+    const selectedTask = useAppSelector(selectCurrentTask);
     const [setReminder, clearReminder] = useReminder();
     const hasReminder = selectedTask && selectedTask.remindDate;
     const pattern12AmPmFormat = "p";

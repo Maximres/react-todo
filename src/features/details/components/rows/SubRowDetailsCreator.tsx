@@ -1,12 +1,12 @@
 ﻿import React, { useState } from "react";
 import { createSubTask } from "@features/tasks";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
-import selectCurrentRow from "@/utils/selectors/selectCurrentRow";
+import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
 import { IRow } from "@/constants/types/tasksTypes";
 
 const SubRowDetailsCreator = () => {
   const dispatch = useAppDispatch();
-  const selectedRow = useAppSelector(selectCurrentRow) as IRow;
+  const selectedRow = useAppSelector(selectCurrentTask) as IRow;
 
   const [newTaskFocused, setNewTaskFocus] = useState(false);
   const [newTaskValue, setNewTaskValue] = useState("");

@@ -1,13 +1,13 @@
 ﻿import React from "react";
 import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
-import selectCurrentRow from "@/utils/selectors/selectCurrentRow";
+import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
 import { IRow, ITask } from "@/constants/types/tasksTypes";
 import { toggleChecked, toggleFavorite, updateTask } from "@/features/tasks";
 import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
 
 const RowDetails = () => {
-  const selectedRow = useAppSelector(selectCurrentRow) as IRow;
+  const selectedRow = useAppSelector(selectCurrentTask) as IRow;
   const dispatch = useAppDispatch();
 
   const handleCheck = (task: IRow) => {
