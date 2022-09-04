@@ -1,28 +1,25 @@
-﻿import React, { memo, useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
-import { useDebouncedCallback } from "use-debounce";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { updateTask } from "@features/tasks";
 import { ITask } from "@/constants/types/tasksTypes";
+import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
 
-const RowNoteTextArea = memo(() => {
+const RowNoteTextArea = () => {
   const dispatch = useAppDispatch();
-  const selectedTask = useAppSelector((s) => s.details.task) as ITask;
-
+  const selectedTask = useAppSelector(selectCurrentTask) as ITask;
   const [note, setNote] = useState(selectedTask.note);
-  const debounceUpdate = useDebouncedCallback(() => {
-    dispatch(updateTask({ id: selectedTask.id, note } as ITask));
-  }, 1000);
 
   useEffect(() => {
-    return () => {
-      debounceUpdate.flush();
-    };
-  }, []);
+    setNote(selectedTask.note);
+  }, [selectedTask]);
 
-  useEffect(() => {
-    debounceUpdate();
-  }, [note]);
+  const onChangeCallback = (e: any) => {
+    setNote(e.target.value);
+    dispatch(
+      updateTask({ id: selectedTask.id, note: e.target.value } as ITask),
+    );
+  };
 
   return (
     <div className="m-3">
@@ -34,16 +31,14 @@ const RowNoteTextArea = memo(() => {
             placeholder="Add note"
             onKeyPress={handleEnterKeyPress}
             value={note}
-            onChange={(e) => {
-              setNote(e.target.value);
-            }}
+            onChange={onChangeCallback}
             aria-label="Add note area"
           />
         </label>
       </div>
     </div>
   );
-});
+};
 
 RowNoteTextArea.displayName = "RowNoteTextArea";
 

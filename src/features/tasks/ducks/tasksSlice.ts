@@ -4,7 +4,6 @@ import { fetchSubtasks } from "@/features/tasks";
 import assignDeep from "lodash/assignIn";
 import { IState, ISubTask, ITask } from "@/constants/types/tasksTypes";
 
-
 const initialState: IState = {
   tasks: [],
   listId: "",
@@ -162,10 +161,14 @@ const tasksSlice = createSlice({
       state.tasks = tasks;
     },
     selectList: (state, action: PayloadAction<IList>) => {
-      state.tasks = action.payload.tasks;
-      state.listId = action.payload.id;
-      state.listName = action.payload.name;
-      state.listIcon = action.payload.iconName;
+      const list = action.payload;
+      if (state.listId === list.id)
+        return;
+
+      state.tasks = list.tasks;
+      state.listId = list.id;
+      state.listName = list.name;
+      state.listIcon = list.iconName;
     },
     setSubtasks: (state, action: PayloadAction<ISubTask[]>) => {
       const subTasks = action.payload;
