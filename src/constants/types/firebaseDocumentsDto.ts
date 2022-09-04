@@ -1,6 +1,4 @@
-﻿import reminderEnum from "@/constants/enums/reminderEnum";
-
-type ListDto = {
+﻿type ListDto = {
   id: string;
   name: string;
   iconName: string;
@@ -12,17 +10,20 @@ type TaskDto = {
   parentId: string;
   id: string;
   text: string;
+  note: string;
   createdDate: number;
   isChecked: boolean;
   isImportant: boolean;
 
-  subTasks: SubTaskDto[];
+  subTasks?: SubTaskDto[];
 
   isMyDay: boolean;
-  remindDate?: number;
-  dueDate?: number;
-  repeatPeriod?: [number, string];
+  remindDate: number;
+  dueDate: number;
+  repeatPeriod: RepeatPeriod;
 };
+
+type RepeatPeriod = [repeats: number, period: string];
 
 type SubTaskDto = {
   parentId: string;
@@ -32,4 +33,4 @@ type SubTaskDto = {
   isChecked: boolean;
 };
 
-export type { ListDto, TaskDto, SubTaskDto };
+export type { ListDto, TaskDto, SubTaskDto, RepeatPeriod };

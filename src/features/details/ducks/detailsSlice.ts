@@ -1,6 +1,6 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { IDetailsState } from "constants/types/detailsTypes";
-import { ITask, ISubTask } from "constants/types/tasksTypes";
+import { ITask } from "constants/types/tasksTypes";
 
 const initialState: IDetailsState = {
   subTasks: [],
@@ -18,6 +18,7 @@ const detailsSlice = createSlice({
       state.task = task;
       if (task) {
         state.subTasks = task.subTasks;
+        state.taskId = task.id;
       }
     },
   },

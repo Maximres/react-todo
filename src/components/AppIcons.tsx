@@ -2,13 +2,12 @@
 import { regular, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { default as cn } from "classnames";
+import { memo } from "react";
 
 const Icon = (props: any, icon: IconProp) => (
-  <FontAwesomeIcon
-    {...props}
-    className={cn(props.className, { pointer: true })}
-    icon={icon}
-  />
+  <i {...props} className={cn(props.className, { pointer: true })}>
+    <FontAwesomeIcon icon={icon} />
+  </i>
 );
 
 const Options = (props: any) => Icon(props, solid("ellipsis-vertical"));
@@ -43,33 +42,33 @@ const All = (props: any) => Icon(props, solid("infinity"));
 const Task = (props: any) => Icon(props, solid("house"));
 
 const Icons = {
-  Options,
-  Favorite,
-  MyDay,
-  Clock,
-  Calendar,
-  CalendarRepeat,
-  ClockRotate,
-  Today,
-  File,
-  Tomorrow,
-  NextWeek,
-  Week,
-  Month,
-  Year,
-  Weekdays,
-  Reminder,
-  PickDate,
-  Trash,
-  User,
-  Plus,
-  NewGroup,
-  Group,
-  List,
-  Search,
-  Planned,
-  All,
-  Task,
+  Options: memo(Options),
+  Favorite: memo(Favorite),
+  MyDay: memo(MyDay),
+  Clock: memo(Clock),
+  Calendar: memo(Calendar),
+  CalendarRepeat: memo(CalendarRepeat),
+  ClockRotate: memo(ClockRotate),
+  Today: memo(Today),
+  File: memo(File),
+  Tomorrow: memo(Tomorrow),
+  NextWeek: memo(NextWeek),
+  Week: memo(Week),
+  Month: memo(Month),
+  Year: memo(Year),
+  Weekdays: memo(Weekdays),
+  Reminder: memo(Reminder),
+  PickDate: memo(PickDate),
+  Trash: memo(Trash),
+  User: memo(User),
+  Plus: memo(Plus),
+  NewGroup: memo(NewGroup),
+  Group: memo(Group),
+  List: memo(List),
+  Search: memo(Search),
+  Planned: memo(Planned),
+  All: memo(All),
+  Task: memo(Task),
 };
 
 export default Icons;

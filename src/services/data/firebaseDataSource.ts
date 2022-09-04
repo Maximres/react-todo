@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import {
@@ -19,7 +20,7 @@ import scheme from "@/constants/enums/firebaseCollectionScheme";
 import { isFulfilled, isRejected } from "@/utils/helpers/promiseResolver";
 import flattenDeep from "lodash/flattenDeep";
 import _orderBy from "lodash/orderBy";
-import { ITask, ISubTask } from "@/constants/types/tasksTypes";
+import { ISubTask, ITask } from "@/constants/types/tasksTypes";
 import reminderEnum from "@/constants/enums/reminderEnum";
 
 function getCollectionGroup(
@@ -115,13 +116,15 @@ const getListsWithSubtasks = (db: Firestore) => {
           list.tasksTotal = listDto.tasks.length;
 
           list.tasks = (listDto.tasks ||= []).map((taskDto) => {
-            const task = {} as ITask;
-            task.id = taskDto.id;
+            const task = {
+              id: taskDto.id,
+              createdDate: Number(taskDto.createdDate),
+              parentId: taskDto.parentId,
+            } as ITask;
             task.isImportant = taskDto.isImportant;
             task.text = taskDto.text;
+            task.note = taskDto.note;
             task.isChecked = taskDto.isChecked;
-            task.createdDate = Number(taskDto.createdDate);
-            task.parentId = taskDto.parentId;
             //todo other props
 
             task.isMyDay = taskDto.isMyDay;
@@ -133,10 +136,11 @@ const getListsWithSubtasks = (db: Firestore) => {
             ];
 
             task.subTasks = (taskDto.subTasks ||= []).map((subDto) => {
-              const subTask = {} as ISubTask;
-              subTask.id = subDto.id;
-              subTask.parentId = subDto.parentId;
-              subTask.createdDate = Number(subDto.createdDate);
+              const subTask = {
+                id: subDto.id,
+                parentId: subDto.parentId,
+                createdDate: Number(subDto.createdDate),
+              } as ISubTask;
               subTask.text = subDto.text;
 
               return subTask;
@@ -219,13 +223,15 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
         list.tasksTotal = listDto.tasks.length;
 
         list.tasks = (listDto.tasks ||= []).map((taskDto) => {
-          const task = {} as ITask;
-          task.id = taskDto.id;
+          const task = {
+            id: taskDto.id,
+            createdDate: Number(taskDto.createdDate),
+            parentId: taskDto.parentId,
+          } as ITask;
           task.isImportant = taskDto.isImportant;
           task.text = taskDto.text;
+          task.note = taskDto.note;
           task.isChecked = taskDto.isChecked;
-          task.createdDate = Number(taskDto.createdDate);
-          task.parentId = taskDto.parentId;
           //todo other props
 
           task.isMyDay = taskDto.isMyDay;
@@ -237,10 +243,12 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
           ];
 
           task.subTasks = (taskDto.subTasks ||= []).map((subDto) => {
-            const subTask = {} as ISubTask;
-            subTask.id = subDto.id;
-            subTask.parentId = subDto.parentId;
-            subTask.createdDate = Number(subDto.createdDate);
+            const subTask = {
+              id: subDto.id,
+              parentId: subDto.parentId,
+              createdDate: Number(subDto.createdDate),
+            } as ISubTask;
+
             subTask.text = subDto.text;
 
             return subTask;
@@ -303,13 +311,16 @@ const getListsWithTasks = (db: Firestore) => {
           list.tasksTotal = listDto.tasks.length;
 
           list.tasks = (listDto.tasks ||= []).map((taskDto) => {
-            const task = {} as ITask;
-            task.id = taskDto.id;
+            const task = {
+              id: taskDto.id,
+              createdDate: Number(taskDto.createdDate),
+              parentId: taskDto.parentId,
+            } as ITask;
             task.isImportant = taskDto.isImportant;
             task.text = taskDto.text;
+            task.note = taskDto.note;
             task.isChecked = taskDto.isChecked;
-            task.createdDate = Number(taskDto.createdDate);
-            task.parentId = taskDto.parentId;
+
             //todo other props
 
             task.isMyDay = taskDto.isMyDay;
@@ -359,10 +370,12 @@ const getSubtasksMany = (db: Firestore, taskIdList: string[]) => {
       .then(() => {
         const result = _orderBy(
           subTaskDtoList.map((subDto) => {
-            const subTask = {} as ISubTask;
-            subTask.id = subDto.id;
-            subTask.parentId = subDto.parentId;
-            subTask.createdDate = Number(subDto.createdDate);
+            const subTask = {
+              id: subDto.id,
+              parentId: subDto.parentId,
+              createdDate: Number(subDto.createdDate),
+            } as ISubTask;
+
             subTask.text = subDto.text;
 
             return subTask;
@@ -393,10 +406,12 @@ const getSubtasks = (db: Firestore, taskId: string) => {
       .then(() => {
         const result = _orderBy(
           subTaskDtoList.map((subDto) => {
-            const subTask = {} as ISubTask;
-            subTask.id = subDto.id;
-            subTask.parentId = subDto.parentId;
-            subTask.createdDate = Number(subDto.createdDate);
+            const subTask = {
+              id: subDto.id,
+              parentId: subDto.parentId,
+              createdDate: Number(subDto.createdDate),
+            } as ISubTask;
+
             subTask.text = subDto.text;
             subTask.isChecked = subDto.isChecked;
 
@@ -421,7 +436,29 @@ const setSubtask = (db: Firestore, task: ITask, subTask: ISubTask) => {
     scheme.SubTasks,
     subTask.id,
   );
-  return setDoc(reference, subTask, { merge: true });
+  return setDoc(reference, subTask, { merge: true }).catch((...args) => {
+    console.error({ setSubtaskErrors: args });
+  });
+};
+
+const updateTask = (db: Firestore, task: ITask) => {
+  const reference = doc(db, scheme.Lists, task.parentId, scheme.Tasks, task.id);
+  const taskDto: TaskDto = {
+    isChecked: task.isChecked,
+    text: task.text ?? "",
+    note: task.note ?? "",
+    createdDate: task.createdDate,
+    isImportant: task.isImportant,
+    dueDate: task.dueDate ?? 0,
+    isMyDay: task.isMyDay,
+    remindDate: task.remindDate ?? 0,
+    repeatPeriod: task.repeatPeriod ?? ([] as any),
+    id: task.id,
+    parentId: task.parentId,
+  };
+  return updateDoc(reference, taskDto).catch((...args) => {
+    console.error({ updateTaskError: args });
+  });
 };
 
 export const FirebaseDataSource = {
@@ -431,4 +468,6 @@ export const FirebaseDataSource = {
   getSubtasks,
 
   setSubtask,
+
+  updateTask,
 };

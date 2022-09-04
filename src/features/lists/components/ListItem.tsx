@@ -4,7 +4,7 @@ import cn from "classnames";
 
 type Props = {
   isSubItem?: boolean;
-  Icon?: JSX.Element;
+  Icon?: JSX.Element | null;
   name?: string;
   total?: number;
   uid?: string;

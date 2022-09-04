@@ -1,7 +1,5 @@
 ﻿import { AppStartListening } from "@/constants/types/redux";
-import {  updateDetails } from "../detailsSlice";
-import { dataService } from "@/services/data";
-import isEmpty from "lodash/isEmpty";
+import { updateDetails } from "../detailsSlice";
 
 export const selectedTasksListener = (startListening: AppStartListening) => {
   startListening({
@@ -21,5 +19,3 @@ export const selectedTasksListener = (startListening: AppStartListening) => {
     },
   });
 };
-
-

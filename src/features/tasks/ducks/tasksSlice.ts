@@ -1,7 +1,9 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { ITask, IState, ISubTask } from "constants/types/tasksTypes";
 import { IList } from "@/constants/types/listsTypes";
 import { fetchSubtasks } from "@/features/tasks";
+import assignDeep from "lodash/assignIn";
+import { IState, ISubTask, ITask } from "@/constants/types/tasksTypes";
+
 
 const initialState: IState = {
   tasks: [],
@@ -17,7 +19,9 @@ const tasksSlice = createSlice({
   reducers: {
     updateTask: (state, action: PayloadAction<ITask>) => {
       const index = state.tasks.findIndex((x) => x.id === action.payload.id);
-      state.tasks[index] = action.payload;
+      if (index < 0) return;
+      const task = state.tasks[index];
+      state.tasks[index] = assignDeep({}, task, action.payload);
     },
     createTask: {
       reducer(state, action: PayloadAction<{ text: string; id: string }>) {
@@ -31,6 +35,7 @@ const tasksSlice = createSlice({
           remindDate: undefined,
           isMyDay: false,
           dueDate: undefined,
+          note: "",
           subTasks: [],
         };
         state.tasks.push(newTask);
@@ -176,7 +181,6 @@ const tasksSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchSubtasks.fulfilled, (state, action) => {
-      console.log("fetchSubtasks")
       state.needSubTasksLoad = false;
 
       const currentTask = state.tasks.find((x) => x.id === state.selectedRowId);

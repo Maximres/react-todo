@@ -1,10 +1,10 @@
 ﻿import React from "react";
 import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
-import { ISubTask } from "@/constants/types/tasksTypes";
 import { toggleSubTaskChecked } from "@features/tasks";
 import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
 import isEmpty from "lodash/isEmpty";
+import { ISubTask } from "@/constants/types/tasksTypes";
 
 const SubRowDetailsEditor = () => {
   const subTasks = useAppSelector((s) => s.details.subTasks);

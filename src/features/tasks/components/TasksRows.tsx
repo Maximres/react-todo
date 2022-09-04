@@ -1,12 +1,12 @@
 ﻿import React, { memo } from "react";
 import Icons from "@/components/AppIcons";
-import { ITask } from "@/constants/types/tasksTypes";
 import { useAppDispatch } from "@/constants/types/redux";
 import {
   toggleChecked,
   toggleFavorite,
   toggleSelected,
 } from "@/features/tasks";
+import { ITask } from "@/constants/types/tasksTypes";
 
 type Props = {
   tasks: ITask[];

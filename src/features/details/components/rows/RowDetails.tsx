@@ -2,7 +2,7 @@
 import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
-import { ITask, ISubTask } from "@/constants/types/tasksTypes";
+import { ISubTask, ITask } from "@/constants/types/tasksTypes";
 import { toggleChecked, toggleFavorite, updateTask } from "@/features/tasks";
 import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
 

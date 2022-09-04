@@ -4,6 +4,7 @@ import { add, set } from "date-fns";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { updateTask } from "@/features/tasks";
 import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
+import { RepeatPeriodType } from "@/constants/types/tasksTypes";
 
 const useReminder = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +36,6 @@ const useReminder = () => {
             milliseconds: 0,
           });
           selectedTaskCopy.remindDate = Number(tomorrow);
-
           break;
         }
         case reminderEnum.NEXT_WEEK: {
@@ -80,10 +80,12 @@ const useReminder = () => {
         case reminderEnum.REPEAT_YEARLY:
           selectedTaskCopy.repeatPeriod = [365, reminderEnum.REPEAT_YEARLY];
           break;
-        case reminderEnum.REPEAT:
-          selectedTaskCopy.repeatPeriod = [365, value as reminderEnum];
-
+        case reminderEnum.REPEAT: {
+          const [repeat, period] = value as RepeatPeriodType;
+          selectedTaskCopy.repeatPeriod = [repeat, period];
           break;
+        }
+
         default:
           throw new Error("Argument Out Of Range Error in `UseReminder`");
       }

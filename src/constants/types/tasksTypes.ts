@@ -1,27 +1,30 @@
 ﻿import reminderEnum from "constants/enums/reminderEnum";
 
 export interface IIdentifier {
-  id: string;
+  readonly id: string;
 }
 
 export interface ISubTask extends IIdentifier {
-  parentId: string;
+  readonly parentId: string;
+  readonly createdDate: number;
   isChecked: boolean;
   text?: string;
-  createdDate: number;
-  isNewOne?: boolean
+  isNewOne?: boolean;
 }
 
 export interface IReminder {
   remindDate?: number;
   dueDate?: number;
   isMyDay: boolean;
-  repeatPeriod?: [number, keyof typeof reminderEnum];
+  repeatPeriod?: RepeatPeriodType;
 }
 
+export type RepeatPeriodType = [number, keyof typeof reminderEnum];
+
 export interface ITask extends ISubTask, IReminder {
+  note?: string;
   isImportant: boolean;
-  subTasks?: ISubTask[]
+  subTasks?: ISubTask[];
 }
 
 export interface IState {
