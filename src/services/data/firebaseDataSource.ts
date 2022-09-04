@@ -446,6 +446,15 @@ const updateTask = (db: Firestore, task: ITask) => {
   });
 };
 
+const updateList = (db: Firestore, list: IList) => {
+  debugger
+  const reference = doc(db, scheme.Lists, list.id);
+  const listDto = convertListToDto(list);
+  return updateDoc(reference, listDto).catch((...args) => {
+    console.error({ updateListError: args });
+  });
+};
+
 const deleteTask = (db: Firestore, id: string, parentId: string) => {
   const reference = doc(db, scheme.Lists, parentId, scheme.Tasks, id);
 
@@ -484,9 +493,21 @@ function convertToDto(task: ITask) {
   return taskDto;
 }
 
+function convertListToDto(list: IList) {
+  const listDto: ListDto = {
+    id: list.id,
+    groupId: list.groupId,
+    name: list.name,
+    iconName: list.iconName,
+    tasks: [] as any,
+  };
+  return listDto;
+}
+
 export const FirebaseDataSource = {
   getListsWithSubtasks,
   getListsWithTasks,
+
   getSubtasksMany,
   getSubtasks,
 
@@ -495,4 +516,6 @@ export const FirebaseDataSource = {
 
   updateTask,
   deleteTask,
+
+  updateList,
 };

@@ -17,7 +17,7 @@ const GroupItem = ({ children, name }: GroupProps) => {
         <div className="accordion-item bg-light">
           <div className="accordion-header" id={ariaLabel}>
             <button
-              className="accordion-button bg-light"
+              className="accordion-button bg-white"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target={`#${collapseId}`}

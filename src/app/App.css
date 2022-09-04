@@ -142,3 +142,29 @@
 .list-group-item-action:focus {
   background-color: #e2e3e5 !important;
 }
+
+
+.col-check-width {
+  width: 50px;
+  min-width: 50px;
+}
+
+.stable-scroll {
+  scrollbar-gutter: stable;
+}
+
+.py-xl {
+  padding-top: 2.75rem !important;
+  padding-bottom: 2.75rem !important;
+}
+.pt-xxl {
+  padding-top: 5rem !important;
+}
+
+.list-info-height {
+  height: 5rem;
+}
+
+.blur-backdrop {
+  backdrop-filter: blur(3px);
+}

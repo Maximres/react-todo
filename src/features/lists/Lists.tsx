@@ -9,7 +9,7 @@ import { selectList } from "@features/tasks";
 
 const Lists = () => {
   const defaultLists = useAppSelector((x) => x.lists.defaultLists);
-  const customLists = useAppSelector((x) => x.lists.customLists);
+  const customLists = useAppSelector((x) => x.lists.userLists);
   const dispatch = useDispatch();
 
   const handleItemClick = (uid: string) => {
@@ -21,7 +21,7 @@ const Lists = () => {
 
   return (
     <aside
-      className="d-flex flex-column align-items-stretch flex-shrink-0 bg-light"
+      className="d-flex flex-column align-items-stretch flex-shrink-0 bg-white"
       style={{ width: "380px" }}
       id="list"
     >
@@ -54,7 +54,7 @@ const Lists = () => {
             />
             <Icons.Search className="form-control-after-search" />
           </div>
-          <hr className="w-100 m-0" />
+          <hr className="w-100 m-0 mt-2" />
         </div>
       </header>
       <section className="flex-grow-1 overflow-auto">

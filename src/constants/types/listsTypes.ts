@@ -16,7 +16,7 @@ export interface IGroup {
 }
 
 export interface IListsState {
-  defaultLists: IList[];
-  customLists: IList[];
+  readonly defaultLists: IList[];
+  userLists: IList[];
   groups: IGroup[];
 }

@@ -7,12 +7,14 @@ import {
   toggleSelected,
 } from "@/features/tasks";
 import { ITask } from "@/constants/types/tasksTypes";
+import cn from "classnames";
 
 type Props = {
   tasks: ITask[];
+  selectedId: string;
 };
 
-const TasksComponent = ({ tasks }: Props): JSX.Element | null => {
+const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
   const dispatch = useAppDispatch();
 
   const handleCheck = (task: ITask) => {
@@ -29,8 +31,8 @@ const TasksComponent = ({ tasks }: Props): JSX.Element | null => {
   };
 
   const elements = tasks.map((row) => (
-    <tr className="row" key={row.id} onClick={() => toggleSideBar(row)}>
-      <td className="px-1 col-1">
+    <tr className={cn("row my-1", {"table-active": selectedId === row.id})} key={row.id} onClick={() => toggleSideBar(row)}>
+      <td className="px-1 col-1 col-check-width">
         <div className="d-flex justify-content-center align-items-center">
           <div className="form-check">
             <input

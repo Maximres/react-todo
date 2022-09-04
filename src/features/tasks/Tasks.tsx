@@ -1,17 +1,17 @@
 ﻿import React from "react";
-import { EditTaskForm } from "@/features/tasks/components/EditTaskForm";
-import { TasksTable } from "@/features/tasks/components/TasksTable";
+import { CreateTaskFooter } from "@/features/tasks/components/CreateTaskFooter";
+import { TasksTableSection } from "@/features/tasks/components/TasksTableSection";
+import { ListInfoHeader } from "@/features/tasks/components/ListInfoHeader";
 
 const Tasks = () => {
   return (
     <main
-      className="bg-white flex-fill position-relative"
+      className="bg-light flex-fill position-relative"
       style={{ minWidth: 350 }}
     >
-      <div className="container-fluid my-5 overflow-auto vh-100">
-        <TasksTable />
-        <EditTaskForm />
-      </div>
+      <ListInfoHeader />
+      <TasksTableSection />
+      <CreateTaskFooter />
     </main>
   );
 };

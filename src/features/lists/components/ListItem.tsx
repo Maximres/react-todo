@@ -21,7 +21,7 @@ const ListItem = ({
 }: Props) => {
   return (
     <li
-      className="list-group-item list-group-item-action border-0 bg-light"
+      className="list-group-item list-group-item-action border-0 bg-white"
       onClick={() => onClick(uid)}
     >
       <div
