@@ -11,7 +11,9 @@ const dataService = {
   getSubtasks: (taskId: string) => FirebaseDataSource.getSubtasks(db, taskId),
 
   setSubtask: (task: ITask, subTask: ISubTask) => FirebaseDataSource.setSubtask(db, task, subTask),
+  setTask: (task: ITask) => FirebaseDataSource.setTask(db, task),
   updateTask: (task: ITask) => FirebaseDataSource.updateTask(db, task),
+  deleteTask: (id: string, parentId: string) => FirebaseDataSource.deleteTask(db, id, parentId),
 };
 
 export { dataService };

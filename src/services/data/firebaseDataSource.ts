@@ -2,6 +2,7 @@
 import {
   collection,
   collectionGroup,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -22,19 +23,6 @@ import flattenDeep from "lodash/flattenDeep";
 import _orderBy from "lodash/orderBy";
 import { ISubTask, ITask } from "@/constants/types/tasksTypes";
 import reminderEnum from "@/constants/enums/reminderEnum";
-
-function getCollectionGroup(
-  firestore: Firestore,
-  documentId: string,
-  collectionName: string,
-) {
-  return getDocs(
-    query(
-      collectionGroup(firestore, collectionName),
-      where("parentId", "==", documentId),
-    ),
-  );
-}
 
 const getListsWithSubtasks = (db: Firestore) => {
   const lists = [] as ListDto[];
@@ -441,8 +429,45 @@ const setSubtask = (db: Firestore, task: ITask, subTask: ISubTask) => {
   });
 };
 
+const setTask = (db: Firestore, task: ITask) => {
+  const reference = doc(db, scheme.Lists, task.parentId, scheme.Tasks, task.id);
+  const taskDto = convertToDto(task);
+
+  return setDoc(reference, taskDto, { merge: true }).catch((...args) => {
+    console.error({ setTaskErrors: args });
+  });
+};
+
 const updateTask = (db: Firestore, task: ITask) => {
   const reference = doc(db, scheme.Lists, task.parentId, scheme.Tasks, task.id);
+  const taskDto = convertToDto(task);
+  return updateDoc(reference, taskDto).catch((...args) => {
+    console.error({ updateTaskError: args });
+  });
+};
+
+const deleteTask = (db: Firestore, id: string, parentId: string) => {
+  const reference = doc(db, scheme.Lists, parentId, scheme.Tasks, id);
+
+  return deleteDoc(reference).catch((...args) => {
+    console.error({ deleteTaskError: args });
+  });
+};
+
+function getCollectionGroup(
+  firestore: Firestore,
+  documentId: string,
+  collectionName: string,
+) {
+  return getDocs(
+    query(
+      collectionGroup(firestore, collectionName),
+      where("parentId", "==", documentId),
+    ),
+  );
+}
+
+function convertToDto(task: ITask) {
   const taskDto: TaskDto = {
     isChecked: task.isChecked,
     text: task.text ?? "",
@@ -456,10 +481,8 @@ const updateTask = (db: Firestore, task: ITask) => {
     id: task.id,
     parentId: task.parentId,
   };
-  return updateDoc(reference, taskDto).catch((...args) => {
-    console.error({ updateTaskError: args });
-  });
-};
+  return taskDto;
+}
 
 export const FirebaseDataSource = {
   getListsWithSubtasks,
@@ -468,6 +491,8 @@ export const FirebaseDataSource = {
   getSubtasks,
 
   setSubtask,
+  setTask,
 
   updateTask,
+  deleteTask,
 };
