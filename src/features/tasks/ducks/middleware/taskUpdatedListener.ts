@@ -5,7 +5,10 @@ import { dataService } from "@/services/data";
 export const taskUpdatedListener = (startListening: AppStartListening) => {
   startListening({
     matcher: updateTask.match,
-    effect: async (action, { getState }) => {
+    effect: async (action, { getState, cancelActiveListeners, delay }) => {
+      cancelActiveListeners();
+      await delay(1000);
+
       const taskId = action.payload.id;
       const tasks = getState().tasks.tasks;
       const task = tasks.find((t) => t.id === taskId);
