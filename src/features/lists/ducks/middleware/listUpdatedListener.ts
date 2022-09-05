@@ -1,5 +1,5 @@
 ﻿import { AppStartListening } from "@/constants/types/redux";
-import { updateList } from "@features/lists";
+import { updateList, createList } from "@features/lists";
 import { dataService } from "@/services/data";
 
 export const listUpdatedListener = (startListening: AppStartListening) => {

@@ -6,6 +6,8 @@ import { useAppSelector } from "@/constants/types/redux";
 import { getListIcon } from "@/utils/helpers/getIcon";
 import { useDispatch } from "react-redux";
 import { selectList } from "@features/tasks";
+import { createList } from "@/features/lists/ducks/listsSlice";
+import { NEW_LIST_NAME } from "@/features/tasks/ducks/constants";
 
 const Lists = () => {
   const defaultLists = useAppSelector((x) => x.lists.defaultLists);
@@ -93,7 +95,6 @@ const Lists = () => {
               );
             })}
 
-
             <GroupItem name="1">
               {
                 <ul className="list-group list-group-flush">
@@ -103,17 +104,30 @@ const Lists = () => {
                 </ul>
               }
             </GroupItem>
-
           </ul>
         </div>
       </section>
       <footer>
         <div className="border-top mt-auto d-flex justify-content-between align-items-center ">
-          <Icons.Plus title="Add a list" className="fs-5 p-3" />
-          <div className="flex-grow-1">
-            <span className="pointer">New list</span>
-          </div>
-          <Icons.NewGroup title="Create a new group" className="fs-5 p-3" />
+          <button
+            className="btn d-flex align-items-center flex-grow-1 m-1 p-2"
+            onClick={(e) => {
+              const untitledCount = customLists.filter(
+                (x) => x.name === NEW_LIST_NAME,
+              ).length;
+              const number = untitledCount > 0 ? untitledCount : "";
+              dispatch(createList(`${NEW_LIST_NAME} ${number}`.trimEnd()));
+            }}
+          >
+            <Icons.Plus title="Add a list" className="fs-5 pe-2" />
+            <div className="">
+              <span className="pointer">New list</span>
+            </div>
+          </button>
+
+          <button type="button" className="btn m-1 p-2">
+            <Icons.NewGroup title="Create a new group" className="fs-5" />
+          </button>
         </div>
       </footer>
     </aside>

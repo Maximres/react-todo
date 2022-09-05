@@ -1,9 +1,9 @@
 ﻿import { ITask } from "./tasksTypes";
 
 export interface IList {
-  id: string;
+  readonly id: string;
   name: string;
-  groupId: string;
+  groupId?: string;
   iconName: string;
   tasksTotal: number;
   tasks: ITask[];

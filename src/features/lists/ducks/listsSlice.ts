@@ -1,4 +1,4 @@
-﻿import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { IList, IListsState } from "@/constants/types/listsTypes";
 import { initialFetchLists } from "@/app/App";
 import assignDeep from "lodash/assignIn";
@@ -30,15 +30,34 @@ const listsSlice = createSlice({
       const list = state.userLists[index];
       state.userLists[index] = assignDeep({}, list, action.payload);
     },
+    createList: {
+      reducer(state, action: PayloadAction<{ name: string; id: string }>) {
+        const newList: IList = {
+          id: action.payload.id,
+          tasks: [] as any,
+          name: action.payload.name,
+          iconName: "",
+          tasksTotal: 0,
+        };
+        state.userLists.push(newList);
+      },
+      prepare(name: string) {
+        return {
+          payload: {
+            name,
+            id: nanoid(),
+          },
+        };
+      },
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(initialFetchLists.fulfilled, (state, action) => {
-      const lists = action.payload;
-      state.userLists = lists;
+      state.userLists = action.payload;
     });
   },
 });
 
-export const { updateList } = listsSlice.actions;
+export const { updateList, createList } = listsSlice.actions;
 
 export const listsReducer = listsSlice.reducer;

@@ -96,11 +96,12 @@ const getListsWithSubtasks = (db: Firestore) => {
           }
         });
         const result = lists.map((listDto) => {
-          const list = {} as IList;
+          const list = {
+            id: listDto.id,
+          } as IList;
           list.name = listDto.name;
           list.groupId = listDto.groupId;
           list.iconName = listDto.iconName;
-          list.id = listDto.id;
           list.tasksTotal = listDto.tasks.length;
 
           list.tasks = (listDto.tasks ||= []).map((taskDto) => {
@@ -203,11 +204,12 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
           }
         });
 
-        const list = {} as IList;
+        const list = {
+          id: listDto.id,
+        } as IList;
         list.name = listDto.name;
         list.groupId = listDto.groupId;
         list.iconName = listDto.iconName;
-        list.id = listDto.id;
         list.tasksTotal = listDto.tasks.length;
 
         list.tasks = (listDto.tasks ||= []).map((taskDto) => {
@@ -291,11 +293,12 @@ const getListsWithTasks = (db: Firestore) => {
         });
 
         const result = lists.map((listDto) => {
-          const list = {} as IList;
+          const list = {
+            id: listDto.id,
+          } as IList;
           list.name = listDto.name;
           list.groupId = listDto.groupId;
           list.iconName = listDto.iconName ?? "List";
-          list.id = listDto.id;
           list.tasksTotal = listDto.tasks.length;
 
           list.tasks = (listDto.tasks ||= []).map((taskDto) => {
@@ -438,6 +441,15 @@ const setTask = (db: Firestore, task: ITask) => {
   });
 };
 
+const setList = (db: Firestore, list: IList) => {
+  const reference = doc(db, scheme.Lists, list.id);
+  const listDto = convertListToDto(list);
+
+  return setDoc(reference, listDto, { merge: true }).catch((...args) => {
+    console.error({ setListErrors: args });
+  });
+};
+
 const updateTask = (db: Firestore, task: ITask) => {
   const reference = doc(db, scheme.Lists, task.parentId, scheme.Tasks, task.id);
   const taskDto = convertToDto(task);
@@ -447,7 +459,7 @@ const updateTask = (db: Firestore, task: ITask) => {
 };
 
 const updateList = (db: Firestore, list: IList) => {
-  debugger
+  debugger;
   const reference = doc(db, scheme.Lists, list.id);
   const listDto = convertListToDto(list);
   return updateDoc(reference, listDto).catch((...args) => {
@@ -496,7 +508,7 @@ function convertToDto(task: ITask) {
 function convertListToDto(list: IList) {
   const listDto: ListDto = {
     id: list.id,
-    groupId: list.groupId,
+    groupId: list.groupId ?? "",
     name: list.name,
     iconName: list.iconName,
     tasks: [] as any,
@@ -507,6 +519,8 @@ function convertListToDto(list: IList) {
 export const FirebaseDataSource = {
   getListsWithSubtasks,
   getListsWithTasks,
+  updateList,
+  setList,
 
   getSubtasksMany,
   getSubtasks,
@@ -516,6 +530,4 @@ export const FirebaseDataSource = {
 
   updateTask,
   deleteTask,
-
-  updateList,
 };

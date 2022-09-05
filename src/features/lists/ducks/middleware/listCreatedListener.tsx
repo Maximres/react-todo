@@ -1,0 +1,17 @@
+﻿import { AppStartListening } from "@/constants/types/redux";
+import { createList } from "@features/lists";
+import { dataService } from "@/services/data";
+
+export const listCreatedListener = (startListening: AppStartListening) => {
+  startListening({
+    matcher: createList.match,
+    effect: async (action, { getState }) => {
+      const { id } = action.payload;
+      const lists = getState().lists.userLists;
+      const list = lists.find((t) => t.id === id);
+      if (list == null) return;
+
+      await dataService.setList(list);
+    },
+  });
+};
