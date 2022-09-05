@@ -410,37 +410,61 @@ const getSubtasks = (db: Firestore, taskId: string) => {
   });
 };
 
-const setSubtask = (db: Firestore, task: ITask, subTask: ISubTask) => {
-  const reference = doc(
-    db,
-    scheme.Lists,
-    task.parentId,
-    scheme.Tasks,
-    task.id,
-    scheme.SubTasks,
-    subTask.id,
-  );
-  return setDoc(reference, subTask, { merge: true }).catch((...args) => {
-    console.error({ setSubtaskErrors: args });
-  });
+const setSubtask = async (db: Firestore, task: ITask, subTask: ISubTask) => {
+  try {
+    const reference = doc(
+      db,
+      scheme.Lists,
+      task.parentId,
+      scheme.Tasks,
+      task.id,
+      scheme.SubTasks,
+      subTask.id,
+    );
+
+    await setDoc(reference, subTask, { merge: true });
+
+    return true;
+  } catch (e: any) {
+    console.log("setSubtaskErrors");
+    console.error(e);
+    return false;
+  }
 };
 
-const setTask = (db: Firestore, task: ITask) => {
-  const reference = doc(db, scheme.Lists, task.parentId, scheme.Tasks, task.id);
-  const taskDto = convertToDto(task);
+const setTask = async (db: Firestore, task: ITask) => {
+  try {
+    const reference = doc(
+      db,
+      scheme.Lists,
+      task.parentId,
+      scheme.Tasks,
+      task.id,
+    );
+    const taskDto = convertToDto(task);
+    await setDoc(reference, taskDto, { merge: true });
 
-  return setDoc(reference, taskDto, { merge: true }).catch((...args) => {
-    console.error({ setTaskErrors: args });
-  });
+    return true;
+  } catch (e: any) {
+    console.log("setTaskErrors");
+    console.error(e);
+
+    return false;
+  }
 };
 
-const setList = (db: Firestore, list: IList) => {
-  const reference = doc(db, scheme.Lists, list.id);
-  const listDto = convertListToDto(list);
+const setList = async (db: Firestore, list: IList) => {
+  try {
+    const reference = doc(db, scheme.Lists, list.id);
+    const listDto = convertListToDto(list);
 
-  return setDoc(reference, listDto, { merge: true }).catch((...args) => {
-    console.error({ setListErrors: args });
-  });
+    await setDoc(reference, listDto, { merge: true });
+    return true;
+  } catch (e: any) {
+    console.log("setListErrors");
+    console.error(e);
+    return false;
+  }
 };
 
 const updateTask = (db: Firestore, task: ITask) => {

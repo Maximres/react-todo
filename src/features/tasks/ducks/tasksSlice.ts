@@ -1,8 +1,8 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { IList } from "@/constants/types/listsTypes";
 import { fetchSubtasks } from "@/features/tasks";
 import assignDeep from "lodash/assignIn";
 import { IState, ISubTask, ITask } from "@/constants/types/tasksTypes";
+import { selectList } from "@features/lists";
 
 const initialState: IState = {
   tasks: [],
@@ -160,16 +160,7 @@ const tasksSlice = createSlice({
       const tasks = [...filtered, { ...task, isChecked: isChecked }];
       state.tasks = tasks;
     },
-    selectList: (state, action: PayloadAction<IList>) => {
-      const list = action.payload;
-      if (state.listId === list.id)
-        return;
 
-      state.tasks = list.tasks;
-      state.listId = list.id;
-      state.listName = list.name;
-      state.listIcon = list.iconName;
-    },
     setSubtasks: (state, action: PayloadAction<ISubTask[]>) => {
       const subTasks = action.payload;
       if (subTasks == null) return;
@@ -191,6 +182,15 @@ const tasksSlice = createSlice({
 
       currentTask.subTasks = action.payload;
     });
+    builder.addCase(selectList, (state, action) => {
+      const list = action.payload;
+      if (state.listId === list.id) return;
+
+      state.tasks = list.tasks;
+      state.listId = list.id;
+      state.listName = list.name;
+      state.listIcon = list.iconName;
+    });
   },
 });
 
@@ -203,7 +203,6 @@ export const {
   updateTask,
   createTask,
   deleteTask,
-  selectList,
   setSubtasks,
   deleteSubTask,
   toggleSubTaskChecked,

@@ -24,6 +24,7 @@ const ListInfoHeader = () => {
         "ps-1",
         "pe-3",
         "blur-backdrop",
+        "z-index-1"
       ])}
     >
       <input

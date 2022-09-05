@@ -173,3 +173,7 @@
   --bs-bg-opacity: 1;
   background-color: rgba(135, 135, 221, var(--bs-bg-opacity)) !important;
 }
+
+.z-index-1 {
+  z-index: 1;
+}

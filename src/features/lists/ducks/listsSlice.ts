@@ -1,7 +1,7 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { IList, IListsState } from "@/constants/types/listsTypes";
-import { initialFetchLists } from "@/app/App";
 import assignDeep from "lodash/assignIn";
+import { listsInitialFetch } from "@/utils/thunks/initialFetch";
 
 const initialState: IListsState = {
   defaultLists: [
@@ -50,14 +50,22 @@ const listsSlice = createSlice({
         };
       },
     },
+    selectList: (state, action: PayloadAction<IList>) => {
+      //todo: sync  selectedTicks with db for initial load
+
+      state.selectedList = assignDeep({}, action.payload, {
+        selectedTicks: Number(Date.now()),
+      });
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(initialFetchLists.fulfilled, (state, action) => {
+    builder.addCase(listsInitialFetch.fulfilled, (state, action) => {
       state.userLists = action.payload;
+      state.selectedList = action.payload?.[0];
     });
   },
 });
 
-export const { updateList, createList } = listsSlice.actions;
+export const { updateList, createList, selectList } = listsSlice.actions;
 
 export const listsReducer = listsSlice.reducer;

@@ -28,10 +28,10 @@ const store = configureStore({
   },
   middleware: (defaultMiddleware) =>
     defaultMiddleware()
-      .concat(consoleLogger as Middleware)
       .concat(listsListenerMiddleware.middleware)
       .concat(tasksListenerMiddleware.middleware)
-      .concat(detailsListenerMiddleware.middleware),
+      .concat(detailsListenerMiddleware.middleware)
+      .concat(consoleLogger as Middleware),
 });
 
 export default store;

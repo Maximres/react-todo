@@ -1,25 +1,70 @@
-﻿import React from "react";
+﻿import React, { useEffect, useState } from "react";
 import Icons from "@/components/AppIcons";
 import GroupItem from "./components/GroupItem";
 import ListItem from "./components/ListItem";
 import { useAppSelector } from "@/constants/types/redux";
 import { getListIcon } from "@/utils/helpers/getIcon";
 import { useDispatch } from "react-redux";
-import { selectList } from "@features/tasks";
-import { createList } from "@/features/lists/ducks/listsSlice";
+import {
+  createList,
+  selectList,
+  updateList,
+} from "@/features/lists/ducks/listsSlice";
 import { NEW_LIST_NAME } from "@/features/tasks/ducks/constants";
+import { IList } from "@/constants/types/listsTypes";
 
 const Lists = () => {
+  const [lastCreatedId, setLastCreatedId] = useState("");
   const defaultLists = useAppSelector((x) => x.lists.defaultLists);
-  const customLists = useAppSelector((x) => x.lists.userLists);
+  const userLists = useAppSelector((x) => x.lists.userLists);
+  const selectedList = useAppSelector((x) => x.lists.selectedList);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    console.log("rerender")
+  })
+
   const handleItemClick = (uid: string) => {
-    const selectedList = customLists.find((i) => i.id === uid);
+    const selectedList = userLists.find((i) => i.id === uid);
     if (!selectedList) return;
 
     dispatch(selectList(selectedList));
   };
+
+  const handleNameEditSubmit = (uid: string, name: string) => {
+    dispatch(updateList({ id: uid, name: name } as IList));
+  };
+
+  const syncDocumentTitle = (name?: string) => {
+    let title = "To Do";
+
+    if (name != null) title = `${name} - ${title}`;
+
+    window.document.title = title;
+  };
+
+  const getUntitledListsCount = () => {
+    const untitledCount = userLists.filter((x) =>
+      x.name.startsWith(NEW_LIST_NAME),
+    ).length;
+    return untitledCount;
+  };
+
+  const handleListCreation = () => {
+    const untitledCount = getUntitledListsCount();
+    const number = untitledCount > 0 ? untitledCount : "";
+    const name = `${NEW_LIST_NAME} ${number}`.trimEnd();
+    const dispatchResult = dispatch(createList(name));
+    setLastCreatedId(dispatchResult.payload.id)
+  };
+
+  useEffect(() => {
+    syncDocumentTitle(selectedList?.name);
+  }, [selectedList]);
+
+  useEffect(() => {
+
+  }, [lastCreatedId])
 
   return (
     <aside
@@ -71,6 +116,7 @@ const Lists = () => {
                   total={item.tasksTotal}
                   Icon={getListIcon(item.iconName)}
                   onClick={handleItemClick}
+                  submitEdit={handleNameEditSubmit}
                 />
               );
             })}
@@ -82,7 +128,7 @@ const Lists = () => {
           </ul>
           <hr className="w-100 m-0" />
           <ul className="list-group list-group-flush">
-            {customLists.map((item) => {
+            {userLists.map((item) => {
               return (
                 <ListItem
                   key={item.id}
@@ -91,6 +137,8 @@ const Lists = () => {
                   total={item.tasksTotal}
                   Icon={getListIcon(item.iconName)}
                   onClick={handleItemClick}
+                  submitEdit={handleNameEditSubmit}
+                  isFocused={item.id === lastCreatedId}
                 />
               );
             })}
@@ -98,9 +146,33 @@ const Lists = () => {
             <GroupItem name="1">
               {
                 <ul className="list-group list-group-flush">
-                  <ListItem onClick={handleItemClick} isSubItem={true} />
-                  <ListItem onClick={handleItemClick} isSubItem={true} />
-                  <ListItem onClick={handleItemClick} isSubItem={true} />
+                  <ListItem
+                    onClick={handleItemClick}
+                    isSubItem={true}
+                    submitEdit={() => {
+                    }}
+                    name={"hhelo"}
+                    uid={String(+Date.now)}
+                    total={0}
+                  />
+                  <ListItem
+                    onClick={handleItemClick}
+                    isSubItem={true}
+                    submitEdit={() => {
+                    }}
+                    name={"hhelo"}
+                    uid={String(+Date.now)}
+                    total={0}
+                  />
+                  <ListItem
+                    onClick={handleItemClick}
+                    isSubItem={true}
+                    submitEdit={() => {
+                    }}
+                    name={"hhelo"}
+                    uid={String(+Date.now)}
+                    total={0}
+                  />
                 </ul>
               }
             </GroupItem>
@@ -111,13 +183,7 @@ const Lists = () => {
         <div className="border-top mt-auto d-flex justify-content-between align-items-center ">
           <button
             className="btn d-flex align-items-center flex-grow-1 m-1 p-2"
-            onClick={(e) => {
-              const untitledCount = customLists.filter(
-                (x) => x.name === NEW_LIST_NAME,
-              ).length;
-              const number = untitledCount > 0 ? untitledCount : "";
-              dispatch(createList(`${NEW_LIST_NAME} ${number}`.trimEnd()));
-            }}
+            onClick={handleListCreation}
           >
             <Icons.Plus title="Add a list" className="fs-5 pe-2" />
             <div className="">

@@ -1,6 +1,7 @@
 ﻿import React, { useMemo } from "react";
 import { TasksRows } from "@/features/tasks/components/TasksRows";
 import { useAppSelector } from "@/constants/types/redux";
+import SimpleBar from "simplebar-react";
 
 const TasksTableSection = () => {
   const tasks = useAppSelector((s) => s.tasks.tasks);
@@ -13,21 +14,28 @@ const TasksTableSection = () => {
   const doneTasks = useMemo(() => tasks.filter((x) => x.isChecked), [tasks]);
 
   return (
-    <section className="px-5 pb-5 pt-xxl overflow-auto h-100 stable-scroll">
-      <div className="row">
-        <div className="col-12 pb-2">
-          <table className="table table-hover table-light">
-            <tbody>
-              <TasksRows tasks={goneDoneTasks} selectedId={selectedId} />
-            </tbody>
-          </table>
-          <table className="table table-hover table-light">
-            <tbody>
-              <TasksRows tasks={doneTasks} selectedId={selectedId} />
-            </tbody>
-          </table>
+    <section className="vh-100">
+      <SimpleBar
+        className="h-100 px-5 pb-4 pt-xxl"
+        scrollbarMaxSize={200}
+        autoHide={false}
+        forceVisible={true}
+      >
+        <div className="row">
+          <div className="col-12 pb-2">
+            <table className="table table-hover table-light">
+              <tbody>
+                <TasksRows tasks={goneDoneTasks} selectedId={selectedId} />
+              </tbody>
+            </table>
+            <table className="table table-hover table-light">
+              <tbody>
+                <TasksRows tasks={doneTasks} selectedId={selectedId} />
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </SimpleBar>
     </section>
   );
 };

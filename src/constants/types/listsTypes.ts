@@ -7,6 +7,7 @@ export interface IList {
   iconName: string;
   tasksTotal: number;
   tasks: ITask[];
+  selectedTicks?: number
 }
 
 export interface IGroup {
@@ -19,4 +20,6 @@ export interface IListsState {
   readonly defaultLists: IList[];
   userLists: IList[];
   groups: IGroup[];
+
+  selectedList?: IList;
 }
