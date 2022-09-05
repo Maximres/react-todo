@@ -6,12 +6,13 @@ import { ListInfoHeader } from "@/features/tasks/components/ListInfoHeader";
 const Tasks = () => {
   return (
     <main
-      className="bg-light flex-fill position-relative"
+      className="bg-blueish flex-fill position-relative"
       style={{ minWidth: 350 }}
     >
       <ListInfoHeader />
       <TasksTableSection />
       <CreateTaskFooter />
+
     </main>
   );
 };

@@ -18,7 +18,7 @@ const ListInfoHeader = () => {
         "position-absolute",
         "input-text-inline-position",
         "list-info-height",
-        "bg-light",
+        "bg-blueish",
         "bg-opacity-75",
         "align-items-center",
         "ps-1",
@@ -32,7 +32,7 @@ const ListInfoHeader = () => {
         onChange={(e) => {
           dispatch(updateList({ id: list.id, name: e.target.value } as IList));
         }}
-        className="text-truncate border-0  bg-transparent fs-2"
+        className="text-truncate border-0 text-white bg-transparent fs-2"
         value={list.name}
       />
     </header>

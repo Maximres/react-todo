@@ -43,7 +43,7 @@ const CreateTaskFooter = () => {
     </>
   );
   return (
-    <footer className="row position-absolute input-text-inline-position bottom-0 py-3 pb-4 px-5 bg-light bg-opacity-75 blur-backdrop">
+    <footer className="row position-absolute input-text-inline-position bottom-0 py-2 pb-4 px-5 bg-blueish bg-opacity-75 blur-backdrop">
       <div className="col-12">
         <form className="p-0" onSubmit={handleNewTaskSubmit}>
           <div className="input-group flex-nowrap input-group-pad">

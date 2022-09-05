@@ -21,8 +21,8 @@ const Lists = () => {
 
   return (
     <aside
-      className="d-flex flex-column align-items-stretch flex-shrink-0 bg-white"
-      style={{ width: "380px" }}
+      className="d-flex flex-column align-items-stretch flex-shrink-0 bg-light"
+      style={{ width: 350 }}
       id="list"
     >
       <header>

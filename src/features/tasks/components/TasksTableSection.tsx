@@ -15,13 +15,13 @@ const TasksTableSection = () => {
   return (
     <section className="px-5 pb-5 pt-xxl overflow-auto h-100 stable-scroll">
       <div className="row">
-        <div className="col-12">
-          <table className="table table-light table-hover col-12">
+        <div className="col-12 pb-2">
+          <table className="table table-hover table-light">
             <tbody>
               <TasksRows tasks={goneDoneTasks} selectedId={selectedId} />
             </tbody>
           </table>
-          <table className="table table-striped table-hover table-secondary">
+          <table className="table table-hover table-light">
             <tbody>
               <TasksRows tasks={doneTasks} selectedId={selectedId} />
             </tbody>
