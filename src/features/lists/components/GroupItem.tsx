@@ -14,10 +14,10 @@ const GroupItem = ({ children, name }: GroupProps) => {
   return (
     <li className="list-group-item list-group-item-action border-0 p-0">
       <div className="accordion accordion-flush" id={accordionId}>
-        <div className="accordion-item bg-light">
+        <div className="accordion-item bg-light p-1">
           <div className="accordion-header" id={ariaLabel}>
             <button
-              className="accordion-button bg-white"
+              className="accordion-button bg-light"
               type="button"
               data-bs-toggle="collapse"
               data-bs-target={`#${collapseId}`}

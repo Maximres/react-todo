@@ -21,6 +21,7 @@ const dataService = {
   deleteTask: (id: string, parentId: string) =>
     FirebaseDataSource.deleteTask(db, id, parentId),
   updateTask: (task: ITask) => FirebaseDataSource.updateTask(db, task),
+  getGroups: () => FirebaseDataSource.getGroups(db),
 };
 
 export { dataService };

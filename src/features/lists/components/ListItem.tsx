@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useRef, useState } from "react";
 import Icons from "@/components/AppIcons";
 import cn from "classnames";
-import { KeyCodes } from "@/constants/keyCodes";
+import { KeyCodes } from "@/constants/enums/keyCodes";
 
 type Props = {
   isSubItem?: boolean;

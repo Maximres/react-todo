@@ -1,7 +1,7 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { IList, IListsState } from "@/constants/types/listsTypes";
+import { IGroup, IList, IListsState } from "@/constants/types/listsTypes";
 import assignDeep from "lodash/assignIn";
-import { listsInitialFetch } from "@/utils/thunks/initialFetch";
+import { initialFetch } from "@/utils/thunks/initialFetch";
 
 const initialState: IListsState = {
   defaultLists: [
@@ -38,8 +38,27 @@ const listsSlice = createSlice({
           name: action.payload.name,
           iconName: "",
           tasksTotal: 0,
+          order: Number(Date.now()),
         };
         state.userLists.push(newList);
+      },
+      prepare(name: string) {
+        return {
+          payload: {
+            name,
+            id: nanoid(),
+          },
+        };
+      },
+    },
+    createGroup: {
+      reducer(state, action: PayloadAction<{ name: string; id: string }>) {
+        const newGroup: IGroup = {
+          id: action.payload.id,
+          name: action.payload.name,
+          order: Number(Date.now()),
+        };
+        state.groups.push(newGroup);
       },
       prepare(name: string) {
         return {
@@ -59,9 +78,12 @@ const listsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(listsInitialFetch.fulfilled, (state, action) => {
-      state.userLists = action.payload;
-      state.selectedList = action.payload?.[0];
+    builder.addCase(initialFetch.fulfilled, (state, action) => {
+      const [lists, groups] = action.payload;
+      state.userLists = lists;
+      state.selectedList = lists?.[0];
+
+      state.groups = groups;
     });
   },
 });

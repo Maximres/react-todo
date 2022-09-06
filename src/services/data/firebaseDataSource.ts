@@ -6,17 +6,19 @@ import {
   doc,
   getDoc,
   getDocs,
+  orderBy,
   query,
   setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
 import {
+  GroupDto,
   ListDto,
   SubTaskDto,
   TaskDto,
 } from "@/constants/types/firebaseDocumentsDto";
-import { IList } from "@/constants/types/listsTypes";
+import { IGroup, IList } from "@/constants/types/listsTypes";
 import scheme from "@/constants/enums/firebaseCollectionScheme";
 import { isFulfilled, isRejected } from "@/utils/helpers/promiseResolver";
 import flattenDeep from "lodash/flattenDeep";
@@ -249,7 +251,7 @@ const getListsWithTasks = (db: Firestore) => {
   const tasks = [] as TaskDto[];
 
   return new Promise<IList[]>((resolve) => {
-    getDocs(collection(db, scheme.Lists))
+    getDocs(query( collection(db, scheme.Lists), orderBy("order", "asc")))
       .then((queryListsSnap) => {
         const tasksQueries = queryListsSnap.docs.map((listDoc) => {
           lists.push({ ...(listDoc.data() as ListDto), id: listDoc.id });
@@ -410,6 +412,38 @@ const getSubtasks = (db: Firestore, taskId: string) => {
   });
 };
 
+const getGroups = (db: Firestore) => {
+  const groupDtoList = [] as GroupDto[];
+
+  return new Promise<IGroup[]>((resolve) => {
+    const groupsQueries = getDocs(
+      query(collection(db, scheme.Groups), orderBy("order", "asc")),
+    );
+    groupsQueries
+      .then((groupSnap) => {
+        groupSnap.docs.forEach((groupDoc) => {
+          groupDtoList.push({
+            ...(groupDoc.data() as GroupDto),
+            id: groupDoc.id,
+          });
+        });
+      })
+      .then(() => {
+        const result = groupDtoList.map((groupDto) => {
+          const group = {
+            id: groupDto.id,
+            name: groupDto.name,
+            order: Number(groupDto.order),
+          } as IGroup;
+
+          return group;
+        });
+
+        resolve(result);
+      });
+  });
+};
+
 const setSubtask = async (db: Firestore, task: ITask, subTask: ISubTask) => {
   try {
     const reference = doc(
@@ -538,6 +572,8 @@ export const FirebaseDataSource = {
   getListsWithTasks,
   updateList,
   setList,
+  
+  getGroups,
 
   getSubtasksMany,
   getSubtasks,

@@ -1,8 +1,7 @@
 ﻿import reminderEnum from "constants/enums/reminderEnum";
+import { IIdentifier } from "@/constants/types/stateTypes";
 
-export interface IIdentifier {
-  readonly id: string;
-}
+
 
 export interface ISubTask extends IIdentifier {
   readonly parentId: string;

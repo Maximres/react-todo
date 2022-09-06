@@ -33,4 +33,10 @@ type SubTaskDto = {
   isChecked: boolean;
 };
 
-export type { ListDto, TaskDto, SubTaskDto, RepeatPeriod };
+type GroupDto = {
+  id: string;
+  name: string;
+  order: number;
+};
+
+export type { ListDto, TaskDto, SubTaskDto, RepeatPeriod, GroupDto };
