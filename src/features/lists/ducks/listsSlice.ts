@@ -39,6 +39,7 @@ const listsSlice = createSlice({
           iconName: "",
           tasksTotal: 0,
           order: Number(Date.now()),
+          groupId: ""
         };
         state.userLists.push(newList);
       },

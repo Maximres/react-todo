@@ -99,6 +99,7 @@ const getListsWithSubtasks = (db: Firestore) => {
       list.groupId = listDto.groupId;
       list.iconName = listDto.iconName;
       list.tasksTotal = listDto.tasks.length;
+      list.order = listDto.order;
 
       list.tasks = (listDto.tasks ||= []).map((taskDto) => {
         const task = {
@@ -206,6 +207,7 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
         list.groupId = listDto.groupId;
         list.iconName = listDto.iconName;
         list.tasksTotal = listDto.tasks.length;
+list.order = listDto.order;
 
         list.tasks = (listDto.tasks ||= []).map((taskDto) => {
           const task = {
@@ -295,6 +297,7 @@ const getListsWithTasks = (db: Firestore) => {
           list.groupId = listDto.groupId;
           list.iconName = listDto.iconName ?? "List";
           list.tasksTotal = listDto.tasks.length;
+          list.order = listDto.order
 
           list.tasks = (listDto.tasks ||= []).map((taskDto) => {
             const task = {
@@ -563,6 +566,7 @@ function convertListToDto(list: IList) {
     name: list.name,
     iconName: list.iconName,
     tasks: [] as any,
+    order: Number(list.order)
   };
   return listDto;
 }

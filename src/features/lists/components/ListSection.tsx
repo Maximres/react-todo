@@ -1,0 +1,71 @@
+﻿import React, { useCallback, useEffect, useMemo } from "react";
+import {
+  GroupList,
+  selectorListsAndGroupLists,
+} from "../ducks/selectors/selectorListsAndGroupLists";
+import { IList } from "@/constants/types/listsTypes";
+import { selectList, updateList } from "@features/lists";
+import _orderBy from "lodash/orderBy";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/constants/types/redux";
+
+type RenderProps = {
+  defaultItems: IList[];
+  items: (IList | GroupList)[];
+  itemClick: (uid: string) => void;
+  editSubmit: (uid: string, name: string) => void;
+};
+
+type Props = {
+  render: (args: RenderProps) => JSX.Element;
+};
+
+const ListSection = ({ render }: Props) => {
+  const dispatch = useDispatch();
+  const defaultLists = useAppSelector((x) => x.lists.defaultLists);
+  const listsGroups = useAppSelector(selectorListsAndGroupLists);
+  const userLists = useAppSelector((x) => x.lists.userLists);
+  const selectedList = useAppSelector((x) => x.lists.selectedList);
+
+  const orderedListsGroups = useMemo(() => {
+    return _orderBy(listsGroups, ["order"], ["asc"]);
+  }, [listsGroups]);
+
+  const handleItemClick = useCallback(
+    (uid: string) => {
+      const selectedList = userLists.find((i) => i.id === uid);
+      if (selectedList == null) return;
+
+      dispatch(selectList(selectedList));
+    },
+    [userLists],
+  );
+
+  const handleNameEditSubmit = useCallback((uid: string, name: string) => {
+    dispatch(updateList({ id: uid, name: name } as IList));
+  }, []);
+
+  useEffect(() => {
+    let title = "To Do";
+
+    const name = selectedList?.name;
+    if (name != null) title = `${selectedList?.name} - ${title}`;
+
+    window.document.title = title;
+  }, [selectedList]);
+
+  return (
+    <section className="flex-grow-1 overflow-auto">
+      <div className="w-100">
+        {render({
+          defaultItems: defaultLists,
+          items: orderedListsGroups,
+          itemClick: handleItemClick,
+          editSubmit: handleNameEditSubmit,
+        })}
+      </div>
+    </section>
+  );
+};
+
+export { ListSection };

@@ -7,7 +7,7 @@ export type GroupList = {
   id: string;
   name: string;
   order: number;
-  lists: IList[];
+  lists?: IList[];
 };
 
 export const selectorListsAndGroupLists = createSelector(

@@ -3,6 +3,7 @@
   name: string;
   iconName: string;
   groupId: string;
+  order: number;
   tasks: TaskDto[];
 };
 
