@@ -1,9 +1,13 @@
 ﻿import Icons from "@/components/AppIcons";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { NEW_LIST_NAME } from "@/features/tasks/ducks/constants";
-import { createList } from "@features/lists";
+import {
+  NEW_GROUP_NAME,
+  NEW_LIST_NAME,
+} from "@/features/tasks/ducks/constants";
+import { createGroup, createList } from "@features/lists";
 import { useAppSelector } from "@/constants/types/redux";
+import { IGroup, IList } from "@/constants/types/listsTypes";
 
 const ListFooter = ({
   setLastCreatedId,
@@ -11,21 +15,32 @@ const ListFooter = ({
   setLastCreatedId: (id: string) => void;
 }) => {
   const userLists = useAppSelector((x) => x.lists.userLists);
+  const groups = useAppSelector((x) => x.lists.groups);
   const dispatch = useDispatch();
 
-  const getUntitledListsCount = () => {
-    const untitledCount = userLists.filter((x) =>
-      x.name.startsWith(NEW_LIST_NAME),
+  const getUntitledCount = (
+    collection: IGroup[] | IList[] = [],
+    name: string,
+  ) => {
+    const untitledCount = collection.filter((x) =>
+      x.name.startsWith(name),
     ).length;
     return untitledCount;
   };
 
   const handleListCreation = () => {
-    const untitledCount = getUntitledListsCount();
+    const untitledCount = getUntitledCount(userLists, NEW_LIST_NAME);
     const number = untitledCount > 0 ? untitledCount : "";
     const name = `${NEW_LIST_NAME} ${number}`.trimEnd();
     const dispatchResult = dispatch(createList(name));
     setLastCreatedId(dispatchResult.payload.id);
+  };
+
+  const handleGroupCreation = () => {
+    const untitledCount = getUntitledCount(groups, NEW_GROUP_NAME);
+    const number = untitledCount > 0 ? untitledCount : "";
+    const name = `${NEW_GROUP_NAME} ${number}`.trimEnd();
+    const dispatchResult = dispatch(createGroup(name));
   };
 
   return (
@@ -41,7 +56,11 @@ const ListFooter = ({
           </div>
         </button>
 
-        <button type="button" className="btn m-1 p-2">
+        <button
+          type="button"
+          className="btn m-1 p-2"
+          onClick={handleGroupCreation}
+        >
           <Icons.NewGroup title="Create a new group" className="fs-5" />
         </button>
       </div>

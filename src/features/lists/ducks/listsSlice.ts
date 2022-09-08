@@ -39,7 +39,7 @@ const listsSlice = createSlice({
           iconName: "",
           tasksTotal: 0,
           order: Number(Date.now()),
-          groupId: ""
+          groupId: "",
         };
         state.userLists.push(newList);
       },
@@ -89,6 +89,7 @@ const listsSlice = createSlice({
   },
 });
 
-export const { updateList, createList, selectList } = listsSlice.actions;
+export const { updateList, createList, selectList, createGroup } =
+  listsSlice.actions;
 
 export const listsReducer = listsSlice.reducer;
