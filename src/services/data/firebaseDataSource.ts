@@ -207,7 +207,7 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
         list.groupId = listDto.groupId;
         list.iconName = listDto.iconName;
         list.tasksTotal = listDto.tasks.length;
-list.order = listDto.order;
+        list.order = listDto.order;
 
         list.tasks = (listDto.tasks ||= []).map((taskDto) => {
           const task = {
@@ -253,7 +253,7 @@ const getListsWithTasks = (db: Firestore) => {
   const tasks = [] as TaskDto[];
 
   return new Promise<IList[]>((resolve) => {
-    getDocs(query( collection(db, scheme.Lists), orderBy("order", "asc")))
+    getDocs(query(collection(db, scheme.Lists), orderBy("order", "asc")))
       .then((queryListsSnap) => {
         const tasksQueries = queryListsSnap.docs.map((listDoc) => {
           lists.push({ ...(listDoc.data() as ListDto), id: listDoc.id });
@@ -297,7 +297,7 @@ const getListsWithTasks = (db: Firestore) => {
           list.groupId = listDto.groupId;
           list.iconName = listDto.iconName ?? "List";
           list.tasksTotal = listDto.tasks.length;
-          list.order = listDto.order
+          list.order = listDto.order;
 
           list.tasks = (listDto.tasks ||= []).map((taskDto) => {
             const task = {
@@ -504,6 +504,20 @@ const setList = async (db: Firestore, list: IList) => {
   }
 };
 
+const setGroup = async (db: Firestore, group: IGroup) => {
+  try {
+    const reference = doc(db, scheme.Groups, group.id);
+    const groupDto = convertGroupToDto(group);
+
+    await setDoc(reference, groupDto, { merge: true });
+    return true;
+  } catch (e: any) {
+    console.log("setGroupErrors");
+    console.error(e);
+    return false;
+  }
+};
+
 const updateTask = (db: Firestore, task: ITask) => {
   const reference = doc(db, scheme.Lists, task.parentId, scheme.Tasks, task.id);
   const taskDto = convertToDto(task);
@@ -566,7 +580,16 @@ function convertListToDto(list: IList) {
     name: list.name,
     iconName: list.iconName,
     tasks: [] as any,
-    order: Number(list.order)
+    order: Number(list.order),
+  };
+  return listDto;
+}
+
+function convertGroupToDto(group: IGroup) {
+  const listDto: GroupDto = {
+    id: group.id,
+    name: group.name,
+    order: group.order,
   };
   return listDto;
 }
@@ -576,8 +599,9 @@ export const FirebaseDataSource = {
   getListsWithTasks,
   updateList,
   setList,
-  
+
   getGroups,
+  setGroup,
 
   getSubtasksMany,
   getSubtasks,

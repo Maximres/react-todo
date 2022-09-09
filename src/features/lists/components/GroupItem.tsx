@@ -26,7 +26,11 @@ const GroupItem = ({ children, name }: GroupProps) => {
             >
               <div className="text-truncate me-1">
                 <Icons.Group className="me-3" />
-                <span>{name}</span>
+                <input
+                  value={name}
+                  type="text"
+                  className="border-0 bg-transparent flex-grow-1 me-3 text-truncate"
+                />
               </div>
             </button>
           </div>

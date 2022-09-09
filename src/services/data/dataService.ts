@@ -2,7 +2,7 @@
 import { firebaseApp } from "@/app/configs/firebase";
 import { FirebaseDataSource } from "@/services/data/firebaseDataSource";
 import { ISubTask, ITask } from "@/constants/types/tasksTypes";
-import { IList } from "@/constants/types/listsTypes";
+import { IGroup, IList } from "@/constants/types/listsTypes";
 
 const db = getFirestore(firebaseApp);
 
@@ -21,7 +21,9 @@ const dataService = {
   deleteTask: (id: string, parentId: string) =>
     FirebaseDataSource.deleteTask(db, id, parentId),
   updateTask: (task: ITask) => FirebaseDataSource.updateTask(db, task),
+
   getGroups: () => FirebaseDataSource.getGroups(db),
+  setGroup: (group: IGroup) => FirebaseDataSource.setGroup(db, group),
 };
 
 export { dataService };
