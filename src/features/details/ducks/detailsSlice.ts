@@ -21,11 +21,18 @@ const detailsSlice = createSlice({
         state.taskId = task.id;
       }
     },
+    reset: (state) => {
+      state.isVisible = false;
+      state.taskId = undefined;
+      state.task = undefined;
+      state.subTasks = undefined;
+    }
   },
 });
 
 export const {
   updateDetails,
+  reset
 } = detailsSlice.actions;
 
 export const detailsReducer = detailsSlice.reducer;

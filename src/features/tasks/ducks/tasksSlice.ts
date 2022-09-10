@@ -184,7 +184,10 @@ const tasksSlice = createSlice({
     });
     builder.addCase(selectList, (state, action) => {
       const list = action.payload;
-      if (state.listId === list.id) return;
+      const sameList = state.listId === list.id;
+      if (sameList) return;
+
+      state.selectedRowId = undefined;
 
       state.tasks = list.tasks;
       state.listId = list.id;
