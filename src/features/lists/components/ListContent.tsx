@@ -1,34 +1,37 @@
 ﻿import React, { useState } from "react";
-import { ListSection } from "@/features/lists/components/ListSection";
+import { ListSection, RenderProps } from "@/features/lists/components/ListSection";
 import { ListFooter } from "@/features/lists/components/ListFooter";
 import ListGroup from "@/features/lists/components/ListGroup";
 
 const ListContent = () => {
-  const [lastCreatedId, setLastCreatedId] = useState("");
+  const [lastListItemId, setLastListItemId] = useState("");
 
   const setLastCreatedIdValue = (id: string) => {
-    setLastCreatedId(id);
+    setLastListItemId(id);
   };
+
+  const renderChild = (render: RenderProps) => (
+    <>
+      <ListGroup
+        items={render.defaultItems}
+        onItemClick={render.itemClick}
+        onListEditSubmit={render.editListSubmit}
+        onGroupEditSubmit={render.editGroupSubmit}
+      />
+      <hr className="w-100 m-0" />
+      <ListGroup
+        items={render.items}
+        onItemClick={render.itemClick}
+        onListEditSubmit={render.editListSubmit}
+        onGroupEditSubmit={render.editGroupSubmit}
+        lastCreatedId={lastListItemId}
+      />
+    </>
+  );
+
   return (
     <>
-      <ListSection
-        render={(render) => (
-          <>
-            <ListGroup
-              items={render.defaultItems}
-              onItemClick={render.itemClick}
-              onEditSubmit={render.editSubmit}
-            />
-            <hr className="w-100 m-0" />
-            <ListGroup
-              items={render.items}
-              onItemClick={render.itemClick}
-              onEditSubmit={render.editSubmit}
-              lastCreatedId={lastCreatedId}
-            />
-          </>
-        )}
-      />
+      <ListSection render={renderChild} />
       <ListFooter setLastCreatedId={setLastCreatedIdValue} />
     </>
   );

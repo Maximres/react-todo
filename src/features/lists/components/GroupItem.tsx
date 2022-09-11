@@ -1,13 +1,18 @@
-﻿import React from "react";
+﻿import React, { useState } from "react";
 import useValidId from "@/utils/hooks/useValidId";
 import Icons from "@/components/AppIcons";
+import { ListsInput } from "@/features/lists/components/ListsInput";
 
 type GroupProps = {
   children: JSX.Element;
   name: string;
+  uid: string;
+  isFocused: boolean;
+  submitEdit: (uid: string, name: string) => void;
 };
 
-const GroupItem = ({ children, name }: GroupProps) => {
+const GroupItem = ({ children, name, isFocused , uid,  submitEdit}: GroupProps) => {
+
   const accordionId = useValidId();
   const collapseId = useValidId();
   const ariaLabel = useValidId();
@@ -26,10 +31,10 @@ const GroupItem = ({ children, name }: GroupProps) => {
             >
               <div className="text-truncate me-1">
                 <Icons.Group className="me-3" />
-                <input
-                  value={name}
-                  type="text"
-                  className="border-0 bg-transparent flex-grow-1 me-3 text-truncate"
+                <ListsInput
+                  name={name}
+                  isFocused={isFocused}
+                  submitEdit={(text) => submitEdit(uid, text)}
                 />
               </div>
             </button>

@@ -70,6 +70,12 @@ const listsSlice = createSlice({
         };
       },
     },
+    updateGroup(state, action: PayloadAction<IGroup>) {
+      const index = state.groups.findIndex((x) => x.id === action.payload.id);
+      if (index < 0) throw new Error("Group is not found");
+      const group = state.groups[index];
+      state.groups[index] = assignDeep({}, group, action.payload);
+    },
     selectList: (state, action: PayloadAction<IList>) => {
       //todo: sync  selectedTicks with db for initial load
 
@@ -89,7 +95,7 @@ const listsSlice = createSlice({
   },
 });
 
-export const { updateList, createList, selectList, createGroup } =
+export const { updateList, createList, selectList, createGroup, updateGroup } =
   listsSlice.actions;
 
 export const listsReducer = listsSlice.reducer;

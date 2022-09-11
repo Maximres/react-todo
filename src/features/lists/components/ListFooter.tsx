@@ -41,6 +41,8 @@ const ListFooter = ({
     const number = untitledCount > 0 ? untitledCount : "";
     const name = `${NEW_GROUP_NAME} ${number}`.trimEnd();
     const dispatchResult = dispatch(createGroup(name));
+    setLastCreatedId(dispatchResult.payload.id);
+
   };
 
   return (

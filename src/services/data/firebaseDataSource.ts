@@ -527,7 +527,6 @@ const updateTask = (db: Firestore, task: ITask) => {
 };
 
 const updateList = (db: Firestore, list: IList) => {
-  debugger;
   const reference = doc(db, scheme.Lists, list.id);
   const listDto = convertListToDto(list);
   return updateDoc(reference, listDto).catch((...args) => {

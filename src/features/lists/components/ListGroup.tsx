@@ -8,17 +8,18 @@ import GroupItem from "@/features/lists/components/GroupItem";
 type Props = {
   items: (IList | GroupList)[];
   onItemClick: (uid: string) => void;
-  onEditSubmit: (uid: string, name: string) => void;
+  onListEditSubmit: (uid: string, name: string) => void;
+  onGroupEditSubmit: (uid: string, name: string) => void;
   lastCreatedId?: string;
 };
 
 const ListGroup = ({
   items,
   onItemClick,
-  onEditSubmit,
+  onListEditSubmit,
+  onGroupEditSubmit,
   lastCreatedId,
 }: Props) => {
-
   function isListItem(value: IList | GroupList): value is IList {
     return typeof (value as IList).groupId !== "undefined";
   }
@@ -32,7 +33,7 @@ const ListGroup = ({
         total={item.tasksTotal}
         Icon={getListIcon(item.iconName)}
         onClick={onItemClick}
-        submitEdit={onEditSubmit}
+        submitEdit={onListEditSubmit}
         isFocused={item.id === lastCreatedId}
       />
     );
@@ -40,7 +41,13 @@ const ListGroup = ({
 
   function renderGroupItem(item: GroupList) {
     return (
-      <GroupItem name={item.name} key={item.id}>
+      <GroupItem
+        name={item.name}
+        key={item.id}
+        uid={item.id}
+        isFocused={item.id === lastCreatedId}
+        submitEdit={onGroupEditSubmit}
+      >
         {
           <ul className="list-group list-group-flush p-1">
             {item.lists &&

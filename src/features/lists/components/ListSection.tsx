@@ -1,19 +1,17 @@
 ﻿import React, { useCallback, useEffect, useMemo } from "react";
-import {
-  GroupList,
-  selectorListsAndGroupLists,
-} from "../ducks/selectors/selectorListsAndGroupLists";
+import { GroupList, selectorListsAndGroupLists } from "../ducks/selectors/selectorListsAndGroupLists";
 import { IList } from "@/constants/types/listsTypes";
-import { selectList, updateList } from "@features/lists";
+import { selectList, updateGroup, updateList } from "@features/lists";
 import _orderBy from "lodash/orderBy";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/constants/types/redux";
 
-type RenderProps = {
+export type RenderProps = {
   defaultItems: IList[];
   items: (IList | GroupList)[];
   itemClick: (uid: string) => void;
-  editSubmit: (uid: string, name: string) => void;
+  editListSubmit: (uid: string, name: string) => void;
+  editGroupSubmit: (uid: string, name: string) => void;
 };
 
 type Props = {
@@ -41,8 +39,12 @@ const ListSection = ({ render }: Props) => {
     [userLists],
   );
 
-  const handleNameEditSubmit = useCallback((uid: string, name: string) => {
+  const handleListEditSubmit = useCallback((uid: string, name: string) => {
     dispatch(updateList({ id: uid, name: name } as IList));
+  }, []);
+
+  const handleGroupEditSubmit = useCallback((uid: string, name: string) => {
+    dispatch(updateGroup({ id: uid, name: name } as IList));
   }, []);
 
   useEffect(() => {
@@ -61,7 +63,8 @@ const ListSection = ({ render }: Props) => {
           defaultItems: defaultLists,
           items: orderedListsGroups,
           itemClick: handleItemClick,
-          editSubmit: handleNameEditSubmit,
+          editListSubmit: handleListEditSubmit,
+          editGroupSubmit: handleGroupEditSubmit,
         })}
       </div>
     </section>
