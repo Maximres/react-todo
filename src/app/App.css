@@ -177,3 +177,12 @@
 .z-index-1 {
   z-index: 1;
 }
+
+.simplebar-track.simplebar-vertical {
+  width: 7px;
+}
+
+.simplebar-scrollbar.simplebar-visible {
+  width: 7px;
+  opacity: 0.75;
+}

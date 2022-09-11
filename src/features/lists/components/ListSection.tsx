@@ -1,10 +1,14 @@
 ﻿import React, { useCallback, useEffect, useMemo } from "react";
-import { GroupList, selectorListsAndGroupLists } from "../ducks/selectors/selectorListsAndGroupLists";
+import {
+  GroupList,
+  selectorListsAndGroupLists,
+} from "../ducks/selectors/selectorListsAndGroupLists";
 import { IList } from "@/constants/types/listsTypes";
 import { selectList, updateGroup, updateList } from "@features/lists";
 import _orderBy from "lodash/orderBy";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/constants/types/redux";
+import SimpleBar from "simplebar-react";
 
 export type RenderProps = {
   defaultItems: IList[];
@@ -57,16 +61,23 @@ const ListSection = ({ render }: Props) => {
   }, [selectedList]);
 
   return (
-    <section className="flex-grow-1 overflow-auto">
-      <div className="w-100">
-        {render({
-          defaultItems: defaultLists,
-          items: orderedListsGroups,
-          itemClick: handleItemClick,
-          editListSubmit: handleListEditSubmit,
-          editGroupSubmit: handleGroupEditSubmit,
-        })}
-      </div>
+    <section className="flex-grow-1 overflow-hidden">
+      <SimpleBar
+        className="overflow-auto h-100"
+        scrollbarMaxSize={200}
+        autoHide={false}
+        forceVisible={true}
+      >
+        <div className="w-100 pe-1">
+          {render({
+            defaultItems: defaultLists,
+            items: orderedListsGroups,
+            itemClick: handleItemClick,
+            editListSubmit: handleListEditSubmit,
+            editGroupSubmit: handleGroupEditSubmit,
+          })}
+        </div>
+      </SimpleBar>
     </section>
   );
 };
