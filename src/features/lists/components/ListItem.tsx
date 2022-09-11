@@ -40,6 +40,7 @@ const ListItem = ({
           name={name}
           isFocused={isFocused}
           submitEdit={(text) => submitEdit(uid, text)}
+          className="mx-3"
         />
         <span className="badge rounded-pill bg-badge-light text-dark ms-auto fw-light">
           {total}

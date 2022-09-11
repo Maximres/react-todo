@@ -1,13 +1,15 @@
 ﻿import React, { useEffect, useRef, useState } from "react";
 import { KeyCodes } from "@/constants/enums/keyCodes";
+import classNames from "classnames";
 
 type Props = {
   name: string;
   isFocused?: boolean;
   submitEdit: (text: string) => void;
+  [key: string]: any
 };
 
-const ListsInput = ({ name, isFocused, submitEdit }: Props) => {
+const ListsInput = ({ name, isFocused, submitEdit, ...rest }: Props) => {
   const [disabled, setDisabled] = useState(!isFocused);
   const [text, setText] = useState(name);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -66,7 +68,10 @@ const ListsInput = ({ name, isFocused, submitEdit }: Props) => {
         autoFocus={isFocused}
         ref={inputRef}
         type="text"
-        className="border-0 bg-transparent flex-grow-1 mx-3 text-truncate"
+        className={classNames(
+          "border-0 bg-transparent flex-grow-1 text-truncate",
+          [rest["className"]],
+        )}
       />
     </span>
   );

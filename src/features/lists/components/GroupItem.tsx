@@ -35,6 +35,7 @@ const GroupItem = ({ children, name, isFocused , uid,  submitEdit}: GroupProps) 
                   name={name}
                   isFocused={isFocused}
                   submitEdit={(text) => submitEdit(uid, text)}
+                  className="me-3"
                 />
               </div>
             </button>
