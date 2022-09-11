@@ -6,7 +6,7 @@ type Props = {
   name: string;
   isFocused?: boolean;
   submitEdit: (text: string) => void;
-  [key: string]: any
+  [key: string]: any;
 };
 
 const ListsInput = ({ name, isFocused, submitEdit, ...rest }: Props) => {
@@ -58,7 +58,7 @@ const ListsInput = ({ name, isFocused, submitEdit, ...rest }: Props) => {
   }, [disabled]);
 
   return (
-    <span onClick={handleClick}>
+    <span onDoubleClick={handleClick}>
       <input
         value={text}
         onChange={handleChange}
