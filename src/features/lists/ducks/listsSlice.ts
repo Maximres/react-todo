@@ -2,6 +2,7 @@
 import { IGroup, IList, IListsState } from "@/constants/types/listsTypes";
 import assignDeep from "lodash/assignIn";
 import { initialFetch } from "@/utils/thunks/initialFetch";
+import { getOrder } from "@/utils/helpers/order";
 
 const initialState: IListsState = {
   defaultLists: [
@@ -38,7 +39,7 @@ const listsSlice = createSlice({
           name: action.payload.name,
           iconName: "",
           tasksTotal: 0,
-          order: Number(Date.now()),
+          order: getOrder(),
           groupId: "",
         };
         state.userLists.push(newList);
@@ -57,7 +58,7 @@ const listsSlice = createSlice({
         const newGroup: IGroup = {
           id: action.payload.id,
           name: action.payload.name,
-          order: Number(Date.now()),
+          order: getOrder(),
         };
         state.groups.push(newGroup);
       },

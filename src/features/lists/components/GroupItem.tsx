@@ -1,7 +1,8 @@
-﻿import React, { useState } from "react";
+﻿import React from "react";
 import useValidId from "@/utils/hooks/useValidId";
 import Icons from "@/components/AppIcons";
 import { ListsInput } from "@/features/lists/components/ListsInput";
+import { DraggableProvided } from "react-beautiful-dnd";
 
 type GroupProps = {
   children: JSX.Element;
@@ -9,15 +10,27 @@ type GroupProps = {
   uid: string;
   isFocused: boolean;
   submitEdit: (uid: string, name: string) => void;
+  dnd: DraggableProvided;
 };
 
-const GroupItem = ({ children, name, isFocused , uid,  submitEdit}: GroupProps) => {
-
+const GroupItem = ({
+  children,
+  name,
+  isFocused,
+  uid,
+  submitEdit,
+  dnd,
+}: GroupProps) => {
   const accordionId = useValidId();
   const collapseId = useValidId();
   const ariaLabel = useValidId();
   return (
-    <li className="list-group-item list-group-item-action border-0 p-0">
+    <li
+      ref={dnd.innerRef}
+      {...dnd.dragHandleProps}
+      {...dnd.draggableProps}
+      className="list-group-item list-group-item-action border-0 p-0"
+    >
       <div className="accordion accordion-flush" id={accordionId}>
         <div className="accordion-item bg-light p-1">
           <div className="accordion-header" id={ariaLabel}>
