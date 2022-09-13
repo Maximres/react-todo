@@ -71,18 +71,26 @@ const ListSection = ({ render }: Props) => {
 
     if (!dest) return;
 
+    const indexMap = {
+
+    }
+    for (const srcKey of orderedListsGroups) {
+
+    }
     //NOT same level
     //todo: from group to top level list
     if (src.droppableId !== dest.droppableId) return;
-
+debugger
     const movedUp = src.index >= dest.index;
     const nextIndex = movedUp ? -1 : +1;
     const destItemAbove = orderedListsGroups[dest.index];
     const destItemBelow = orderedListsGroups[dest.index + nextIndex];
-    const meanOrder = (destItemAbove.order + (destItemBelow?.order ?? 0.1)) / 2.0;
-    const srcItem = listsGroups.find((x) => x.id === draggableId)!;
-    const srcItemCopy = { ...srcItem, order: meanOrder };
+    const meanOrder =
+      (destItemAbove.order + (destItemBelow?.order ?? 0.1)) / 2.0;
+    const srcItem = listsGroups.find((x) => x.id === draggableId);
+    if (!srcItem) return;
 
+    const srcItemCopy = { ...srcItem, order: meanOrder };
     if (isListItem(srcItemCopy)) {
       dispatch(updateList(srcItemCopy as IList));
     } else {

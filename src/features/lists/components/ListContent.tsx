@@ -25,6 +25,7 @@ const ListContent = () => {
               onListEditSubmit={render.editListSubmit}
               onGroupEditSubmit={render.editGroupSubmit}
               dnd={provided}
+              dndDisabled={true}
             />
           </>
         )}

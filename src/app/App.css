@@ -179,7 +179,7 @@
 }
 
 .simplebar-track.simplebar-vertical {
-  width: 7px;
+  width: 7px !important;
 }
 
 .simplebar-scrollbar.simplebar-visible {

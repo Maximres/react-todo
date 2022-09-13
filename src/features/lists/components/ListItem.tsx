@@ -14,6 +14,7 @@ type Props = {
   onClick: (uid: string) => void;
   submitEdit: (uid: string, name: string) => void;
   isFocused?: boolean;
+  isDragDisabled?: boolean;
 };
 
 const ListItem = ({
@@ -22,46 +23,90 @@ const ListItem = ({
   name,
   isSubItem = false,
   isFocused = false,
+  isDragDisabled = false,
   Icon = <Icons.List />,
   total = 0,
   onClick,
   submitEdit,
 }: Props) => {
+  console.log(isDragDisabled);
 
-  if (!uid)
-    return null;
-
-  return (
-    <Draggable draggableId={uid} index={index}>
-      {(provided) => (
-        <li
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          className="list-group-item list-group-item-action border-0 bg-light"
-          onClick={() => onClick(uid)}
-          onDoubleClick={(e) => {}}
-        >
-          <div
-            className={cn("d-flex align-items-center", {
-              " group-item-ms": isSubItem,
-            })}
+  const draggable = (
+    <>
+      <Draggable
+        draggableId={uid}
+        index={index}
+        isDragDisabled={isDragDisabled}
+      >
+        {(provided) => (
+          <li
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            className="list-group-item list-group-item-action border-0 bg-light"
+            onClick={() => onClick(uid)}
+            onDoubleClick={(e) => {}}
           >
-            {Icon}
-            <ListsInput
-              name={name}
-              isFocused={isFocused}
-              submitEdit={(text) => submitEdit(uid, text)}
-              className="mx-3"
-            />
-            <span className="badge rounded-pill bg-badge-light text-dark ms-auto fw-light">
-              {total}
-            </span>
-          </div>
-        </li>
-      )}
-    </Draggable>
+            <div
+              className={cn("d-flex align-items-center", {
+                " group-item-ms": isSubItem,
+              })}
+            >
+              {Icon}
+              <ListsInput
+                name={name}
+                isFocused={isFocused}
+                submitEdit={(text) => submitEdit(uid, text)}
+                className="mx-3"
+              />
+              <span className="badge rounded-pill bg-badge-light text-dark ms-auto fw-light">
+                {total}
+              </span>
+            </div>
+          </li>
+        )}
+      </Draggable>
+    </>
   );
+
+  if (!isSubItem) {
+    console.log("here1")
+
+    return draggable;
+  }
+
+  if (isDragDisabled) {
+    console.log("here2")
+    return null
+    return (
+      <li
+        className="list-group-item list-group-item-action border-0 bg-light"
+        onClick={() => onClick(uid)}
+        onDoubleClick={(e) => {}}
+      >
+        <div
+          className={cn("d-flex align-items-center", {
+            " group-item-ms": isSubItem,
+          })}
+        >
+          {Icon}
+          <ListsInput
+            name={name}
+            isFocused={isFocused}
+            submitEdit={(text) => submitEdit(uid, text)}
+            className="mx-3"
+          />
+          <span className="badge rounded-pill bg-badge-light text-dark ms-auto fw-light">
+            {total}
+          </span>
+        </div>
+      </li>
+    );
+  }
+
+  console.log("here3")
+
+  return draggable;
 };
 
 export default ListItem;

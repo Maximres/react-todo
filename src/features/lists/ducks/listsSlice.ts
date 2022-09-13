@@ -2,19 +2,26 @@
 import { IGroup, IList, IListsState } from "@/constants/types/listsTypes";
 import assignDeep from "lodash/assignIn";
 import { initialFetch } from "@/utils/thunks/initialFetch";
-import { getOrder } from "@/utils/helpers/order";
+import { getOrderNumber } from "@/utils/helpers/order";
 
+const defaults = [
+  {
+    name: "My Day",
+    iconName: "MyDay",
+    id: "DEFAULT_MY_DAY",
+    tasksTotal: 0,
+    groupId: "",
+  },
+  {
+    name: "Important",
+    iconName: "Favorite",
+    id: "DEFAULT_IMPORTANT",
+    tasksTotal: 0,
+    groupId: "",
+  },
+] as IList[];
 const initialState: IListsState = {
-  defaultLists: [
-    { name: "My Day", iconName: "MyDay", groupId: "1", tasksTotal: 1 },
-    {
-      name: "Important",
-      iconName: "Favorite",
-      groupId: "2",
-      tasksTotal: 4,
-    },
-    { name: "My Day", iconName: "", groupId: "3", tasksTotal: 2 },
-  ] as IList[],
+  defaultLists: defaults,
   userLists: [],
   groups: [],
 };
@@ -39,7 +46,7 @@ const listsSlice = createSlice({
           name: action.payload.name,
           iconName: "",
           tasksTotal: 0,
-          order: getOrder(),
+          order: getOrderNumber(),
           groupId: "",
         };
         state.userLists.push(newList);
@@ -58,7 +65,7 @@ const listsSlice = createSlice({
         const newGroup: IGroup = {
           id: action.payload.id,
           name: action.payload.name,
-          order: getOrder(),
+          order: getOrderNumber(),
         };
         state.groups.push(newGroup);
       },
