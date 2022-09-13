@@ -29,7 +29,6 @@ const ListItem = ({
   onClick,
   submitEdit,
 }: Props) => {
-  console.log(isDragDisabled);
 
   const draggable = (
     <>
@@ -69,42 +68,6 @@ const ListItem = ({
     </>
   );
 
-  if (!isSubItem) {
-    console.log("here1")
-
-    return draggable;
-  }
-
-  if (isDragDisabled) {
-    console.log("here2")
-    return null
-    return (
-      <li
-        className="list-group-item list-group-item-action border-0 bg-light"
-        onClick={() => onClick(uid)}
-        onDoubleClick={(e) => {}}
-      >
-        <div
-          className={cn("d-flex align-items-center", {
-            " group-item-ms": isSubItem,
-          })}
-        >
-          {Icon}
-          <ListsInput
-            name={name}
-            isFocused={isFocused}
-            submitEdit={(text) => submitEdit(uid, text)}
-            className="mx-3"
-          />
-          <span className="badge rounded-pill bg-badge-light text-dark ms-auto fw-light">
-            {total}
-          </span>
-        </div>
-      </li>
-    );
-  }
-
-  console.log("here3")
 
   return draggable;
 };

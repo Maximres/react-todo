@@ -4,7 +4,7 @@ import { IList } from "@/constants/types/listsTypes";
 import ListItem from "@/features/lists/components/ListItem";
 import { getListIcon } from "@/utils/helpers/getIcon";
 import GroupItem from "@/features/lists/components/GroupItem";
-import { Draggable, DroppableProvided } from "react-beautiful-dnd";
+import { Draggable, Droppable, DroppableProvided } from "react-beautiful-dnd";
 import { isListItem } from "@/utils/helpers/listItemResolver";
 
 type Props = {
@@ -54,20 +54,22 @@ const ListGroup = ({
     );
   };
 
-  const renderSubGroupItem = (item: GroupList, parentIndex: number, isDragDisabled: boolean) => (
-    <div>
-      <ul className="list-group list-group-flush p-1">
+  const renderSubGroupItem = (item: GroupList, provided: DroppableProvided) => (
+
+      <ul className="list-group list-group-flush p-1"
+      ref={provided.innerRef}
+          {...provided.droppableProps}
+      >
         {item.lists &&
           item.lists.map((listItem, index) => {
-            return renderListItem(listItem, index + parentIndex, isDragDisabled, true);
+            return renderListItem(listItem, index, false, true);
           })}
+        {provided.placeholder}
       </ul>
-    </div>
+
   );
 
   const renderGroupItem = (item: GroupList, index: number, isDragDisabled: boolean) => {
-    console.log(counter.current);
-
     return (
       <Draggable
         draggableId={item.id}
@@ -85,7 +87,11 @@ const ListGroup = ({
               submitEdit={onGroupEditSubmit}
               dnd={dndProvided}
             >
-              {renderSubGroupItem(item, index, snapshot.isDragging)}
+              {
+                <Droppable droppableId={"group_" + item.id} type="GROUP">
+                  {(provided) =>                 renderSubGroupItem(item, provided)}
+                </Droppable>
+}
             </GroupItem>
           </div>
 

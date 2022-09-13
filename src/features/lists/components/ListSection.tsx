@@ -6,6 +6,7 @@ import {
 import { IGroup, IList } from "@/constants/types/listsTypes";
 import { selectList, updateGroup, updateList } from "@features/lists";
 import _orderBy from "lodash/orderBy";
+import _isEmpty from "lodash/isEmpty";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/constants/types/redux";
 import SimpleBar from "simplebar-react";
@@ -15,6 +16,7 @@ import {
   ResponderProvided,
 } from "react-beautiful-dnd";
 import { isListItem } from "@/utils/helpers/listItemResolver";
+import { getOrderNumber } from "@/utils/helpers/order";
 
 export type RenderProps = {
   defaultItems: IList[];
@@ -68,34 +70,83 @@ const ListSection = ({ render }: Props) => {
 
   const onDragEnd = (result: DropResult, provided: ResponderProvided) => {
     const { source: src, destination: dest, draggableId } = result;
-
+    debugger;
     if (!dest) return;
 
-    const indexMap = {
+    if (result.type === "GROUP") {
+      //source from group
 
-    }
-    for (const srcKey of orderedListsGroups) {
 
+
+      //to another group
+      if (dest.droppableId.includes("group")) {
+        const groupId = dest.droppableId.replace("group_", "");
+        const groupSrcId = src.droppableId.replace("group_", "");
+        const groupItem = orderedListsGroups.find(
+          (x) => x.id === groupId,
+        ) as GroupList;
+
+        const groupSrcItem = orderedListsGroups.find(
+          (x) => x.id === groupSrcId,
+        ) as GroupList;
+
+        if (!groupItem) return;
+
+        if (!_isEmpty(groupItem.lists)) {
+          const listItem = groupItem.lists![dest.index];
+          const orderNumber = listItem.order;
+          const nextItem = groupItem.lists![dest.index + 1];
+          let orderStamp = getOrderNumber();
+          if (nextItem) {
+            orderStamp = nextItem.order;
+          }
+          const meanOrder = (orderNumber + (orderStamp ?? 0.1)) / 2.0;
+
+          const srcItem = groupSrcItem.lists?.find((x) => x.id === draggableId);
+          if (!srcItem) return;
+
+          const srcItemCopy = {
+            ...srcItem,
+            order: meanOrder,
+            groupId: groupId,
+          };
+
+          dispatch(updateList(srcItemCopy as IList));
+          return;
+        }
+
+
+        const srcItem = groupSrcItem.lists?.find((x) => x.id === draggableId);
+        if (!srcItem) return;
+
+        const srcItemCopy = {
+          ...srcItem,
+          order: getOrderNumber(),
+          groupId: groupId,
+        };
+        dispatch(updateList(srcItemCopy as IList));
+        return;
+      }
     }
-    //NOT same level
-    //todo: from group to top level list
-    if (src.droppableId !== dest.droppableId) return;
-debugger
+
+    //to top level list
     const movedUp = src.index >= dest.index;
     const nextIndex = movedUp ? -1 : +1;
     const destItemAbove = orderedListsGroups[dest.index];
-    const destItemBelow = orderedListsGroups[dest.index + nextIndex];
+    const destItemBelow = orderedListsGroups[dest.index + 1];
     const meanOrder =
-      (destItemAbove.order + (destItemBelow?.order ?? 0.1)) / 2.0;
+      (destItemAbove.order + (destItemBelow?.order ?? getOrderNumber())) / 2.0;
     const srcItem = listsGroups.find((x) => x.id === draggableId);
     if (!srcItem) return;
 
-    const srcItemCopy = { ...srcItem, order: meanOrder };
+    const srcItemCopy = { ...srcItem, order: meanOrder, groupId: "" };
     if (isListItem(srcItemCopy)) {
       dispatch(updateList(srcItemCopy as IList));
     } else {
       dispatch(updateGroup(srcItemCopy as IGroup));
     }
+
+    return;
   };
   return (
     <section className="flex-grow-1 overflow-hidden">
