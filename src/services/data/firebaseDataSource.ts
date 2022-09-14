@@ -99,13 +99,14 @@ const getListsWithSubtasks = (db: Firestore) => {
       list.groupId = listDto.groupId;
       list.iconName = listDto.iconName;
       list.tasksTotal = listDto.tasks.length;
-      list.order = listDto.order;
+      list.order = Number(listDto.order);
 
       list.tasks = (listDto.tasks ||= []).map((taskDto) => {
         const task = {
           id: taskDto.id,
           createdDate: Number(taskDto.createdDate),
           parentId: taskDto.parentId,
+          order: Number(taskDto.order),
         } as ITask;
         task.isImportant = taskDto.isImportant;
         task.text = taskDto.text;
@@ -126,6 +127,7 @@ const getListsWithSubtasks = (db: Firestore) => {
             id: subDto.id,
             parentId: subDto.parentId,
             createdDate: Number(subDto.createdDate),
+            order: Number(subDto.order),
           } as ISubTask;
           subTask.text = subDto.text;
 
@@ -207,13 +209,14 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
         list.groupId = listDto.groupId;
         list.iconName = listDto.iconName;
         list.tasksTotal = listDto.tasks.length;
-        list.order = listDto.order;
+        list.order = Number(listDto.order);
 
         list.tasks = (listDto.tasks ||= []).map((taskDto) => {
           const task = {
             id: taskDto.id,
             createdDate: Number(taskDto.createdDate),
             parentId: taskDto.parentId,
+            order: Number(taskDto.order),
           } as ITask;
           task.isImportant = taskDto.isImportant;
           task.text = taskDto.text;
@@ -234,6 +237,7 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
               id: subDto.id,
               parentId: subDto.parentId,
               createdDate: Number(subDto.createdDate),
+              order: Number(subDto.order),
             } as ISubTask;
 
             subTask.text = subDto.text;
@@ -274,7 +278,7 @@ const getListsWithTasks = (db: Firestore) => {
           .map((taskSnap) => {
             const queries = taskSnap.value.docs.map((taskDoc) => {
               tasks.push({ ...(taskDoc.data() as TaskDto), id: taskDoc.id });
-              return getCollectionGroup(db, taskDoc.id, scheme.SubTasks);
+              return ((getCollectionGroup(db, taskDoc.id, scheme.SubTasks) ));
             });
 
             return queries;
@@ -297,13 +301,14 @@ const getListsWithTasks = (db: Firestore) => {
           list.groupId = listDto.groupId;
           list.iconName = listDto.iconName ?? "List";
           list.tasksTotal = listDto.tasks.length;
-          list.order = listDto.order;
+          list.order = Number(listDto.order);
 
           list.tasks = (listDto.tasks ||= []).map((taskDto) => {
             const task = {
               id: taskDto.id,
               createdDate: Number(taskDto.createdDate),
               parentId: taskDto.parentId,
+              order: Number(taskDto.order),
             } as ITask;
             task.isImportant = taskDto.isImportant;
             task.text = taskDto.text;
@@ -363,6 +368,7 @@ const getSubtasksMany = (db: Firestore, taskIdList: string[]) => {
               id: subDto.id,
               parentId: subDto.parentId,
               createdDate: Number(subDto.createdDate),
+              order: Number(subDto.order),
             } as ISubTask;
 
             subTask.text = subDto.text;
@@ -403,10 +409,11 @@ const getSubtasks = (db: Firestore, taskId: string) => {
 
             subTask.text = subDto.text;
             subTask.isChecked = subDto.isChecked;
+            subTask.order = Number(subDto.order);
 
             return subTask;
           }),
-          ["createdDate"],
+          ["order"],
           ["asc"],
         );
 
@@ -542,16 +549,24 @@ const deleteTask = (db: Firestore, id: string, parentId: string) => {
   });
 };
 
+const getCollectionQuery = (
+  firestore: Firestore,
+  collectionName: string,
+  documentId: string,
+) =>
+  query(
+    collectionGroup(firestore, collectionName),
+    orderBy("order", "asc"),
+    where("parentId", "==", documentId),
+  );
+
 function getCollectionGroup(
   firestore: Firestore,
   documentId: string,
   collectionName: string,
 ) {
   return getDocs(
-    query(
-      collectionGroup(firestore, collectionName),
-      where("parentId", "==", documentId),
-    ),
+    getCollectionQuery(firestore, collectionName, documentId),
   );
 }
 
@@ -568,6 +583,7 @@ function convertToDto(task: ITask) {
     repeatPeriod: task.repeatPeriod ?? ([] as any),
     id: task.id,
     parentId: task.parentId,
+    order: Number(task.order),
   };
   return taskDto;
 }
@@ -588,7 +604,7 @@ function convertGroupToDto(group: IGroup) {
   const listDto: GroupDto = {
     id: group.id,
     name: group.name,
-    order: group.order,
+    order: Number(group.order),
   };
   return listDto;
 }

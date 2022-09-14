@@ -1,13 +1,14 @@
-﻿import React, { memo } from "react";
-import Icons from "@/components/AppIcons";
+﻿import React, { memo, useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "@/constants/types/redux";
 import {
   toggleChecked,
   toggleFavorite,
   toggleSelected,
+  updateTask,
 } from "@/features/tasks";
 import { ITask } from "@/constants/types/tasksTypes";
-import cn from "classnames";
+import { Task } from "@/features/tasks/components/Task";
+import { getOrderNumber } from "@/utils/helpers/order";
 
 type Props = {
   tasks: ITask[];
@@ -17,42 +18,85 @@ type Props = {
 const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
   const dispatch = useAppDispatch();
 
-  const handleCheck = (task: ITask) => {
+  const [dragEndId, setDragEndId] = useState<string | null>();
+  const [isDragTop, setIsDragTop] = useState(false);
+  const [droppableId, setDroppableId] = useState<string | null>(null);
+
+  useEffect(() => {
+    console.log({ dragEndId, isDragTop, droppableIndex: droppableId, tasks });
+    const dropId = droppableId;
+    if (dropId == null) return;
+
+    const destItemIndex = tasks.findIndex((x) => x.id === dropId);
+    if (destItemIndex < 0) return;
+    const destItem = tasks[destItemIndex];
+
+    const placement = isDragTop ? destItemIndex - 1 : destItemIndex + 1;
+    let siblingDestItem = tasks[placement];
+    let siblingsOrder =
+      siblingDestItem != null
+        ? siblingDestItem?.order
+        : placement >= tasks.length
+        ? getOrderNumber()
+        : -1;
+
+    const source = tasks.find((x) => x.id === dragEndId) as ITask;
+
+    const meanOrder = (destItem.order + siblingsOrder) / 2.0;
+
+    const srcCopy = { ...source, order: meanOrder };
+    dispatch(updateTask(srcCopy));
+    setDroppableId(null);
+    setDragEndId(null);
+  }, [dragEndId]);
+
+  const onDragEndCB = useCallback((id: string) => {
+    setDragEndId(id);
+  }, []);
+
+  const handleCheck = useCallback((task: ITask) => {
     dispatch(toggleChecked({ task: task, isChecked: !task.isChecked }));
-  };
+  }, []);
 
-  const handleToggleFavorite = (e: any, task: ITask) => {
-    e.stopPropagation();
+  const handleDrag = useCallback((dropId: string | null, above: boolean) => {
+    if (dropId == null && dropId !== droppableId) setDroppableId(null);
+
+    if (droppableId === dropId && isDragTop === above) return;
+
+    setDroppableId(dropId);
+    setIsDragTop(above);
+  }, []);
+
+  const toggleImportant = useCallback((task: ITask) => {
     dispatch(toggleFavorite({ task: task, isImportant: !task.isImportant }));
-  };
+  }, []);
 
-  const toggleSideBar = (task: ITask) => {
+  const toggleSideBar = useCallback((task: ITask) => {
     dispatch(toggleSelected({ task: task }));
-  };
+  }, []);
+
+  const getBorderClass = useCallback(
+    (id: string) => {
+      if (droppableId === null) return "";
+      if (id !== droppableId) return "";
+
+      return isDragTop ? "drag-top" : "drag-bottom";
+    },
+    [droppableId, isDragTop],
+  );
 
   const elements = tasks.map((row) => (
-    <tr className={cn("row my-1", {"table-active": selectedId === row.id})} key={row.id} onClick={() => toggleSideBar(row)}>
-      <td className="px-1 col-1 col-check-width">
-        <div className="d-flex justify-content-center align-items-center">
-          <div className="form-check">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              onClick={(e) => e.stopPropagation()}
-              checked={row.isChecked}
-              onChange={() => handleCheck(row)}
-            />
-          </div>
-        </div>
-      </td>
-      <td className="px-1 col">{row.text}</td>
-      <td className="px-1 col-1">
-        <Icons.Favorite
-          isImportant={row.isImportant}
-          onClick={(e: any) => handleToggleFavorite(e, row)}
-        />
-      </td>
-    </tr>
+    <Task
+      key={row.id}
+      task={row}
+      selectedId={selectedId}
+      toggleImportant={toggleImportant}
+      toggleSideBar={toggleSideBar}
+      handleCheck={handleCheck}
+      handleDrag={handleDrag}
+      onDragEnd={onDragEndCB}
+      borderCn={getBorderClass(row.id)}
+    />
   ));
 
   return tasks ? <>{elements}</> : null;

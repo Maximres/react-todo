@@ -3,6 +3,7 @@ import { fetchSubtasks } from "@/features/tasks";
 import assignDeep from "lodash/assignIn";
 import { IState, ISubTask, ITask } from "@/constants/types/tasksTypes";
 import { selectList } from "@features/lists";
+import { getOrderNumber } from "@/utils/helpers/order";
 
 const initialState: IState = {
   tasks: [],
@@ -36,6 +37,7 @@ const tasksSlice = createSlice({
           dueDate: undefined,
           note: "",
           subTasks: [],
+          order: getOrderNumber()
         };
         state.tasks.push(newTask);
       },
@@ -78,7 +80,8 @@ const tasksSlice = createSlice({
           text: action.payload.text,
           createdDate: Number(new Date()),
           parentId: action.payload.parentId,
-          isNewOne: true,
+          order: getOrderNumber()
+
         };
         state.needSubTasksLoad = true;
         parentTask.subTasks ??= [];

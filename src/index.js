@@ -9,9 +9,9 @@ import store from "./app/configs/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+  // <React.StrictMode> ////bug with dnd lib. second render cause troubles
+  <Provider store={store}>
+    <App />
+  </Provider>,
   // </React.StrictMode>,
 );

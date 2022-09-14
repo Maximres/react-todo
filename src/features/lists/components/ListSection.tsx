@@ -70,7 +70,7 @@ const ListSection = ({ render }: Props) => {
 
   const onDragEnd = (result: DropResult, provided: ResponderProvided) => {
     const { source: src, destination: dest, draggableId } = result;
-    debugger;
+
     if (!dest) return;
 
     if (result.type === "GROUP") {

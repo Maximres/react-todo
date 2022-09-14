@@ -15,7 +15,7 @@ type TaskDto = {
   createdDate: number;
   isChecked: boolean;
   isImportant: boolean;
-
+  order: number;
   subTasks?: SubTaskDto[];
 
   isMyDay: boolean;
@@ -32,6 +32,7 @@ type SubTaskDto = {
   text: string;
   createdDate: number;
   isChecked: boolean;
+  order: number;
 };
 
 type GroupDto = {

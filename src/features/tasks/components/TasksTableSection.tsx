@@ -2,17 +2,29 @@
 import { TasksRows } from "@/features/tasks/components/TasksRows";
 import { useAppSelector } from "@/constants/types/redux";
 import SimpleBar from "simplebar-react";
+import { useDrop } from "react-dnd";
+import _orderBy from "lodash/orderBy";
 
 const TasksTableSection = () => {
   const tasks = useAppSelector((s) => s.tasks.tasks);
   const selectedId = useAppSelector((s) => s.tasks.selectedRowId) ?? "";
 
   const goneDoneTasks = useMemo(
-    () => tasks.filter((x) => !x.isChecked),
+    () => _orderBy(tasks.filter((x) => !x.isChecked), ["order"], ["asc"]),
     [tasks],
   );
   const doneTasks = useMemo(() => tasks.filter((x) => x.isChecked), [tasks]);
 
+  const [{ getItem, isOver, canDrop }, drop] = useDrop(() => ({
+    accept: "task",
+    drop: () => ({ name: "done-table" }),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+      getItem: monitor.getItem(),
+    }),
+  }));
+  const isActive = canDrop && isOver;
   return (
     <section className="vh-100">
       <SimpleBar
@@ -24,13 +36,16 @@ const TasksTableSection = () => {
         <div className="row">
           <div className="col-12 pb-2">
             <table className="table table-hover table-light">
-              <tbody>
-                <TasksRows tasks={goneDoneTasks} selectedId={selectedId} />
+              <tbody
+                ref={drop}
+              >
+              <TasksRows tasks={goneDoneTasks} selectedId={selectedId} />
               </tbody>
             </table>
+
             <table className="table table-hover table-light">
               <tbody>
-                <TasksRows tasks={doneTasks} selectedId={selectedId} />
+              <TasksRows tasks={doneTasks} selectedId={selectedId} />
               </tbody>
             </table>
           </div>

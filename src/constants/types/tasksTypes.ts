@@ -8,7 +8,7 @@ export interface ISubTask extends IIdentifier {
   readonly createdDate: number;
   isChecked: boolean;
   text?: string;
-  isNewOne?: boolean;
+  order: number
 }
 
 export interface IReminder {
