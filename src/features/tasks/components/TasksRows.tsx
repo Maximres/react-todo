@@ -23,7 +23,6 @@ const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
   const [droppableId, setDroppableId] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log({ dragEndId, isDragTop, droppableIndex: droppableId, tasks });
     const dropId = droppableId;
     if (dropId == null) return;
 
@@ -50,13 +49,23 @@ const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
     setDragEndId(null);
   }, [dragEndId]);
 
-  const onDragEndCB = useCallback((id: string) => {
-    setDragEndId(id);
+  const toggleImportant = useCallback((task: ITask) => {
+    dispatch(toggleFavorite({ task: task, isImportant: !task.isImportant }));
+  }, []);
+
+  const toggleSideBar = useCallback((task: ITask) => {
+    dispatch(toggleSelected({ task: task }));
   }, []);
 
   const handleCheck = useCallback((task: ITask) => {
     dispatch(toggleChecked({ task: task, isChecked: !task.isChecked }));
   }, []);
+
+  const onDragEnd = useCallback((id: string) => {
+    setDragEndId(id);
+  }, []);
+
+
 
   const handleDrag = useCallback((dropId: string | null, above: boolean) => {
     if (dropId == null && dropId !== droppableId) setDroppableId(null);
@@ -67,13 +76,6 @@ const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
     setIsDragTop(above);
   }, []);
 
-  const toggleImportant = useCallback((task: ITask) => {
-    dispatch(toggleFavorite({ task: task, isImportant: !task.isImportant }));
-  }, []);
-
-  const toggleSideBar = useCallback((task: ITask) => {
-    dispatch(toggleSelected({ task: task }));
-  }, []);
 
   const getBorderClass = useCallback(
     (id: string) => {
@@ -94,7 +96,7 @@ const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
       toggleSideBar={toggleSideBar}
       handleCheck={handleCheck}
       handleDrag={handleDrag}
-      onDragEnd={onDragEndCB}
+      onDragEnd={onDragEnd}
       borderCn={getBorderClass(row.id)}
     />
   ));

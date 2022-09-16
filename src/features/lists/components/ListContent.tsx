@@ -1,11 +1,12 @@
 ﻿import React, { useState } from "react";
 import {
-  ListSection,
+  ListManager,
   RenderProps,
-} from "@/features/lists/components/ListSection";
+} from "@/features/lists/components/ListManager";
 import { ListFooter } from "@/features/lists/components/ListFooter";
 import ListGroup from "@/features/lists/components/ListGroup";
-import { Droppable } from "react-beautiful-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
 
 const ListContent = () => {
   const [lastListItemId, setLastListItemId] = useState("");
@@ -16,43 +17,30 @@ const ListContent = () => {
 
   const renderChild = (render: RenderProps) => (
     <>
-      <Droppable droppableId="list_default">
-        {(provided) => (
-          <>
-            <ListGroup
-              items={render.defaultItems}
-              onItemClick={render.itemClick}
-              onListEditSubmit={render.editListSubmit}
-              onGroupEditSubmit={render.editGroupSubmit}
-              dnd={provided}
-              dndDisabled={true}
-            />
-          </>
-        )}
-      </Droppable>
-
+      <ListGroup
+        items={render.defaultItems}
+        onItemClick={render.itemClick}
+        onListEditSubmit={render.editListSubmit}
+        onGroupEditSubmit={render.editGroupSubmit}
+        dndDisabled={true}
+      />
       <hr className="w-100 m-0" />
-      <Droppable droppableId="list_user">
-        {(provided) => (
-          <>
-            <ListGroup
-              items={render.items}
-              onItemClick={render.itemClick}
-              onListEditSubmit={render.editListSubmit}
-              onGroupEditSubmit={render.editGroupSubmit}
-              lastCreatedId={lastListItemId}
-              dnd={provided}
-            />
-          </>
-        )}
-      </Droppable>
+      <ListGroup
+        items={render.items}
+        onItemClick={render.itemClick}
+        onListEditSubmit={render.editListSubmit}
+        onGroupEditSubmit={render.editGroupSubmit}
+        lastCreatedId={lastListItemId}
+      />
     </>
   );
 
   return (
     <>
-      <ListSection render={renderChild} />
-      <ListFooter setLastCreatedId={setLastCreatedIdValue} />
+      <DndProvider backend={HTML5Backend}>
+        <ListManager render={renderChild} />
+        <ListFooter setLastCreatedId={setLastCreatedIdValue} />
+      </DndProvider>
     </>
   );
 };

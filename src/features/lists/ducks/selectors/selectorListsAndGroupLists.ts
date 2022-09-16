@@ -3,7 +3,7 @@ import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "@/constants/types/redux";
 import _groupBy from "lodash/groupBy";
 
-export type GroupList = {
+export type IGroupedList = {
   id: string;
   name: string;
   order: number;
@@ -23,7 +23,7 @@ export const selectorListsAndGroupLists = createSelector(
           name: x.name,
           order: x.order,
           lists: groupedById[x.id] ?? [],
-        } as GroupList),
+        } as IGroupedList),
     );
     return [...ungrouped, ...groped];
   },
