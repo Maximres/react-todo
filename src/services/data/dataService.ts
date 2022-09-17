@@ -10,6 +10,7 @@ const dataService = {
   getListsWithTasks: () => FirebaseDataSource.getListsWithTasks(db),
   setList: (list: IList) => FirebaseDataSource.setList(db, list),
   updateList: (list: IList) => FirebaseDataSource.updateList(db, list),
+  updateGroup: (group: IGroup) => FirebaseDataSource.updateGroup(db, group),
 
   getSubtasksMany: (taskIds: string[]) =>
     FirebaseDataSource.getSubtasksMany(db, taskIds),

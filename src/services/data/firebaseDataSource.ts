@@ -541,6 +541,14 @@ const updateList = (db: Firestore, list: IList) => {
   });
 };
 
+const updateGroup = (db: Firestore, group: IGroup) => {
+  const reference = doc(db, scheme.Groups, group.id);
+  const listDto = convertGroupToDto(group);
+  return updateDoc(reference, listDto).catch((...args) => {
+    console.error({ updateGroupError: args });
+  });
+};
+
 const deleteTask = (db: Firestore, id: string, parentId: string) => {
   const reference = doc(db, scheme.Lists, parentId, scheme.Tasks, id);
 
@@ -617,6 +625,7 @@ export const FirebaseDataSource = {
 
   getGroups,
   setGroup,
+  updateGroup,
 
   getSubtasksMany,
   getSubtasks,

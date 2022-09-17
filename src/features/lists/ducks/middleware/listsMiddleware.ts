@@ -1,8 +1,9 @@
 ﻿import { createListenerMiddleware } from "@reduxjs/toolkit";
 import { AppStartListening } from "constants/types/redux";
-import { listUpdatedListener } from "@/features/lists/ducks/middleware/listUpdatedListener";
-import { listCreatedListener } from "@/features/lists/ducks/middleware/listCreatedListener";
-import { groupCreatedListener } from "@/features/lists/ducks/middleware/groupCreatedListener";
+import { listUpdatedListener } from "./listUpdatedListener";
+import { listCreatedListener } from "./listCreatedListener";
+import { groupCreatedListener } from "./groupCreatedListener";
+import { groupUpdatedListener } from "./groupUpdatedListener";
 
 
 export const listsListenerMiddleware = createListenerMiddleware();
@@ -13,4 +14,5 @@ const startAppListeningDetails =
 listUpdatedListener(startAppListeningDetails);
 listCreatedListener(startAppListeningDetails);
 groupCreatedListener(startAppListeningDetails);
+groupUpdatedListener(startAppListeningDetails);
 

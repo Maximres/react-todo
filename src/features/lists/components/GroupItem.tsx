@@ -12,7 +12,11 @@ type GroupProps = {
   isFocused: boolean;
   submitEdit: (uid: string, name: string) => void;
 
-  handleDrag: (dropId: string | null, dropType: string, above: boolean) => void;
+  handleHoverDrop: (
+    dropId: string | null,
+    dropType: string,
+    position: "above" | "bellow" | "center",
+  ) => void;
   onDragEnd: (id: string, type: string, parentId?: string) => void;
   dropTargetClass: string;
 };
@@ -23,7 +27,7 @@ const GroupItem = ({
   isFocused,
   uid,
   submitEdit,
-  handleDrag,
+  handleHoverDrop,
   onDragEnd,
   dropTargetClass,
 }: GroupProps) => {
@@ -33,7 +37,7 @@ const GroupItem = ({
 
   const ref = useRef<HTMLLIElement>(null);
 
-  const [{ canDrag, isDragging }, drag] = useDrag(() => ({
+  const [{ canDrag, isDragging, item }, drag] = useDrag(() => ({
     type: "group",
     item: () => ({ id: uid, type: "group" }),
     canDrag: (monitor) => {
@@ -52,12 +56,13 @@ const GroupItem = ({
     collect: (monitor) => ({
       canDrag: monitor.canDrag(),
       isDragging: monitor.isDragging(),
+      item: monitor.getItem()
     }),
   }));
 
-  const [, drop] = useDrop(() => ({
+  const [{isOver}, drop] = useDrop(() => ({
     accept: ["list", "group"],
-    hover: (item: any, monitor) => {
+    hover: (item: {id: string, type: "group" | "list"}, monitor) => {
       if (!ref.current) return;
 
       const dragId = item.id;
@@ -65,39 +70,66 @@ const GroupItem = ({
 
       const overCurrent = monitor.isOver({ shallow: true });
       if (!overCurrent)
-        //hovering sub items
+        //can't drop group to self sub items
         return;
 
-      // hovering itself
+      // hovering itself container
       if (dragId === dropId) {
-        handleDrag(null, "group", false);
+        handleHoverDrop(dropId, "group", "center");
         return;
       }
 
       const dropRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleY = (dropRect.bottom - dropRect.top) / 2;
+      const hoverMiddle = dropRect.bottom - dropRect.top;
+      const dropY = Math.floor(dropRect.y);
+      const dropMiddleY = hoverMiddle / 2;
+      const thirdHeight = Math.floor(hoverMiddle / 3);
       const clientOffset = monitor.getClientOffset();
       const clientPositionY = clientOffset?.y ?? 0;
-      const hoverClientY = clientPositionY - dropRect.top;
-      const movingUpwards = hoverClientY <= hoverMiddleY;
+      const clientY = clientPositionY - dropRect.top;
 
-      handleDrag(dropId, "group", movingUpwards);
+      const topDropYBaseline = dropY + thirdHeight;
+      const centerDropYBaseline = dropY + thirdHeight * 2;
+      const bottomDropPart = dropY + thirdHeight * 3;
+      console.log({item: item.type})
+      const topPartHovered =
+        clientPositionY >= dropY && clientPositionY <= topDropYBaseline;
+      if (topPartHovered) {
+        handleHoverDrop(dropId, "group", "above");
+        return;
+      }
+      const centerPartHovered =
+        clientPositionY > topDropYBaseline && clientPositionY <= centerDropYBaseline;
+      const draggingList = item.type === "list";
+      if (centerPartHovered && draggingList) {
+        handleHoverDrop(dropId, "group", "center");
+        return;
+      }
+      //else: bellow part hovered
+      handleHoverDrop(dropId, "group", "bellow");
     },
+    collect: monitor => ({
+      isOverCurrent: monitor.isOver({shallow: true}),
+      isOver: monitor.isOver({shallow: true}),
+    })
   }));
 
   drag(drop(ref));
+  const isDraggingOverCurrentItem = isDragging && uid === item.id;
 
   return (
     <li
       ref={ref}
-      className={cn(
-        "list-group-item list-group-item-action border-0 p-0",
-        dropTargetClass,
-      )}
+      className="list-group-item list-group-item-action border-0 p-0"
     >
       <div className="accordion accordion-flush" id={accordionId}>
         <div className="accordion-item bg-light p-1">
-          <div className="accordion-header" id={ariaLabel}>
+          <div
+            className={cn("accordion-header", {
+              [dropTargetClass]: !isDraggingOverCurrentItem
+            }) }
+            id={ariaLabel}
+          >
             <button
               className="accordion-button bg-light"
               type="button"

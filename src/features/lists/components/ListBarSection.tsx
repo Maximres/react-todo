@@ -1,8 +1,8 @@
 ﻿import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   IGroupedList,
-  selectorListsAndGroupLists,
-} from "../ducks/selectors/selectorListsAndGroupLists";
+  selectorOrderedListsAndGroups,
+} from "../ducks/selectors/selectorOrderedListsAndGroups";
 import { IGroup, IList } from "@/constants/types/listsTypes";
 import { selectList, updateGroup, updateList } from "@features/lists";
 import _orderBy from "lodash/orderBy";
@@ -27,16 +27,12 @@ type Props = {
 
 
 
-const ListManager = ({ render }: Props) => {
+const ListBarSection = ({ render }: Props) => {
   const dispatch = useDispatch();
   const defaultLists = useAppSelector((x) => x.lists.defaultLists);
-  const listsGroups = useAppSelector(selectorListsAndGroupLists);
+  const orderedListsGroups = useAppSelector(selectorOrderedListsAndGroups);
   const userLists = useAppSelector((x) => x.lists.userLists);
   const selectedList = useAppSelector((x) => x.lists.selectedList);
-
-  const orderedListsGroups = useMemo(() => {
-    return _orderBy(listsGroups, ["order"], ["asc"]);
-  }, [listsGroups]);
 
   const handleItemClick = useCallback(
     (uid: string) => {
@@ -68,12 +64,12 @@ const ListManager = ({ render }: Props) => {
   return (
     <section className="flex-grow-1 overflow-hidden">
       <SimpleBar
-        className="overflow-auto h-100"
+        className="h-100"
         scrollbarMaxSize={200}
         autoHide={false}
         forceVisible={true}
       >
-        <div className="w-100 pe-1">
+        <div className="w-100 pe-1 pb-1">
           {render({
             defaultItems: defaultLists,
             items: orderedListsGroups,
@@ -87,4 +83,4 @@ const ListManager = ({ render }: Props) => {
   );
 };
 
-export { ListManager };
+export { ListBarSection };

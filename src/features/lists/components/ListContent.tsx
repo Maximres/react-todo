@@ -1,8 +1,8 @@
 ﻿import React, { useState } from "react";
 import {
-  ListManager,
+  ListBarSection,
   RenderProps,
-} from "@/features/lists/components/ListManager";
+} from "@/features/lists/components/ListBarSection";
 import { ListFooter } from "@/features/lists/components/ListFooter";
 import ListGroup from "@/features/lists/components/ListGroup";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -38,7 +38,7 @@ const ListContent = () => {
   return (
     <>
       <DndProvider backend={HTML5Backend}>
-        <ListManager render={renderChild} />
+        <ListBarSection render={renderChild} />
         <ListFooter setLastCreatedId={setLastCreatedIdValue} />
       </DndProvider>
     </>

@@ -128,7 +128,7 @@
 }
 
 .group-item-ms {
-  margin-left: 2.5rem !important;
+  margin-left: 1.5rem !important;
 }
 
 #list .accordion-button:not(.collapsed) {
@@ -191,5 +191,12 @@
   box-shadow: 0px -3px 0px 0px rgba(0,0,0,0.74) !important;
 }
 .drag-bottom {
-  box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.74) !important;
+  box-shadow: 0px 3px 0px 0px rgba(135, 135, 221,0.74) !important;
+}
+
+.drag-around {
+  box-shadow: 0px 3px 0px 0px rgba(0, 0, 0, 0.74),
+  -3px 0px 0px 0px rgba(0, 0, 0, 0.74) inset,
+  3px 0px 0px 0px rgba(0, 0, 0, 0.74) inset,
+  0px -3px 0px 0px rgba(0, 0, 0, 0.74) !important;
 }

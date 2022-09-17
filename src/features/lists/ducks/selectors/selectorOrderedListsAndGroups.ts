@@ -2,6 +2,8 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "@/constants/types/redux";
 import _groupBy from "lodash/groupBy";
+import _orderBy from "lodash/orderBy";
+
 
 export type IGroupedList = {
   id: string;
@@ -10,7 +12,7 @@ export type IGroupedList = {
   lists?: IList[];
 };
 
-export const selectorListsAndGroupLists = createSelector(
+export const selectorOrderedListsAndGroups = createSelector(
   (x: RootState) => x.lists.userLists,
   (x: RootState) => x.lists.groups,
   (lists, groups) => {
@@ -22,9 +24,9 @@ export const selectorListsAndGroupLists = createSelector(
           id: x.id,
           name: x.name,
           order: x.order,
-          lists: groupedById[x.id] ?? [],
+          lists:  _orderBy(groupedById[x.id] || [], ["order", "asc"]),
         } as IGroupedList),
     );
-    return [...ungrouped, ...groped];
+    return _orderBy([...ungrouped, ...groped], ["order", "asc"] );
   },
 );

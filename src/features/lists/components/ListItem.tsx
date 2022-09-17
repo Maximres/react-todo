@@ -15,13 +15,13 @@ type Props = {
   isFocused?: boolean;
   isDragDisabled?: boolean;
 
-  handleDrag: (
+  handleHoverDrop: (
     dropId: string | null,
     type: string,
-    above: boolean,
+    dropPosition: "above" | "bellow" | "center",
     parentId?: string,
   ) => void;
-  onDragEnd: (id: string, type: string, parentId: string|undefined) => void;
+  onDragEnd: (id: string, type: string, parentId: string | undefined) => void;
   dropTargetClass: string;
 };
 
@@ -35,30 +35,39 @@ const ListItem = ({
   total = 0,
   onClick,
   submitEdit,
-  handleDrag,
+  handleHoverDrop,
   onDragEnd,
   dropTargetClass,
 }: Props) => {
   const ref = useRef<HTMLLIElement>(null);
 
-  const [, drag] = useDrag(() => ({
+  const [{isDragging}, drag] = useDrag(() => ({
     type: "list",
     item: () => ({ id: uid, parentId, type: "list" }),
-    end: (item) => {
+    end: (item, monitor) => {
       onDragEnd(item.id, item.type, parentId);
     },
+    collect: monitor => ({
+      isDragging: monitor.isDragging(),
+    })
   }));
 
-  const [, drop] = useDrop(() => ({
-    accept: "list",
+  const [{isOverCurrent}, drop] = useDrop(() => ({
+    accept: ["list", "group"],
+    canDrop: (item: { type: string }) => {
+      if (item.type === "group" && !!parentId) return false;
+
+      return true;
+    },
     hover: (item: any, monitor) => {
       if (!ref.current) return;
+      if (!monitor.canDrop()) return;
 
       const dragId = item.id;
       const dropId = uid;
       // hovering itself
       if (dragId === dropId) {
-        handleDrag(null, "list", false);
+        handleHoverDrop(dropId, "list", "center");
         return;
       }
 
@@ -67,21 +76,26 @@ const ListItem = ({
       const clientOffset = monitor.getClientOffset();
       const clientPositionY = clientOffset?.y ?? 0;
       const hoverClientY = clientPositionY - dropRect.top;
-      const movingUpwards = hoverClientY <= hoverMiddleY;
+      const movingUpwards = hoverClientY <= hoverMiddleY ? "above" : "bellow";
 
-      handleDrag(dropId, "list", movingUpwards, parentId);
+      handleHoverDrop(dropId, "list", movingUpwards, parentId);
     },
+    collect: monitor => ({
+      isOverCurrent: monitor.isOver({shallow: true})
+    })
   }));
 
   drag(drop(ref));
 
+  const isSubItem = parentId != null;
+  const isDraggingOverCurrentItem = isDragging && isOverCurrent;
   return (
     <li
       ref={ref}
       className={cn(
         "list-group-item list-group-item-action border-0 bg-light",
         {
-          [dropTargetClass]: parentId == null,
+          [dropTargetClass]: !isSubItem && isOverCurrent,
         },
       )}
       onClick={() => onClick(uid)}
@@ -89,8 +103,8 @@ const ListItem = ({
     >
       <div
         className={cn("d-flex align-items-center", {
-          " group-item-ms": parentId != null,
-          [dropTargetClass]: parentId != null,
+          " group-item-ms": isSubItem,
+          [dropTargetClass]: isSubItem && !isDraggingOverCurrentItem,
         })}
       >
         {Icon}
