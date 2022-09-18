@@ -11,15 +11,15 @@ type GroupProps = {
   name: string;
   uid: string;
   isFocused: boolean;
-  submitEdit: (uid: string, name: string) => void;
+  onSubmitEdit: (uid: string, name: string) => void;
 
-  handleHoverDrop: (
+  onDropHover: (
     dropId: string | null,
     dropType: DndElement,
     position: DropPosition,
   ) => void;
   onDragEnd: (id: string | null, type: DndElement, parentId?: string) => void;
-  dropTargetClass: string;
+  hoverClass: string;
 };
 
 const GroupItem = ({
@@ -27,10 +27,10 @@ const GroupItem = ({
   name,
   isFocused,
   uid,
-  submitEdit,
-  handleHoverDrop,
+  onSubmitEdit,
+  onDropHover,
   onDragEnd,
-  dropTargetClass,
+  hoverClass,
 }: GroupProps) => {
   const accordionId = useValidId();
   const collapseId = useValidId();
@@ -78,7 +78,7 @@ const GroupItem = ({
 
       // hovering itself container
       if (dragId === dropId) {
-        handleHoverDrop(dropId, "group", "inside");
+        onDropHover(dropId, "group", "inside");
         return;
       }
 
@@ -94,7 +94,7 @@ const GroupItem = ({
       const topPartHovered =
         clientPositionY >= dropY && clientPositionY <= topDropYBaseline;
       if (topPartHovered) {
-        handleHoverDrop(dropId, "group", "above");
+        onDropHover(dropId, "group", "above");
         return;
       }
 
@@ -103,12 +103,12 @@ const GroupItem = ({
         clientPositionY <= centerDropYBaseline;
       const draggingList = item.type === "list";
       if (centerPartHovered && draggingList) {
-        handleHoverDrop(dropId, "group", "inside");
+        onDropHover(dropId, "group", "inside");
         return;
       }
 
       //else: bellow part hovered
-      handleHoverDrop(dropId, "group", "below");
+      onDropHover(dropId, "group", "below");
     },
     collect: (monitor) => ({
       isOverCurrent: monitor.isOver({ shallow: true }),
@@ -128,7 +128,7 @@ const GroupItem = ({
         <div className="accordion-item bg-light p-1">
           <div
             className={cn("accordion-header", {
-              [dropTargetClass]: !isDraggingCurrentItem && isOver,
+              [hoverClass]: !isDraggingCurrentItem && isOver,
             })}
             id={ariaLabel}
           >
@@ -145,7 +145,7 @@ const GroupItem = ({
                 <ListsInput
                   name={name}
                   isFocused={isFocused}
-                  submitEdit={(text) => submitEdit(uid, text)}
+                  submitEdit={(text) => onSubmitEdit(uid, text)}
                   className="me-3"
                 />
               </div>

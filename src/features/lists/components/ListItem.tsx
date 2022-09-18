@@ -12,11 +12,11 @@ type Props = {
   name: string;
   total: number;
   onClick: (uid: string) => void;
-  submitEdit: (uid: string, name: string) => void;
+  onSubmitEdit: (uid: string, name: string) => void;
   isFocused?: boolean;
   isDragDisabled?: boolean;
 
-  handleHoverDrop: (
+  onDropHover: (
     dropId: string | null,
     type: DndElement,
     dropPosition: DropPosition,
@@ -27,7 +27,7 @@ type Props = {
     type: DndElement,
     parentId: string | undefined,
   ) => void;
-  dropTargetClass: string;
+  hoverClass: string;
 };
 
 const ListItem = ({
@@ -39,10 +39,10 @@ const ListItem = ({
   Icon = <Icons.List />,
   total = 0,
   onClick,
-  submitEdit,
-  handleHoverDrop,
+  onSubmitEdit,
+  onDropHover,
   onDragEnd,
-  dropTargetClass,
+  hoverClass,
 }: Props) => {
   const ref = useRef<HTMLLIElement>(null);
 
@@ -79,11 +79,11 @@ const ListItem = ({
         if (dragId === dropId) {
           const isSubItem = parentId != null;
           if (isSubItem) {
-            handleHoverDrop(null, "list", "inside");
+            onDropHover(null, "list", "inside");
             return;
           }
 
-          handleHoverDrop(dropId, "list", "inside");
+          onDropHover(dropId, "list", "inside");
           return;
         }
 
@@ -94,7 +94,7 @@ const ListItem = ({
         const hoverClientY = clientPositionY - dropRect.top;
         const movingUpwards = hoverClientY <= hoverMiddleY ? "above" : "below";
 
-        handleHoverDrop(dropId, "list", movingUpwards, parentId);
+        onDropHover(dropId, "list", movingUpwards, parentId);
       },
       collect: (monitor) => ({
         isOverCurrent: monitor.isOver({ shallow: true }),
@@ -114,7 +114,7 @@ const ListItem = ({
       className={cn(
         "list-group-item list-group-item-action border-0 bg-light",
         {
-          [dropTargetClass]: !isSubItem && isOverCurrent,
+          [hoverClass]: !isSubItem && isOverCurrent,
         },
       )}
       onClick={() => onClick(uid)}
@@ -123,14 +123,14 @@ const ListItem = ({
       <div
         className={cn("d-flex align-items-center", {
           " group-item-ms": isSubItem,
-          [dropTargetClass]: isSubItem && isOver
+          [hoverClass]: isSubItem && isOver
         })}
       >
         {Icon}
         <ListsInput
           name={name}
           isFocused={isFocused}
-          submitEdit={(text) => submitEdit(uid, text)}
+          submitEdit={(text) => onSubmitEdit(uid, text)}
           className="mx-3"
         />
         <span className="badge rounded-pill bg-badge-light text-dark ms-auto fw-light">
