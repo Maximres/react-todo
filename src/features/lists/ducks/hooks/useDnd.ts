@@ -22,9 +22,12 @@ const useDnd = () => {
       position: DropPosition,
       parentId?: string,
     ) => {
-      if (currentDropId == null && currentDropId !== dropItemId)
-        setDropItemId(null);
-      if (currentDropId === dropItemId && dropPosition === position) return;
+      const isReset = currentDropId == null && currentDropId !== dropItemId;
+      if (isReset) setDropItemId(null);
+
+      const isHasNotChanged =
+        currentDropId === dropItemId && dropPosition === position;
+      if (isHasNotChanged) return;
 
       setDropItemId(currentDropId);
       setDropType(type);
