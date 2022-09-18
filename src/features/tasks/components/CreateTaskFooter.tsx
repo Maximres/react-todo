@@ -1,6 +1,6 @@
 ﻿import React, { useMemo, useState } from "react";
 import Icons from "@/components/AppIcons";
-import { createTask } from "@/features/tasks";
+import { createTask } from "@features/tasks";
 import { useAppDispatch } from "@/constants/types/redux";
 
 const CreateTaskFooter = () => {
