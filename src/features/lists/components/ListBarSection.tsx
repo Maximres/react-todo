@@ -1,17 +1,11 @@
-﻿import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  IGroupedList,
-  selectorOrderedListsAndGroups,
-} from "../ducks/selectors/selectorOrderedListsAndGroups";
-import { IGroup, IList } from "@/constants/types/listsTypes";
+﻿import React, { useCallback, useEffect } from "react";
+import { selectorOrderedListsAndGroups } from "../ducks/selectors/selectorOrderedListsAndGroups";
+import { IList } from "@/constants/types/listsTypes";
 import { selectList, updateGroup, updateList } from "@features/lists";
-import _orderBy from "lodash/orderBy";
-import _isEmpty from "lodash/isEmpty";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/constants/types/redux";
 import SimpleBar from "simplebar-react";
-import { isListItem } from "@/utils/helpers/listItemResolver";
-import { getOrderNumber } from "@/utils/helpers/order";
+import { IGroupedList } from "@/features/lists/ducks/constants/types";
 
 export type RenderProps = {
   defaultItems: IList[];
@@ -24,8 +18,6 @@ export type RenderProps = {
 type Props = {
   render: (args: RenderProps) => JSX.Element;
 };
-
-
 
 const ListBarSection = ({ render }: Props) => {
   const dispatch = useDispatch();

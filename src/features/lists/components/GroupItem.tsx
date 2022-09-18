@@ -1,9 +1,10 @@
 ﻿import React, { useRef } from "react";
 import useValidId from "@/utils/hooks/useValidId";
 import Icons from "@/components/AppIcons";
-import { ListsInput } from "@/features/lists/components/ListsInput";
+import { ListsInput } from "./ListsInput";
 import { useDrag, useDrop } from "react-dnd";
 import cn from "classnames";
+import { DndElement, DropPosition } from "../ducks/constants/types";
 
 type GroupProps = {
   children: JSX.Element;
@@ -14,10 +15,10 @@ type GroupProps = {
 
   handleHoverDrop: (
     dropId: string | null,
-    dropType: string,
-    position: "above" | "bellow" | "center",
+    dropType: DndElement,
+    position: DropPosition,
   ) => void;
-  onDragEnd: (id: string, type: string, parentId?: string) => void;
+  onDragEnd: (id: string | null, type: DndElement, parentId?: string) => void;
   dropTargetClass: string;
 };
 
@@ -39,7 +40,7 @@ const GroupItem = ({
 
   const [{ canDrag, isDragging, item }, drag] = useDrag(() => ({
     type: "group",
-    item: () => ({ id: uid, type: "group" }),
+    item: () => ({ id: uid, type: "group" as DndElement }),
     canDrag: (monitor) => {
       const dragRect = ref.current?.getBoundingClientRect();
       if (dragRect == null) return false;
@@ -50,19 +51,21 @@ const GroupItem = ({
 
       return dragBottom >= cursorY;
     },
-    end: (item) => {
-      onDragEnd(item.id, item.type);
+    end: (item, monitor) => {
+      const didDrop = monitor.didDrop();
+      const dropId = didDrop ? item.id : null;
+      onDragEnd(dropId, item.type);
     },
     collect: (monitor) => ({
       canDrag: monitor.canDrag(),
       isDragging: monitor.isDragging(),
-      item: monitor.getItem()
+      item: monitor.getItem(),
     }),
   }));
 
-  const [{isOver}, drop] = useDrop(() => ({
+  const [{ isOver }, drop] = useDrop(() => ({
     accept: ["list", "group"],
-    hover: (item: {id: string, type: "group" | "list"}, monitor) => {
+    hover: (item: { id: string; type: DndElement }, monitor) => {
       if (!ref.current) return;
 
       const dragId = item.id;
@@ -75,47 +78,46 @@ const GroupItem = ({
 
       // hovering itself container
       if (dragId === dropId) {
-        handleHoverDrop(dropId, "group", "center");
+        handleHoverDrop(dropId, "group", "inside");
         return;
       }
 
       const dropRect = ref.current?.getBoundingClientRect();
       const hoverMiddle = dropRect.bottom - dropRect.top;
       const dropY = Math.floor(dropRect.y);
-      const dropMiddleY = hoverMiddle / 2;
       const thirdHeight = Math.floor(hoverMiddle / 3);
       const clientOffset = monitor.getClientOffset();
       const clientPositionY = clientOffset?.y ?? 0;
-      const clientY = clientPositionY - dropRect.top;
 
       const topDropYBaseline = dropY + thirdHeight;
       const centerDropYBaseline = dropY + thirdHeight * 2;
-      const bottomDropPart = dropY + thirdHeight * 3;
-      console.log({item: item.type})
       const topPartHovered =
         clientPositionY >= dropY && clientPositionY <= topDropYBaseline;
       if (topPartHovered) {
         handleHoverDrop(dropId, "group", "above");
         return;
       }
+
       const centerPartHovered =
-        clientPositionY > topDropYBaseline && clientPositionY <= centerDropYBaseline;
+        clientPositionY > topDropYBaseline &&
+        clientPositionY <= centerDropYBaseline;
       const draggingList = item.type === "list";
       if (centerPartHovered && draggingList) {
-        handleHoverDrop(dropId, "group", "center");
+        handleHoverDrop(dropId, "group", "inside");
         return;
       }
+
       //else: bellow part hovered
-      handleHoverDrop(dropId, "group", "bellow");
+      handleHoverDrop(dropId, "group", "below");
     },
-    collect: monitor => ({
-      isOverCurrent: monitor.isOver({shallow: true}),
-      isOver: monitor.isOver({shallow: true}),
-    })
+    collect: (monitor) => ({
+      isOverCurrent: monitor.isOver({ shallow: true }),
+      isOver: monitor.isOver({ shallow: true }),
+    }),
   }));
 
   drag(drop(ref));
-  const isDraggingOverCurrentItem = isDragging && uid === item.id;
+  const isDraggingCurrentItem = isDragging && uid === item.id;
 
   return (
     <li
@@ -126,8 +128,8 @@ const GroupItem = ({
         <div className="accordion-item bg-light p-1">
           <div
             className={cn("accordion-header", {
-              [dropTargetClass]: !isDraggingOverCurrentItem
-            }) }
+              [dropTargetClass]: !isDraggingCurrentItem && isOver,
+            })}
             id={ariaLabel}
           >
             <button

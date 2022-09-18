@@ -3,6 +3,7 @@ import Icons from "@/components/AppIcons";
 import cn from "classnames";
 import { ListsInput } from "@/features/lists/components/ListsInput";
 import { useDrag, useDrop } from "react-dnd";
+import { DndElement, DropPosition } from "../ducks/constants/types";
 
 type Props = {
   uid: string;
@@ -17,11 +18,15 @@ type Props = {
 
   handleHoverDrop: (
     dropId: string | null,
-    type: string,
-    dropPosition: "above" | "bellow" | "center",
+    type: DndElement,
+    dropPosition: DropPosition,
     parentId?: string,
   ) => void;
-  onDragEnd: (id: string, type: string, parentId: string | undefined) => void;
+  onDragEnd: (
+    id: string | null,
+    type: DndElement,
+    parentId: string | undefined,
+  ) => void;
   dropTargetClass: string;
 };
 
@@ -41,49 +46,63 @@ const ListItem = ({
 }: Props) => {
   const ref = useRef<HTMLLIElement>(null);
 
-  const [{isDragging}, drag] = useDrag(() => ({
+  const [{ isDragging }, drag] = useDrag(() => ({
     type: "list",
-    item: () => ({ id: uid, parentId, type: "list" }),
+    item: () => ({ id: uid, parentId, type: "list" as DndElement }),
     end: (item, monitor) => {
-      onDragEnd(item.id, item.type, parentId);
+      const didDrop = monitor.didDrop();
+      const dragId = didDrop ? item.id : null;
+      onDragEnd(dragId, item.type, parentId);
     },
-    collect: monitor => ({
+    collect: (monitor) => ({
       isDragging: monitor.isDragging(),
-    })
+    }),
+    canDrag: () => !isDragDisabled,
   }));
 
-  const [{isOverCurrent}, drop] = useDrop(() => ({
-    accept: ["list", "group"],
-    canDrop: (item: { type: string }) => {
-      if (item.type === "group" && !!parentId) return false;
+  const [{ isOverCurrent, isOver }, drop] = useDrop(
+    () => ({
+      accept: ["list", "group"] as DndElement[],
+      canDrop: (item: { type: DndElement }) => {
+        const dropGroupToSubItems = item.type === "group" && !!parentId;
+        if (dropGroupToSubItems) return false;
 
-      return true;
-    },
-    hover: (item: any, monitor) => {
-      if (!ref.current) return;
-      if (!monitor.canDrop()) return;
+        return !isDragDisabled;
+      },
+      hover: (item: any, monitor) => {
+        if (!ref.current) return;
+        if (!monitor.canDrop()) return;
 
-      const dragId = item.id;
-      const dropId = uid;
-      // hovering itself
-      if (dragId === dropId) {
-        handleHoverDrop(dropId, "list", "center");
-        return;
-      }
+        const dragId = item.id;
+        const dropId = uid;
+        // hovering itself
+        if (dragId === dropId) {
+          const isSubItem = parentId != null;
+          if (isSubItem) {
+            handleHoverDrop(null, "list", "inside");
+            return;
+          }
 
-      const dropRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleY = (dropRect.bottom - dropRect.top) / 2;
-      const clientOffset = monitor.getClientOffset();
-      const clientPositionY = clientOffset?.y ?? 0;
-      const hoverClientY = clientPositionY - dropRect.top;
-      const movingUpwards = hoverClientY <= hoverMiddleY ? "above" : "bellow";
+          handleHoverDrop(dropId, "list", "inside");
+          return;
+        }
 
-      handleHoverDrop(dropId, "list", movingUpwards, parentId);
-    },
-    collect: monitor => ({
-      isOverCurrent: monitor.isOver({shallow: true})
-    })
-  }));
+        const dropRect = ref.current?.getBoundingClientRect();
+        const hoverMiddleY = (dropRect.bottom - dropRect.top) / 2;
+        const clientOffset = monitor.getClientOffset();
+        const clientPositionY = clientOffset?.y ?? 0;
+        const hoverClientY = clientPositionY - dropRect.top;
+        const movingUpwards = hoverClientY <= hoverMiddleY ? "above" : "below";
+
+        handleHoverDrop(dropId, "list", movingUpwards, parentId);
+      },
+      collect: (monitor) => ({
+        isOverCurrent: monitor.isOver({ shallow: true }),
+        isOver: monitor.isOver(),
+      }),
+    }),
+    [parentId],
+  );
 
   drag(drop(ref));
 
@@ -104,7 +123,7 @@ const ListItem = ({
       <div
         className={cn("d-flex align-items-center", {
           " group-item-ms": isSubItem,
-          [dropTargetClass]: isSubItem && !isDraggingOverCurrentItem,
+          [dropTargetClass]: isSubItem && isOver
         })}
       >
         {Icon}

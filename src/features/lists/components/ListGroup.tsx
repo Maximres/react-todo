@@ -1,16 +1,24 @@
 ﻿import React, { memo, useCallback, useEffect, useState } from "react";
-import { IGroupedList } from "../ducks/selectors/selectorOrderedListsAndGroups";
 import { IGroup, IList } from "@/constants/types/listsTypes";
 import ListItem from "@/features/lists/components/ListItem";
 import { getListIcon } from "@/utils/helpers/getIcon";
 import GroupItem from "@/features/lists/components/GroupItem";
 import { isListItem } from "@/utils/helpers/listItemResolver";
-import { useDrop } from "react-dnd";
-import _isEmpty from "lodash/isEmpty";
 import { getOrderNumber } from "@/utils/helpers/order";
 import { updateGroup, updateList } from "@features/lists";
 import { useDispatch } from "react-redux";
 import { IOrderable } from "@/constants/types/stateTypes";
+import {
+  DndElement,
+  DragType,
+  DropPosition,
+  IGroupedList,
+} from "@/features/lists/ducks/constants/types";
+import {
+  getDestItemPlacement,
+  getSiblingsOrderNumber,
+  getSourceItem,
+} from "@/features/lists/ducks/helpers/DndHelpers";
 
 type Props = {
   items: (IList | IGroupedList)[];
@@ -19,34 +27,6 @@ type Props = {
   onGroupEditSubmit: (uid: string, name: string) => void;
   lastCreatedId?: string;
   dndDisabled?: boolean;
-};
-
-type DragType = {
-  id: string;
-  type: string;
-  parentId: string | undefined;
-};
-
-type ListType = [id: string | null, parentId?: string];
-
-const getSourceItem = (
-  dragEndItem: DragType,
-  items: (IList | IGroupedList)[],
-) => {
-  const isSubItem = !!dragEndItem.parentId;
-
-  if (isSubItem) {
-    const sourceGroup = items.find(
-      (x) => x.id === dragEndItem.parentId,
-    ) as IGroupedList;
-    const source = sourceGroup.lists?.find(
-      (x) => x.id === dragEndItem.id,
-    ) as IList;
-    return source;
-  } else {
-    const source = items.find((x) => x.id === dragEndItem.id) as IList;
-    return source;
-  }
 };
 
 const ListGroup = ({
@@ -60,27 +40,10 @@ const ListGroup = ({
   const dispatch = useDispatch();
 
   const [dragEndItem, setDragEndItem] = useState<DragType | null>(null);
-  const [dropPosition, setDropPosition] = useState<
-    "above" | "bellow" | "center"
-  >("center");
+  const [dropPosition, setDropPosition] = useState<DropPosition>("inside");
   const [dropItem, setDropItem] = useState<string | null>(null);
-  const [dropType, setDropType] = useState<string>("");
+  const [dropType, setDropType] = useState<DndElement>("list");
   const [dropParentId, setDropParentId] = useState<string | undefined>();
-
-  useEffect(() => {
-    //some comment
-    // console.log("ListGroup:rendered");
-  });
-
-  const [{ getItem, isOver, canDrop }, drop] = useDrop(() => ({
-    accept: ["list", "group"],
-    drop: () => ({ name: "group & lists" }),
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-      getItem: monitor.getItem(),
-    }),
-  }));
 
   const renderListItem = (item: IList, parentId?: string) => {
     return (
@@ -131,15 +94,19 @@ const ListGroup = ({
   };
 
   useEffect(() => {
-    if (dragEndItem == null || dropItem == null) return;
-    if (dropItem === dragEndItem.id) return;
+    debugger
+    const didNotDrop = dragEndItem == null || dropItem == null;
+    if (didNotDrop || dropItem === dragEndItem.id) {
+      resetDnd();
+      return;
+    }
 
-    const { id: dragId, type: dragType, parentId: dragParent } = dragEndItem;
-    const moveListToTopLevel = !dropParentId;
-    const moveListToSubGroup = !!dropParentId;
-    debugger;
+    const { type: dragType } = dragEndItem;
+
     //list dragged
     if (dragType === "list") {
+      const moveListToTopLevel = !dropParentId;
+      const moveListToSubGroup = !!dropParentId;
       const source = getSourceItem(dragEndItem, items);
 
       if (source == null) return;
@@ -149,17 +116,8 @@ const ListGroup = ({
         const destItemIndex = items.findIndex((x) => x.id === dropItem);
         if (destItemIndex < 0) return;
 
-        let placement = destItemIndex;
-        if (dropPosition === "above") placement--;
-        if (dropPosition === "bellow") placement++;
-
-        let siblingDestItem = items[placement];
-        let siblingsOrder =
-          siblingDestItem != null
-            ? siblingDestItem?.order
-            : placement >= items.length
-            ? getOrderNumber()
-            : -1;
+        const placement = getDestItemPlacement(destItemIndex, dropPosition);
+        const siblingsOrder = getSiblingsOrderNumber(items, placement);
 
         const destItem = items[destItemIndex];
         const meanOrder = (destItem.order + siblingsOrder) / 2.0;
@@ -175,21 +133,12 @@ const ListGroup = ({
         const destGroupItem = items[destGroupIndex] as IGroupedList;
         const destGroupItems = destGroupItem.lists ?? [];
         const destListItemIndex = destGroupItems.findIndex(
-          (x) => x.id == dropItem,
+          (x) => x.id === dropItem,
         );
         if (destListItemIndex == null || destListItemIndex < 0) return;
 
-        let placement = destListItemIndex;
-        if (dropPosition === "above") placement--;
-        if (dropPosition === "bellow") placement++;
-
-        let siblingDestItem = destGroupItems[placement];
-        let siblingsOrder =
-          siblingDestItem != null
-            ? siblingDestItem?.order
-            : placement >= destGroupItems.length
-            ? getOrderNumber()
-            : -1;
+        const placement = getDestItemPlacement(destListItemIndex, dropPosition);
+        const siblingsOrder = getSiblingsOrderNumber(destGroupItems, placement);
 
         const destItem = destGroupItems[destListItemIndex];
         const meanOrder = (destItem.order + siblingsOrder) / 2.0;
@@ -202,21 +151,12 @@ const ListGroup = ({
       }
 
       //list moved to top level NEXT to group
-      if (dropType === "group" && dropPosition !== "center") {
+      if (dropType === "group" && dropPosition !== "inside") {
         const destGroupIndex = items.findIndex((x) => x.id === dropItem);
         if (destGroupIndex < 0) return;
 
-        let placement = destGroupIndex;
-        if (dropPosition === "above") placement--;
-        if (dropPosition === "bellow") placement++;
-
-        let siblingDestItem = items[placement];
-        let siblingsOrder =
-          siblingDestItem != null
-            ? siblingDestItem?.order
-            : placement >= items.length
-            ? getOrderNumber()
-            : -1;
+        const placement = getDestItemPlacement(destGroupIndex, dropPosition);
+        const siblingsOrder = getSiblingsOrderNumber(items, placement);
 
         const destGroupItem = items[destGroupIndex] as IGroupedList;
         const meanOrder = (destGroupItem.order + siblingsOrder) / 2.0;
@@ -225,7 +165,7 @@ const ListGroup = ({
       }
 
       //list moved from anywhere to sub group
-      if (dropType === "group" && dropPosition === "center") {
+      if (dropType === "group" && dropPosition === "inside") {
         const destGroupIndex = items.findIndex((x) => x.id === dropItem);
         if (destGroupIndex < 0) return;
 
@@ -250,23 +190,13 @@ const ListGroup = ({
       const destIndex = items.findIndex((x) => x.id === dropItem);
       if (destIndex < 0) return;
 
-      let placement = destIndex;
-      if (dropPosition === "above") placement--;
-      if (dropPosition === "bellow") placement++;
-
-      let siblingDestItem = items[placement];
-      let siblingsOrder =
-        siblingDestItem != null
-          ? siblingDestItem?.order
-          : placement >= items.length
-          ? getOrderNumber()
-          : -1;
+      const placement = getDestItemPlacement(destIndex, dropPosition);
+      const siblingsOrder = getSiblingsOrderNumber(items, placement);
 
       const destItem = items[destIndex] as IOrderable;
       const meanOrder = (destItem.order + siblingsOrder) / 2.0;
 
       const source = items.find((x) => x.id === dragEndItem.id) as IGroupedList;
-
       const srcCopy: IGroup = {
         ...source,
         order: meanOrder,
@@ -276,13 +206,20 @@ const ListGroup = ({
     }
 
     //reset dnd items
-    setDropParentId(undefined);
-    setDropType("");
-    setDropItem(null);
+    resetDnd();
   }, [dragEndItem]);
 
+  const resetDnd = useCallback(() => {
+    setDropItem(null);
+    setDropParentId(undefined);
+  }, []);
+
   const onDragEnd = useCallback(
-    (id: string, type: string, parentId: string | undefined) => {
+    (id: string | null, type: DndElement, parentId: string | undefined) => {
+      if (id == null) {
+        resetDnd();
+        return;
+      }
       setDragEndItem({ id, type, parentId });
     },
     [],
@@ -291,12 +228,10 @@ const ListGroup = ({
   const handleHoverDrop = useCallback(
     (
       dropId: string | null,
-      type: string,
-      position: "above" | "bellow" | "center",
+      type: DndElement,
+      position: DropPosition,
       parentId?: string,
     ) => {
-      console.log({ dropId, type, position, parentId, dropItem });
-
       if (dropId == null && dropId !== dropItem) setDropItem(null);
       if (dropId === dropItem && dropPosition === position) return;
 
@@ -305,7 +240,7 @@ const ListGroup = ({
       setDropParentId(parentId);
       setDropPosition(position);
     },
-    [],
+    [dropItem, dropPosition],
   );
 
   const getBorderClass = useCallback(
@@ -313,11 +248,11 @@ const ListGroup = ({
       if (dropItem == null || dropItem !== id) return "";
 
       switch (dropPosition) {
-        case "center":
+        case "inside":
           return "drag-around";
         case "above":
           return "drag-top";
-        case "bellow":
+        case "below":
           return "drag-bottom";
       }
 
@@ -326,84 +261,8 @@ const ListGroup = ({
     [dropItem, dropPosition],
   );
 
-  const onDragEnd_obsolete = (result: any) => {
-    const { source: src, destination: dest, draggableId } = result;
-
-    if (!dest) return;
-
-    if (result.type === "GROUP") {
-      //source from group
-
-      //to another group
-      if (dest.droppableId.includes("group")) {
-        const groupId = dest.droppableId.replace("group_", "");
-        const groupSrcId = src.droppableId.replace("group_", "");
-        const groupItem = items.find((x) => x.id === groupId) as IGroupedList;
-
-        const groupSrcItem = items.find(
-          (x) => x.id === groupSrcId,
-        ) as IGroupedList;
-
-        if (!groupItem) return;
-
-        if (!_isEmpty(groupItem.lists)) {
-          const listItem = groupItem.lists![dest.index];
-          const orderNumber = listItem.order;
-          const nextItem = groupItem.lists![dest.index + 1];
-          let orderStamp = getOrderNumber();
-          if (nextItem) {
-            orderStamp = nextItem.order;
-          }
-          const meanOrder = (orderNumber + (orderStamp ?? 0.1)) / 2.0;
-
-          const srcItem = groupSrcItem.lists?.find((x) => x.id === draggableId);
-          if (!srcItem) return;
-
-          const srcItemCopy = {
-            ...srcItem,
-            order: meanOrder,
-            groupId: groupId,
-          };
-
-          dispatch(updateList(srcItemCopy as IList));
-          return;
-        }
-
-        const srcItem = groupSrcItem.lists?.find((x) => x.id === draggableId);
-        if (!srcItem) return;
-
-        const srcItemCopy = {
-          ...srcItem,
-          order: getOrderNumber(),
-          groupId: groupId,
-        };
-        dispatch(updateList(srcItemCopy as IList));
-        return;
-      }
-    }
-
-    //to top level list
-    const movedUp = src.index >= dest.index;
-    const nextIndex = movedUp ? -1 : +1;
-    const destItemAbove = items[dest.index];
-    const destItemBelow = items[dest.index + 1];
-    const meanOrder =
-      (destItemAbove.order + (destItemBelow?.order ?? getOrderNumber())) / 2.0;
-    const srcItem = items.find((x) => x.id === draggableId);
-    if (!srcItem) return;
-
-    const srcItemCopy = { ...srcItem, order: meanOrder, groupId: "" };
-    if (isListItem(srcItemCopy)) {
-      dispatch(updateList(srcItemCopy as IList));
-    } else {
-      dispatch(updateGroup(srcItemCopy as IGroup));
-    }
-
-    return;
-  };
-
   return (
-    <ul ref={drop} className="list-group list-group-flush">
+    <ul className="list-group list-group-flush">
       {items.map((item, index) => {
         if (isListItem(item)) {
           return renderListItem(item);
