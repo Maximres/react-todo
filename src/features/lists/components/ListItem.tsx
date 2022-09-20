@@ -1,9 +1,9 @@
-﻿import React, { useRef } from "react";
+﻿import React from "react";
 import Icons from "@/components/AppIcons";
 import cn from "classnames";
-import { ListsInput } from "@/features/lists/components/ListsInput";
-import { useDrag, useDrop } from "react-dnd";
+import { ListsInput } from "./ListsInput";
 import { DndElement, DropPosition } from "../ducks/constants/types";
+import { useSortableList } from "../ducks/hooks/useSortableList";
 
 type Props = {
   uid: string;
@@ -44,70 +44,15 @@ const ListItem = ({
   onDragEnd,
   hoverClass,
 }: Props) => {
-  const ref = useRef<HTMLLIElement>(null);
-
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: "list",
-    item: () => ({ id: uid, parentId, type: "list" as DndElement }),
-    end: (item, monitor) => {
-      const didDrop = monitor.didDrop();
-      const dragId = didDrop ? item.id : null;
-      onDragEnd(dragId, item.type, parentId);
-    },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-    canDrag: () => !isDragDisabled,
-  }));
-
-  const [{ isOverCurrent, isOver }, drop] = useDrop(
-    () => ({
-      accept: ["list", "group"] as DndElement[],
-      canDrop: (item: { type: DndElement }) => {
-        const dropGroupToSubItems = item.type === "group" && !!parentId;
-        if (dropGroupToSubItems) return false;
-
-        return !isDragDisabled;
-      },
-      hover: (item: any, monitor) => {
-        if (!ref.current) return;
-        if (!monitor.canDrop()) return;
-
-        const dragId = item.id;
-        const dropId = uid;
-        // hovering itself
-        if (dragId === dropId) {
-          const isSubItem = parentId != null;
-          if (isSubItem) {
-            onDropHover(null, "list", "inside");
-            return;
-          }
-
-          onDropHover(dropId, "list", "inside");
-          return;
-        }
-
-        const dropRect = ref.current?.getBoundingClientRect();
-        const hoverMiddleY = (dropRect.bottom - dropRect.top) / 2;
-        const clientOffset = monitor.getClientOffset();
-        const clientPositionY = clientOffset?.y ?? 0;
-        const hoverClientY = clientPositionY - dropRect.top;
-        const movingUpwards = hoverClientY <= hoverMiddleY ? "above" : "below";
-
-        onDropHover(dropId, "list", movingUpwards, parentId);
-      },
-      collect: (monitor) => ({
-        isOverCurrent: monitor.isOver({ shallow: true }),
-        isOver: monitor.isOver(),
-      }),
-    }),
-    [parentId],
+  const [{ isOverCurrent, isOver }, ref] = useSortableList(
+    uid,
+    parentId,
+    onDragEnd,
+    isDragDisabled,
+    onDropHover,
   );
 
-  drag(drop(ref));
-
   const isSubItem = parentId != null;
-  const isDraggingOverCurrentItem = isDragging && isOverCurrent;
   return (
     <li
       ref={ref}
@@ -123,7 +68,7 @@ const ListItem = ({
       <div
         className={cn("d-flex align-items-center", {
           " group-item-ms": isSubItem,
-          [hoverClass]: isSubItem && isOver
+          [hoverClass]: isSubItem && isOver,
         })}
       >
         {Icon}
