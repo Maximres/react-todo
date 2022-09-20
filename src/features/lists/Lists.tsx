@@ -5,8 +5,7 @@ import { ListContent } from "@/features/lists/components/ListContent";
 const Lists = () => {
   return (
     <aside
-      className="d-flex flex-column align-items-stretch flex-shrink-0 bg-light"
-      style={{ width: 350 }}
+      className="d-flex flex-column align-items-stretch flex-shrink-0 bg-light w-100 overflow-auto z-index-1"
       id="list"
     >
       <ListHeader />

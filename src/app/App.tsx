@@ -14,11 +14,11 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div className="grid-container vh-100">
       <Lists />
       <Tasks />
       <Details />
-    </>
+    </div>
   );
 }
 

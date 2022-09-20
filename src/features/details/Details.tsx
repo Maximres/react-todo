@@ -21,7 +21,6 @@ export const Details = (): JSX.Element | null => {
   return (
     <aside
       className="d-flex flex-column align-items-stretch flex-shrink-0 overflow-auto bg-light"
-      style={{ width: "380px" }}
       id="details"
     >
       <div className="d-flex align-items-center flex-shrink-0 pt-3 px-3 mx-3 link-dark justify-content-end">

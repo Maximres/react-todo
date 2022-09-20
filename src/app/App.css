@@ -1,8 +1,9 @@
 :root {
-  --side-bar-width: 300px;
   --default-font-size-number: 15;
   --default-font-size-px: calc(var(--default-font-size-number) * 1px);
   font-size: var(--default-font-size-px);
+  --lists-section-width: 350px;
+  --details-section-width: 380px;
 }
 
 .App {
@@ -199,4 +200,14 @@
   -3px 0px 0px 0px rgba(0, 0, 0, 0.74) inset,
   3px 0px 0px 0px rgba(0, 0, 0, 0.74) inset,
   0px -3px 0px 0px rgba(0, 0, 0, 0.74) !important;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: var(--lists-section-width) 1fr;
+  grid-auto-columns: var(--details-section-width);
+  grid-auto-flow: column;
+  place-items: stretch;
+  place-content: stretch;
+  width: 100%;
 }
