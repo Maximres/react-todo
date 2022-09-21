@@ -28,10 +28,19 @@ const ListBarSection = ({ render }: Props) => {
 
   const handleItemClick = useCallback(
     (uid: string) => {
+
+
+      setTimeout(() => {
+        throw new Error("async erroe")
+      }, 1000)
+
       const selectedList = userLists.find((i) => i.id === uid);
       if (selectedList == null) return;
 
       dispatch(selectList(selectedList));
+
+
+      throw new Error("Something went wrroooongg")
     },
     [userLists],
   );

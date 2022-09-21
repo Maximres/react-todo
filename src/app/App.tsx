@@ -4,6 +4,7 @@ import { Details } from "@features/details";
 import { Lists } from "@features/lists";
 import { useAppDispatch } from "@/constants/types/redux";
 import { initialFetch } from "@/utils/thunks/initialFetch";
+
 import "./App.css";
 
 function App() {
