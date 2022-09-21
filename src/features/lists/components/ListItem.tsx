@@ -1,9 +1,12 @@
-﻿import React, { useEffect } from "react";
+﻿import React, { useRef } from "react";
 import Icons from "@/components/AppIcons";
 import cn from "classnames";
 import { ListsInput } from "./ListsInput";
 import { DndElement, DropPosition } from "../ducks/constants/types";
 import { useSortableList } from "../ducks/hooks/useSortableList";
+import useValidId from "@/utils/hooks/useValidId";
+import "@szhsin/react-menu/dist/index.css";
+import { ControlledMenu, MenuItem, useMenuState } from "@szhsin/react-menu";
 
 type Props = {
   uid: string;
@@ -44,6 +47,10 @@ const ListItem = ({
   onDragEnd,
   hoverClass,
 }: Props) => {
+  const dropdownMenuId = useValidId();
+  const [menuProps, toggleMenu] = useMenuState();
+  const dropdownRef = useRef(null);
+
   const [{ isOverCurrent, isOver }, ref] = useSortableList(
     uid,
     parentId,
@@ -58,18 +65,27 @@ const ListItem = ({
       <li
         ref={ref}
         className={cn(
-          "list-group-item list-group-item-action border-0 bg-light",
+          "list-group-item list-group-item-action",
+          "border-0 bg-light",
+
           {
             [hoverClass]: !isSubItem && isOverCurrent,
           },
         )}
         onClick={() => onClick(uid)}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          toggleMenu(true);
+        }}
       >
         <div
+          ref={dropdownRef}
           className={cn("d-flex align-items-center", {
             " group-item-ms": isSubItem,
             [hoverClass]: isSubItem && isOver,
           })}
+          aria-expanded="false"
+          id={dropdownMenuId}
         >
           {Icon}
           <ListsInput
@@ -82,8 +98,20 @@ const ListItem = ({
             {total}
           </span>
         </div>
+        <ControlledMenu
+          {...menuProps}
+          anchorRef={dropdownRef}
+          onClose={() => toggleMenu(false)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
+          <MenuItem>Cut</MenuItem>
+          <MenuItem>Copy</MenuItem>
+          <MenuItem>Paste</MenuItem>
+        </ControlledMenu>
       </li>
-
     </>
   );
 };
