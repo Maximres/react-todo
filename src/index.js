@@ -7,7 +7,6 @@ import App from "./app/App";
 import "bootstrap/dist/css/bootstrap.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "simplebar/dist/simplebar.min.css";
-import "react-contexify/dist/ReactContexify.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

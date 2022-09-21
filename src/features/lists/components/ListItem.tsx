@@ -1,4 +1,4 @@
-﻿import React from "react";
+﻿import React, { useEffect } from "react";
 import Icons from "@/components/AppIcons";
 import cn from "classnames";
 import { ListsInput } from "./ListsInput";
@@ -54,35 +54,37 @@ const ListItem = ({
 
   const isSubItem = parentId != null;
   return (
-    <li
-      ref={ref}
-      className={cn(
-        "list-group-item list-group-item-action border-0 bg-light",
-        {
-          [hoverClass]: !isSubItem && isOverCurrent,
-        },
-      )}
-      onClick={() => onClick(uid)}
-      onDoubleClick={(e) => {}}
-    >
-      <div
-        className={cn("d-flex align-items-center", {
-          " group-item-ms": isSubItem,
-          [hoverClass]: isSubItem && isOver,
-        })}
+    <>
+      <li
+        ref={ref}
+        className={cn(
+          "list-group-item list-group-item-action border-0 bg-light",
+          {
+            [hoverClass]: !isSubItem && isOverCurrent,
+          },
+        )}
+        onClick={() => onClick(uid)}
       >
-        {Icon}
-        <ListsInput
-          name={name}
-          isFocused={isFocused}
-          submitEdit={(text) => onSubmitEdit(uid, text)}
-          className="mx-3"
-        />
-        <span className="badge rounded-pill bg-badge-light text-dark ms-auto fw-light">
-          {total}
-        </span>
-      </div>
-    </li>
+        <div
+          className={cn("d-flex align-items-center", {
+            " group-item-ms": isSubItem,
+            [hoverClass]: isSubItem && isOver,
+          })}
+        >
+          {Icon}
+          <ListsInput
+            name={name}
+            isFocused={isFocused}
+            submitEdit={(text) => onSubmitEdit(uid, text)}
+            className="mx-3"
+          />
+          <span className="badge rounded-pill bg-badge-light text-dark ms-auto fw-light">
+            {total}
+          </span>
+        </div>
+      </li>
+
+    </>
   );
 };
 

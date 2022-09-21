@@ -40,51 +40,54 @@ const GroupItem = ({
     onDragEnd,
     onDropHover,
   );
-  const isDraggingCurrentItem = isDragging && uid === item.id;
 
+  const isDraggingCurrentItem = isDragging && uid === item.id;
   return (
-    <li
-      ref={ref}
-      className="list-group-item list-group-item-action border-0 p-0"
-    >
-      <div className="accordion accordion-flush" id={accordionId}>
-        <div className="accordion-item bg-light p-1">
-          <div
-            className={cn("accordion-header", {
-              [hoverClass]: !isDraggingCurrentItem && isOver,
-            })}
-            id={ariaLabel}
-          >
-            <button
-              className="accordion-button bg-light"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target={`#${collapseId}`}
-              aria-expanded="true"
-              aria-controls={collapseId}
+    <>
+      <li
+        ref={ref}
+        className="list-group-item list-group-item-action border-0 p-0"
+      >
+        <div className="accordion accordion-flush" id={accordionId}>
+          <div className="accordion-item bg-light p-1">
+            <div
+              className={cn("accordion-header", {
+                [hoverClass]: !isDraggingCurrentItem && isOver,
+              })}
+              id={ariaLabel}
             >
-              <div className="text-truncate me-1">
-                <Icons.Group className="me-3" />
-                <ListsInput
-                  name={name}
-                  isFocused={isFocused}
-                  submitEdit={(text) => onSubmitEdit(uid, text)}
-                  className="me-3"
-                />
-              </div>
-            </button>
-          </div>
-          <div
-            id={collapseId}
-            className="accordion-collapse collapse show"
-            aria-labelledby={ariaLabel}
-            data-bs-parent={`#${accordionId}`}
-          >
-            {children}
+              <button
+                className="accordion-button bg-light"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target={`#${collapseId}`}
+                aria-expanded="true"
+                aria-controls={collapseId}
+              >
+                <div className="text-truncate me-1">
+                  <Icons.Group className="me-3" />
+                  <ListsInput
+                    name={name}
+                    isFocused={isFocused}
+                    submitEdit={(text) => onSubmitEdit(uid, text)}
+                    className="me-3"
+                  />
+                </div>
+              </button>
+            </div>
+            <div
+              id={collapseId}
+              className="accordion-collapse collapse show"
+              aria-labelledby={ariaLabel}
+              data-bs-parent={`#${accordionId}`}
+            >
+              {children}
+            </div>
           </div>
         </div>
-      </div>
-    </li>
+      </li>
+
+    </>
   );
 };
 
