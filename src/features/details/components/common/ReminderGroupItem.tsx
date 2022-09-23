@@ -4,7 +4,12 @@ import DatePickerContainer from "./DatePickerContainer";
 
 type Props = {
   dateTimeType: string;
-  datePickerProps: {};
+  datePickerProps: {
+    shouldCloseOnSelect: boolean;
+    placeholderText: string;
+    showTimeInput?: boolean;
+    dateFormat?: string;
+  };
   CustomInput: React.ForwardRefExoticComponent<any>;
 };
 

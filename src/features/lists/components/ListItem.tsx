@@ -1,4 +1,4 @@
-﻿import React, { useRef } from "react";
+﻿import React, { useContext, useRef } from "react";
 import Icons from "@/components/AppIcons";
 import cn from "classnames";
 import { ListsInput } from "./ListsInput";
@@ -6,7 +6,8 @@ import { DndElement, DropPosition } from "../ducks/constants/types";
 import { useSortableList } from "../ducks/hooks/useSortableList";
 import useValidId from "@/utils/hooks/useValidId";
 import "@szhsin/react-menu/dist/index.css";
-import { ControlledMenu, MenuItem, useMenuState } from "@szhsin/react-menu";
+import { useMenuState } from "@szhsin/react-menu";
+import { ListContextMenu } from "@/features/lists/components/ListContextMenu";
 
 type Props = {
   uid: string;
@@ -33,23 +34,24 @@ type Props = {
   hoverClass: string;
 };
 
-const ListItem = ({
-  uid,
-  name,
-  parentId,
-  isFocused = false,
-  isDragDisabled = false,
-  Icon = <Icons.List />,
-  total = 0,
-  onClick,
-  onSubmitEdit,
-  onDropHover,
-  onDragEnd,
-  hoverClass,
-}: Props) => {
+const ListItem = (props: Props) => {
+  const {
+    uid,
+    name,
+    parentId,
+    isFocused = false,
+    isDragDisabled = false,
+    Icon = <Icons.List />,
+    total = 0,
+    onClick,
+    onSubmitEdit,
+    onDropHover,
+    onDragEnd,
+    hoverClass,
+  } = props;
   const dropdownMenuId = useValidId();
   const [menuProps, toggleMenu] = useMenuState();
-  const dropdownRef = useRef(null);
+  const contextMenuContainer = useRef(null);
 
   const [{ isOverCurrent, isOver }, ref] = useSortableList(
     uid,
@@ -79,7 +81,7 @@ const ListItem = ({
         }}
       >
         <div
-          ref={dropdownRef}
+          ref={contextMenuContainer}
           className={cn("d-flex align-items-center", {
             " group-item-ms": isSubItem,
             [hoverClass]: isSubItem && isOver,
@@ -98,19 +100,11 @@ const ListItem = ({
             {total}
           </span>
         </div>
-        <ControlledMenu
-          {...menuProps}
-          anchorRef={dropdownRef}
-          onClose={() => toggleMenu(false)}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-        >
-          <MenuItem>Cut</MenuItem>
-          <MenuItem>Copy</MenuItem>
-          <MenuItem>Paste</MenuItem>
-        </ControlledMenu>
+        <ListContextMenu
+          menuProps={menuProps}
+          toggleMenu={toggleMenu}
+          ref={ref}
+        />
       </li>
     </>
   );

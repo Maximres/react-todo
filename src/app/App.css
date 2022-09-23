@@ -211,3 +211,7 @@
   place-content: stretch;
   width: 100%;
 }
+
+.szh-menu-container .szh-menu {
+  width: calc(var(--lists-section-width) - 50px);
+}

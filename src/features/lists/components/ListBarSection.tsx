@@ -1,11 +1,11 @@
-﻿import React, { useCallback, useEffect } from "react";
+﻿import React, { useCallback, useEffect, useRef } from "react";
 import { selectorOrderedListsAndGroups } from "../ducks/selectors/selectorOrderedListsAndGroups";
 import { IList } from "@/constants/types/listsTypes";
 import { selectList, updateGroup, updateList } from "@features/lists";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/constants/types/redux";
 import SimpleBar from "simplebar-react";
-import { IGroupedList } from "@/features/lists/ducks/constants/types";
+import { IGroupedList } from "../ducks/constants/types";
 
 export type RenderProps = {
   defaultItems: IList[];
@@ -26,21 +26,13 @@ const ListBarSection = ({ render }: Props) => {
   const userLists = useAppSelector((x) => x.lists.userLists);
   const selectedList = useAppSelector((x) => x.lists.selectedList);
 
+
   const handleItemClick = useCallback(
     (uid: string) => {
-
-
-      setTimeout(() => {
-        throw new Error("async erroe")
-      }, 1000)
-
       const selectedList = userLists.find((i) => i.id === uid);
       if (selectedList == null) return;
 
       dispatch(selectList(selectedList));
-
-
-      throw new Error("Something went wrroooongg")
     },
     [userLists],
   );
@@ -63,7 +55,9 @@ const ListBarSection = ({ render }: Props) => {
   }, [selectedList]);
 
   return (
-    <section className="flex-grow-1 overflow-hidden">
+    <section
+      className="flex-grow-1 overflow-hidden"
+    >
       <SimpleBar
         className="h-100"
         scrollbarMaxSize={200}
@@ -71,13 +65,13 @@ const ListBarSection = ({ render }: Props) => {
         forceVisible={true}
       >
         <div className="w-100 pe-1 pb-1">
-          {render({
-            defaultItems: defaultLists,
-            items: orderedListsGroups,
-            itemClick: handleItemClick,
-            editListSubmit: handleListEditSubmit,
-            editGroupSubmit: handleGroupEditSubmit,
-          })}
+            {render({
+              defaultItems: defaultLists,
+              items: orderedListsGroups,
+              itemClick: handleItemClick,
+              editListSubmit: handleListEditSubmit,
+              editGroupSubmit: handleGroupEditSubmit,
+            })}
         </div>
       </SimpleBar>
     </section>

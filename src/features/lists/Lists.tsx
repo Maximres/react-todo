@@ -1,4 +1,4 @@
-﻿import React, { useEffect } from "react";
+﻿import React from "react";
 import { ListHeader } from "./components/ListHeader";
 import { ListContent } from "@/features/lists/components/ListContent";
 
