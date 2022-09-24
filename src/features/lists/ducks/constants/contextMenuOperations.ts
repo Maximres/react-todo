@@ -9,7 +9,7 @@
 
 enum GroupItemOperations {
   Rename,
-  Create,
+  Add,
   Ungroup,
   Delete,
 }

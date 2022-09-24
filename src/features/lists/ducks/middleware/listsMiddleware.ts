@@ -4,7 +4,8 @@ import { listUpdatedListener } from "./listUpdatedListener";
 import { listCreatedListener } from "./listCreatedListener";
 import { groupCreatedListener } from "./groupCreatedListener";
 import { groupUpdatedListener } from "./groupUpdatedListener";
-
+import { groupDeletedListener } from "./groupDeletedListener";
+import { ungroupListener } from "./ungroupListener";
 
 export const listsListenerMiddleware = createListenerMiddleware();
 
@@ -15,4 +16,5 @@ listUpdatedListener(startAppListeningDetails);
 listCreatedListener(startAppListeningDetails);
 groupCreatedListener(startAppListeningDetails);
 groupUpdatedListener(startAppListeningDetails);
-
+groupDeletedListener(startAppListeningDetails);
+ungroupListener(startAppListeningDetails);

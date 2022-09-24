@@ -3,6 +3,8 @@ import { IGroup, IList, IListsState } from "@/constants/types/listsTypes";
 import assignDeep from "lodash/assignIn";
 import { initialFetch } from "@/utils/thunks/initialFetch";
 import { getOrderNumber } from "@/utils/helpers/order";
+import { getUntitledName } from "./helpers/getUntitledListName";
+import { ListGroupNames } from "@/features/tasks/ducks/constants";
 
 const defaults = [
   {
@@ -39,40 +41,48 @@ const listsSlice = createSlice({
       state.userLists[index] = assignDeep({}, list, action.payload);
     },
     createList: {
-      reducer(state, action: PayloadAction<{ name: string; id: string }>) {
+      reducer(state, action: PayloadAction<{ id: string; groupId: string }>) {
+        const name = getUntitledName(
+          state.userLists,
+          ListGroupNames.NEW_LIST_NAME,
+        );
         const newList: IList = {
           id: action.payload.id,
           tasks: [] as any,
-          name: action.payload.name,
+          name: name,
           iconName: "",
           tasksTotal: 0,
           order: getOrderNumber(),
-          groupId: "",
+          groupId: action.payload.groupId,
         };
         state.userLists.push(newList);
       },
-      prepare(name: string) {
+      prepare(groupId?: string) {
         return {
           payload: {
-            name,
             id: nanoid(),
+            groupId: groupId ?? "",
           },
         };
       },
     },
     createGroup: {
-      reducer(state, action: PayloadAction<{ name: string; id: string }>) {
+      reducer(state, action: PayloadAction<{ id: string }>) {
+        const name = getUntitledName(
+          state.groups,
+          ListGroupNames.NEW_GROUP_NAME,
+        );
+
         const newGroup: IGroup = {
           id: action.payload.id,
-          name: action.payload.name,
+          name: name,
           order: getOrderNumber(),
         };
         state.groups.push(newGroup);
       },
-      prepare(name: string) {
+      prepare() {
         return {
           payload: {
-            name,
             id: nanoid(),
           },
         };
@@ -83,6 +93,19 @@ const listsSlice = createSlice({
       if (index < 0) throw new Error("Group is not found");
       const group = state.groups[index];
       state.groups[index] = assignDeep({}, group, action.payload);
+    },
+    deleteGroup(state, action: PayloadAction<string>) {
+      const index = state.groups.findIndex((x) => x.id === action.payload);
+      if (index < 0) throw new Error("Group is not found");
+      state.groups.splice(index, 1);
+    },
+    unGroup(state, action: PayloadAction<string>) {
+      const listsToUngroup = state.userLists.filter(
+        (x) => x.groupId === action.payload,
+      );
+      listsToUngroup.forEach((x) => {
+        x.groupId = "";
+      });
     },
     selectList(state, action: PayloadAction<IList>) {
       //todo: sync  selectedTicks with db for initial load
@@ -115,8 +138,10 @@ export const {
   selectList,
   createGroup,
   updateGroup,
+  deleteGroup,
   startEditItem,
-  endEditItem
+  endEditItem,
+  unGroup,
 } = listsSlice.actions;
 
 export const listsReducer = listsSlice.reducer;

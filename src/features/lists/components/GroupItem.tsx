@@ -10,7 +10,13 @@ import { ClickEvent, useMenuState } from "@szhsin/react-menu";
 import { GroupItemOperations } from "@/features/lists/ducks/constants/contextMenuOperations";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { isEditingSelector } from "@/features/lists/ducks/selectors/isEditingSelector";
-import { endEditItem, startEditItem } from "@features/lists";
+import {
+  createList,
+  deleteGroup,
+  endEditItem,
+  startEditItem,
+  unGroup,
+} from "@features/lists";
 
 type GroupProps = {
   children: JSX.Element;
@@ -25,6 +31,7 @@ type GroupProps = {
   ) => void;
   onDragEnd: (id: string | null, type: DndElement, parentId?: string) => void;
   hoverClass: string;
+  hasSubItems: boolean;
 };
 
 const isGroupItem = (value: unknown): value is GroupItemOperations => {
@@ -42,6 +49,7 @@ const GroupItem = ({
   onDropHover,
   onDragEnd,
   hoverClass,
+  hasSubItems,
 }: GroupProps) => {
   const dispatch = useAppDispatch();
   const accordionId = useValidId();
@@ -64,12 +72,18 @@ const GroupItem = ({
         dispatch(startEditItem(uid));
         break;
       }
-      case GroupItemOperations.Create:
+      case GroupItemOperations.Add: {
+        dispatch(createList(uid));
         break;
-      case GroupItemOperations.Ungroup:
+      }
+      case GroupItemOperations.Ungroup: {
+        dispatch(unGroup(uid));
         break;
-      case GroupItemOperations.Delete:
+      }
+      case GroupItemOperations.Delete: {
+        dispatch(deleteGroup(uid));
         break;
+      }
     }
   };
 
@@ -78,9 +92,11 @@ const GroupItem = ({
   const submitEdit = (text: string) => {
     onSubmitEdit(uid, text);
   };
-  const releaseEditMode = () => {
+
+  const exitEditMode = () => {
     dispatch(endEditItem());
   };
+
   return (
     <>
       <li
@@ -114,7 +130,7 @@ const GroupItem = ({
                     name={name}
                     isEditMode={isInEditMode}
                     submitEdit={submitEdit}
-                    onBlur={releaseEditMode}
+                    onBlur={exitEditMode}
                     className="me-3"
                   />
                 </div>
@@ -135,6 +151,7 @@ const GroupItem = ({
           toggleMenu={toggleMenu}
           ref={ref}
           onItemClick={onItemClick}
+          isDeletable={!hasSubItems}
         />
       </li>
     </>

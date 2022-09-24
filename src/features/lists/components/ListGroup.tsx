@@ -8,8 +8,7 @@ import { useDispatch } from "react-redux";
 import { IGroupedList } from "@/features/lists/ducks/constants/types";
 import { updateGroup, updateList } from "@features/lists";
 import { useDnd } from "@/features/lists/ducks/hooks/useDnd";
-import { RootState, useAppSelector } from "@/constants/types/redux";
-import { createSelector } from "@reduxjs/toolkit";
+import _isEmpty from "lodash/isEmpty";
 
 type Props = {
   items: (IList | IGroupedList)[];
@@ -75,6 +74,7 @@ const ListGroup = ({
         onDropHover={onHover}
         hoverClass={getHoveringStyle(item.id)}
         onDragEnd={onDragEnd}
+        hasSubItems={!_isEmpty(item.lists)}
       >
         {renderSubGroupItem(item)}
       </GroupItem>

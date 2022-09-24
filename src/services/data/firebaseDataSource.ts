@@ -11,6 +11,7 @@ import {
   setDoc,
   updateDoc,
   where,
+  writeBatch,
 } from "firebase/firestore";
 import {
   GroupDto,
@@ -541,6 +542,21 @@ const updateList = (db: Firestore, list: IList) => {
   });
 };
 
+const ungroupLists = async (db: Firestore, lists: IList[]) => {
+  try {
+    const batch = writeBatch(db);
+
+    for (const list of lists) {
+      const reference = doc(db, scheme.Lists, list.id);
+      batch.update(reference, { groupId: "" });
+    }
+
+    await batch.commit();
+  } catch (e) {
+    console.error({ updateListError: e });
+  }
+};
+
 const updateGroup = (db: Firestore, group: IGroup) => {
   const reference = doc(db, scheme.Groups, group.id);
   const listDto = convertGroupToDto(group);
@@ -554,6 +570,14 @@ const deleteTask = (db: Firestore, id: string, parentId: string) => {
 
   return deleteDoc(reference).catch((...args) => {
     console.error({ deleteTaskError: args });
+  });
+};
+
+const deleteGroup = (db: Firestore, id: string) => {
+  const reference = doc(db, scheme.Groups, id);
+
+  return deleteDoc(reference).catch((...args) => {
+    console.error({ deleteGroupError: args });
   });
 };
 
@@ -622,10 +646,12 @@ export const FirebaseDataSource = {
   getListsWithTasks,
   updateList,
   setList,
+  ungroupLists,
 
   getGroups,
   setGroup,
   updateGroup,
+  deleteGroup,
 
   getSubtasksMany,
   getSubtasks,

@@ -1,17 +1,21 @@
 ﻿import React from "react";
-import { ClickEvent, ControlledMenu, MenuDivider, MenuItem } from "@szhsin/react-menu";
+import {
+  ClickEvent,
+  ControlledMenu,
+  MenuDivider,
+  MenuItem,
+} from "@szhsin/react-menu";
 import { GroupItemOperations } from "../ducks/constants/contextMenuOperations";
 
 type Props = {
   menuProps: any;
   toggleMenu: (open?: boolean | undefined) => void;
-  onItemClick: (e: ClickEvent) => void
+  onItemClick: (e: ClickEvent) => void;
+  isDeletable: boolean;
 };
 
-
 const GroupContextMenu = React.forwardRef(
-  ({ menuProps, toggleMenu, onItemClick }: Props, anchorRef) => {
-
+  ({ menuProps, toggleMenu, onItemClick, isDeletable }: Props, anchorRef) => {
     return (
       <ControlledMenu
         {...menuProps}
@@ -27,10 +31,16 @@ const GroupContextMenu = React.forwardRef(
         onItemClick={onItemClick}
       >
         <MenuItem value={GroupItemOperations.Rename}>Rename group</MenuItem>
-        <MenuItem value={GroupItemOperations.Create}>New list</MenuItem>
-        <MenuItem value={GroupItemOperations.Ungroup}>Ungroup list</MenuItem>
-        <MenuDivider />
-        <MenuItem value={GroupItemOperations.Delete}>Delete group</MenuItem>
+        <MenuItem value={GroupItemOperations.Add}>New list</MenuItem>
+        {!isDeletable && (
+          <MenuItem value={GroupItemOperations.Ungroup}>Ungroup list</MenuItem>
+        )}
+        {isDeletable && (
+          <>
+            <MenuDivider />
+            <MenuItem className="text-danger" value={GroupItemOperations.Delete}>Delete group</MenuItem>
+          </>
+        )}
       </ControlledMenu>
     );
   },
