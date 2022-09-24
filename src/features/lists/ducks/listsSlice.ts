@@ -84,12 +84,18 @@ const listsSlice = createSlice({
       const group = state.groups[index];
       state.groups[index] = assignDeep({}, group, action.payload);
     },
-    selectList: (state, action: PayloadAction<IList>) => {
+    selectList(state, action: PayloadAction<IList>) {
       //todo: sync  selectedTicks with db for initial load
 
       state.selectedList = assignDeep({}, action.payload, {
         selectedTicks: Number(Date.now()),
       });
+    },
+    startEditItem(state, action: PayloadAction<string>) {
+      state.editItemId = action.payload;
+    },
+    endEditItem(state) {
+      state.editItemId = void 0;
     },
   },
   extraReducers: (builder) => {
@@ -103,7 +109,14 @@ const listsSlice = createSlice({
   },
 });
 
-export const { updateList, createList, selectList, createGroup, updateGroup } =
-  listsSlice.actions;
+export const {
+  updateList,
+  createList,
+  selectList,
+  createGroup,
+  updateGroup,
+  startEditItem,
+  endEditItem
+} = listsSlice.actions;
 
 export const listsReducer = listsSlice.reducer;

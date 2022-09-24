@@ -1,6 +1,6 @@
 ﻿import React, { useContext } from "react";
 import { ControlledMenu, MenuDivider, MenuItem } from "@szhsin/react-menu";
-import { ListItemOperations } from "@/features/lists/ducks/constants/listItemOperations";
+import { ListItemOperations } from "@/features/lists/ducks/constants/contextMenuOperations";
 
 type Props = {
   menuProps: any;

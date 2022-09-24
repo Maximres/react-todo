@@ -9,12 +9,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 
 const ListContent = () => {
-  const [lastListItemId, setLastListItemId] = useState("");
-
-  const setLastCreatedIdValue = (id: string) => {
-    setLastListItemId(id);
-  };
-
   const renderChild = (render: RenderProps) => (
     <>
       <ListGroup
@@ -30,7 +24,6 @@ const ListContent = () => {
         onItemClick={render.itemClick}
         onListEditSubmit={render.editListSubmit}
         onGroupEditSubmit={render.editGroupSubmit}
-        lastCreatedId={lastListItemId}
       />
     </>
   );
@@ -39,7 +32,7 @@ const ListContent = () => {
     <>
       <DndProvider backend={HTML5Backend}>
         <ListBarSection render={renderChild} />
-        <ListFooter setLastCreatedId={setLastCreatedIdValue} />
+        <ListFooter />
       </DndProvider>
     </>
   );

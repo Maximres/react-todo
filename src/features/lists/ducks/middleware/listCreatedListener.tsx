@@ -1,5 +1,5 @@
 ﻿import { AppStartListening } from "@/constants/types/redux";
-import { createList, selectList } from "@features/lists";
+import { createList, selectList, startEditItem } from "@features/lists";
 import { dataService } from "@/services/data";
 
 export const listCreatedListener = (startListening: AppStartListening) => {
@@ -12,8 +12,9 @@ export const listCreatedListener = (startListening: AppStartListening) => {
       if (list == null) return;
 
       dispatch(selectList(list));
-      await dataService.setList(list);
+      dispatch(startEditItem(list.id));
 
+      await dataService.setList(list);
     },
   });
 };

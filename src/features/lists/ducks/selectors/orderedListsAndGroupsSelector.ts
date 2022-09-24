@@ -4,7 +4,7 @@ import _groupBy from "lodash/groupBy";
 import _orderBy from "lodash/orderBy";
 import { IGroupedList } from "../constants/types";
 
-export const selectorOrderedListsAndGroups = createSelector(
+export const orderedListsAndGroupsSelector = createSelector(
   (x: RootState) => x.lists.userLists,
   (x: RootState) => x.lists.groups,
   (lists, groups) => {

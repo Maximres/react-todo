@@ -5,12 +5,17 @@ import { ListsInput } from "./ListsInput";
 import cn from "classnames";
 import { DndElement, DropPosition } from "../ducks/constants/types";
 import { useSortableGroup } from "../ducks/hooks/useSortableGroup";
+import { GroupContextMenu } from "@/features/lists/components/GroupContextMenu";
+import { ClickEvent, useMenuState } from "@szhsin/react-menu";
+import { GroupItemOperations } from "@/features/lists/ducks/constants/contextMenuOperations";
+import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
+import { isEditingSelector } from "@/features/lists/ducks/selectors/isEditingSelector";
+import { endEditItem, startEditItem } from "@features/lists";
 
 type GroupProps = {
   children: JSX.Element;
   name: string;
   uid: string;
-  isFocused: boolean;
   onSubmitEdit: (uid: string, name: string) => void;
 
   onDropHover: (
@@ -22,31 +27,69 @@ type GroupProps = {
   hoverClass: string;
 };
 
+const isGroupItem = (value: unknown): value is GroupItemOperations => {
+  return (
+    value != null &&
+    Object.values(GroupItemOperations).includes(value as GroupItemOperations)
+  );
+};
+
 const GroupItem = ({
   children,
   name,
-  isFocused,
   uid,
   onSubmitEdit,
   onDropHover,
   onDragEnd,
   hoverClass,
 }: GroupProps) => {
+  const dispatch = useAppDispatch();
   const accordionId = useValidId();
   const collapseId = useValidId();
   const ariaLabel = useValidId();
+  const [menuProps, toggleMenu] = useMenuState();
   const [{ isDragging, item, isOver }, ref] = useSortableGroup(
     uid,
     onDragEnd,
     onDropHover,
   );
+  const isInEditMode = useAppSelector((x) => isEditingSelector(x, uid));
+
+  const onItemClick = (e: ClickEvent) => {
+    const value = e.value as GroupItemOperations;
+    if (!isGroupItem(value)) return;
+
+    switch (value) {
+      case GroupItemOperations.Rename: {
+        dispatch(startEditItem(uid));
+        break;
+      }
+      case GroupItemOperations.Create:
+        break;
+      case GroupItemOperations.Ungroup:
+        break;
+      case GroupItemOperations.Delete:
+        break;
+    }
+  };
 
   const isDraggingCurrentItem = isDragging && uid === item.id;
+
+  const submitEdit = (text: string) => {
+    onSubmitEdit(uid, text);
+  };
+  const releaseEditMode = () => {
+    dispatch(endEditItem());
+  };
   return (
     <>
       <li
         ref={ref}
         className="list-group-item list-group-item-action border-0 p-0"
+        onContextMenu={(e) => {
+          e.preventDefault();
+          toggleMenu(true);
+        }}
       >
         <div className="accordion accordion-flush" id={accordionId}>
           <div className="accordion-item bg-light p-1">
@@ -67,9 +110,11 @@ const GroupItem = ({
                 <div className="text-truncate me-1">
                   <Icons.Group className="me-3" />
                   <ListsInput
+                    key={uid + isInEditMode}
                     name={name}
-                    isFocused={isFocused}
-                    submitEdit={(text) => onSubmitEdit(uid, text)}
+                    isEditMode={isInEditMode}
+                    submitEdit={submitEdit}
+                    onBlur={releaseEditMode}
                     className="me-3"
                   />
                 </div>
@@ -85,8 +130,13 @@ const GroupItem = ({
             </div>
           </div>
         </div>
+        <GroupContextMenu
+          menuProps={menuProps}
+          toggleMenu={toggleMenu}
+          ref={ref}
+          onItemClick={onItemClick}
+        />
       </li>
-
     </>
   );
 };

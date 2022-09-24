@@ -1,5 +1,5 @@
 ﻿import React, { useCallback, useEffect, useRef } from "react";
-import { selectorOrderedListsAndGroups } from "../ducks/selectors/selectorOrderedListsAndGroups";
+import { orderedListsAndGroupsSelector } from "../ducks/selectors/orderedListsAndGroupsSelector";
 import { IList } from "@/constants/types/listsTypes";
 import { selectList, updateGroup, updateList } from "@features/lists";
 import { useDispatch } from "react-redux";
@@ -22,7 +22,7 @@ type Props = {
 const ListBarSection = ({ render }: Props) => {
   const dispatch = useDispatch();
   const defaultLists = useAppSelector((x) => x.lists.defaultLists);
-  const orderedListsGroups = useAppSelector(selectorOrderedListsAndGroups);
+  const orderedListsGroups = useAppSelector(orderedListsAndGroupsSelector);
   const userLists = useAppSelector((x) => x.lists.userLists);
   const selectedList = useAppSelector((x) => x.lists.selectedList);
 

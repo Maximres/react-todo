@@ -20,6 +20,7 @@ export interface IListsState {
   readonly defaultLists: IList[];
   userLists: IList[];
   groups: IGroup[];
-
   selectedList?: IList;
+
+  editItemId?: string
 }

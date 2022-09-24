@@ -9,11 +9,7 @@ import { createGroup, createList } from "@features/lists";
 import { useAppSelector } from "@/constants/types/redux";
 import { IGroup, IList } from "@/constants/types/listsTypes";
 
-const ListFooter = ({
-  setLastCreatedId,
-}: {
-  setLastCreatedId: (id: string) => void;
-}) => {
+const ListFooter = () => {
   const userLists = useAppSelector((x) => x.lists.userLists);
   const groups = useAppSelector((x) => x.lists.groups);
   const dispatch = useDispatch();
@@ -32,17 +28,14 @@ const ListFooter = ({
     const untitledCount = getUntitledCount(userLists, NEW_LIST_NAME);
     const number = untitledCount > 0 ? untitledCount : "";
     const name = `${NEW_LIST_NAME} ${number}`.trimEnd();
-    const dispatchResult = dispatch(createList(name));
-    setLastCreatedId(dispatchResult.payload.id);
+    dispatch(createList(name));
   };
 
   const handleGroupCreation = () => {
     const untitledCount = getUntitledCount(groups, NEW_GROUP_NAME);
     const number = untitledCount > 0 ? untitledCount : "";
     const name = `${NEW_GROUP_NAME} ${number}`.trimEnd();
-    const dispatchResult = dispatch(createGroup(name));
-    setLastCreatedId(dispatchResult.payload.id);
-
+    dispatch(createGroup(name));
   };
 
   return (

@@ -1,4 +1,4 @@
-﻿import React, { useContext, useRef } from "react";
+﻿import React from "react";
 import Icons from "@/components/AppIcons";
 import cn from "classnames";
 import { ListsInput } from "./ListsInput";
@@ -8,6 +8,9 @@ import useValidId from "@/utils/hooks/useValidId";
 import "@szhsin/react-menu/dist/index.css";
 import { useMenuState } from "@szhsin/react-menu";
 import { ListContextMenu } from "@/features/lists/components/ListContextMenu";
+import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
+import { isEditingSelector } from "../ducks/selectors/isEditingSelector";
+import { endEditItem } from "@features/lists";
 
 type Props = {
   uid: string;
@@ -17,7 +20,6 @@ type Props = {
   total: number;
   onClick: (uid: string) => void;
   onSubmitEdit: (uid: string, name: string) => void;
-  isFocused?: boolean;
   isDragDisabled?: boolean;
 
   onDropHover: (
@@ -39,7 +41,6 @@ const ListItem = (props: Props) => {
     uid,
     name,
     parentId,
-    isFocused = false,
     isDragDisabled = false,
     Icon = <Icons.List />,
     total = 0,
@@ -49,9 +50,10 @@ const ListItem = (props: Props) => {
     onDragEnd,
     hoverClass,
   } = props;
+  const dispatch = useAppDispatch();
+  const focusableId = useAppSelector((x) => isEditingSelector(x, uid));
   const dropdownMenuId = useValidId();
   const [menuProps, toggleMenu] = useMenuState();
-  const contextMenuContainer = useRef(null);
 
   const [{ isOverCurrent, isOver }, ref] = useSortableList(
     uid,
@@ -62,6 +64,9 @@ const ListItem = (props: Props) => {
   );
 
   const isSubItem = parentId != null;
+  const submitEdit = (text: string) => {
+    onSubmitEdit(uid, text);
+  };
   return (
     <>
       <li
@@ -77,11 +82,11 @@ const ListItem = (props: Props) => {
         onClick={() => onClick(uid)}
         onContextMenu={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           toggleMenu(true);
         }}
       >
         <div
-          ref={contextMenuContainer}
           className={cn("d-flex align-items-center", {
             " group-item-ms": isSubItem,
             [hoverClass]: isSubItem && isOver,
@@ -92,8 +97,8 @@ const ListItem = (props: Props) => {
           {Icon}
           <ListsInput
             name={name}
-            isFocused={isFocused}
-            submitEdit={(text) => onSubmitEdit(uid, text)}
+            isEditMode={focusableId}
+            submitEdit={submitEdit}
             className="mx-3"
           />
           <span className="badge rounded-pill bg-badge-light text-dark ms-auto fw-light">

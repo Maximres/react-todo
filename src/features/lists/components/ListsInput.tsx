@@ -4,13 +4,14 @@ import classNames from "classnames";
 
 type Props = {
   name: string;
-  isFocused?: boolean;
+  isEditMode?: boolean;
+  onBlur?: () => void;
   submitEdit: (text: string) => void;
   [key: string]: any;
 };
 
-const ListsInput = ({ name, isFocused, submitEdit, ...rest }: Props) => {
-  const [disabled, setDisabled] = useState(!isFocused);
+const ListsInput = ({ name, isEditMode, submitEdit, onBlur = () => {}, ...rest }: Props) => {
+  const [disabled, setDisabled] = useState(!isEditMode);
   const [text, setText] = useState(name);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -25,6 +26,7 @@ const ListsInput = ({ name, isFocused, submitEdit, ...rest }: Props) => {
     }
 
     setDisabled(true);
+    onBlur();
   };
 
   const handleChange = (e: any) => {
@@ -65,7 +67,7 @@ const ListsInput = ({ name, isFocused, submitEdit, ...rest }: Props) => {
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
         disabled={disabled}
-        autoFocus={isFocused}
+        autoFocus={isEditMode}
         ref={inputRef}
         type="text"
         className={classNames(

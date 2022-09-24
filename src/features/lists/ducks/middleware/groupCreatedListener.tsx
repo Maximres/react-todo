@@ -1,5 +1,5 @@
 ﻿import { AppStartListening } from "@/constants/types/redux";
-import { createGroup, createList, selectList } from "@features/lists";
+import { createGroup, startEditItem } from "@features/lists";
 import { dataService } from "@/services/data";
 
 export const groupCreatedListener = (startListening: AppStartListening) => {
@@ -11,8 +11,8 @@ export const groupCreatedListener = (startListening: AppStartListening) => {
       const group = groups.find((t) => t.id === id);
       if (group == null) return;
 
+      dispatch(startEditItem(group.id));
       await dataService.setGroup(group);
-
     },
   });
 };

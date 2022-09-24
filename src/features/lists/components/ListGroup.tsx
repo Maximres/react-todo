@@ -8,13 +8,14 @@ import { useDispatch } from "react-redux";
 import { IGroupedList } from "@/features/lists/ducks/constants/types";
 import { updateGroup, updateList } from "@features/lists";
 import { useDnd } from "@/features/lists/ducks/hooks/useDnd";
+import { RootState, useAppSelector } from "@/constants/types/redux";
+import { createSelector } from "@reduxjs/toolkit";
 
 type Props = {
   items: (IList | IGroupedList)[];
   onItemClick: (uid: string) => void;
   onListEditSubmit: (uid: string, name: string) => void;
   onGroupEditSubmit: (uid: string, name: string) => void;
-  lastCreatedId?: string;
   dndDisabled?: boolean;
 };
 
@@ -23,7 +24,6 @@ const ListGroup = ({
   onItemClick,
   onListEditSubmit,
   onGroupEditSubmit,
-  lastCreatedId,
   dndDisabled = false,
 }: Props) => {
   const dispatch = useDispatch();
@@ -47,7 +47,6 @@ const ListGroup = ({
         Icon={getListIcon(item.iconName)}
         onClick={onItemClick}
         onSubmitEdit={onListEditSubmit}
-        isFocused={item.id === lastCreatedId}
         isDragDisabled={dndDisabled}
         parentId={parentId}
         hoverClass={getHoveringStyle(item.id)}
@@ -72,7 +71,6 @@ const ListGroup = ({
         name={item.name}
         key={item.id}
         uid={item.id}
-        isFocused={item.id === lastCreatedId}
         onSubmitEdit={onGroupEditSubmit}
         onDropHover={onHover}
         hoverClass={getHoveringStyle(item.id)}
