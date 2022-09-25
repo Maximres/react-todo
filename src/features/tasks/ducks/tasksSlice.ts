@@ -10,7 +10,6 @@ const initialState: IState = {
   listId: "",
   listIcon: "",
   listName: "",
-  needSubTasksLoad: false,
 };
 
 const tasksSlice = createSlice({
@@ -37,7 +36,7 @@ const tasksSlice = createSlice({
           dueDate: undefined,
           note: "",
           subTasks: [],
-          order: getOrderNumber()
+          order: getOrderNumber(),
         };
         state.tasks.push(newTask);
       },
@@ -80,10 +79,8 @@ const tasksSlice = createSlice({
           text: action.payload.text,
           createdDate: Number(new Date()),
           parentId: action.payload.parentId,
-          order: getOrderNumber()
-
+          order: getOrderNumber(),
         };
-        state.needSubTasksLoad = true;
         parentTask.subTasks ??= [];
         parentTask.subTasks.push(newSubTask);
       },
@@ -175,11 +172,18 @@ const tasksSlice = createSlice({
         task.subTasks = subs;
       });
     },
+    setTasks: (state, action: PayloadAction<ITask[]>) => {
+      const tasks = action.payload;
+      if (tasks == null) {
+        state.tasks = [];
+        return;
+      }
+
+      state.tasks = tasks;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchSubtasks.fulfilled, (state, action) => {
-      state.needSubTasksLoad = false;
-
       const currentTask = state.tasks.find((x) => x.id === state.selectedRowId);
       if (currentTask == null) return;
 
@@ -187,12 +191,17 @@ const tasksSlice = createSlice({
     });
     builder.addCase(selectList, (state, action) => {
       const list = action.payload;
+      if (list == null) {
+        state.selectedRowId = undefined;
+        state.tasks = [];
+        state.listId = "";
+        return;
+      }
+
       const sameList = state.listId === list.id;
       if (sameList) return;
 
-      state.selectedRowId = undefined;
-
-      state.tasks = list.tasks;
+      state.tasks = list.tasks
       state.listId = list.id;
       state.listName = list.name;
       state.listIcon = list.iconName;
@@ -209,6 +218,7 @@ export const {
   updateTask,
   createTask,
   deleteTask,
+  setTasks,
   setSubtasks,
   deleteSubTask,
   toggleSubTaskChecked,

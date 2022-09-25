@@ -2,7 +2,7 @@
 import { AppStartListening } from "constants/types/redux";
 import { selectedListListener } from "./selectedListListener";
 import { subTaskCreatedListener } from "./subTaskCreatedListener";
-import { taskUpdatedListener } from "./taskUpdatedListener";
+import { taskChangedListener } from "./taskChangedListener";
 import { taskDeletedListener } from "@/features/tasks/ducks/middleware/taskDeletedListener";
 import { taskCreatedListener } from "@/features/tasks/ducks/middleware/taskCreatedListener";
 
@@ -13,6 +13,6 @@ const startAppListeningDetails =
 
 selectedListListener(startAppListeningDetails);
 subTaskCreatedListener(startAppListeningDetails);
-taskUpdatedListener(startAppListeningDetails);
+taskChangedListener(startAppListeningDetails);
 taskDeletedListener(startAppListeningDetails);
 taskCreatedListener(startAppListeningDetails);

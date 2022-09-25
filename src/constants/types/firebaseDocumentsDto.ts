@@ -5,6 +5,7 @@
   groupId: string;
   order: number;
   tasks: TaskDto[];
+  totalTasks: number;
 };
 
 type TaskDto = {

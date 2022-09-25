@@ -32,7 +32,6 @@ export interface IState {
   listIcon: string;
   tasks: ITask[];
   selectedRowId?: string;
-  needSubTasksLoad: boolean;
 }
 
 export interface IAction {

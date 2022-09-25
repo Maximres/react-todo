@@ -6,7 +6,7 @@ export interface IList extends IOrderable {
   name: string;
   groupId?: string;
   iconName: string;
-  tasksTotal: number;
+  totalTasks: number;
   tasks: ITask[];
   selectedTicks?: number;
 }
@@ -20,7 +20,7 @@ export interface IListsState {
   readonly defaultLists: IList[];
   userLists: IList[];
   groups: IGroup[];
-  selectedList?: IList;
+  selectedListId?: string;
 
   editItemId?: string
 }

@@ -1,24 +1,25 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { IGroup, IList, IListsState } from "@/constants/types/listsTypes";
 import assignDeep from "lodash/assignIn";
+import { IGroup, IList, IListsState } from "@/constants/types/listsTypes";
 import { initialFetch } from "@/utils/thunks/initialFetch";
 import { getOrderNumber } from "@/utils/helpers/order";
 import { getUntitledName } from "./helpers/getUntitledListName";
 import { ListGroupNames } from "@/features/tasks/ducks/constants";
+import { createTask, deleteTask } from "@features/tasks";
 
 const defaults = [
   {
     name: "My Day",
     iconName: "MyDay",
     id: "DEFAULT_MY_DAY",
-    tasksTotal: 0,
+    totalTasks: 0,
     groupId: "",
   },
   {
     name: "Important",
     iconName: "Favorite",
     id: "DEFAULT_IMPORTANT",
-    tasksTotal: 0,
+    totalTasks: 0,
     groupId: "",
   },
 ] as IList[];
@@ -41,18 +42,22 @@ const listsSlice = createSlice({
       state.userLists[index] = assignDeep({}, list, action.payload);
     },
     createList: {
-      reducer(state, action: PayloadAction<{ id: string; groupId: string }>) {
-        const name = getUntitledName(
-          state.userLists,
-          ListGroupNames.NEW_LIST_NAME,
-        );
+      reducer(
+        state,
+        action: PayloadAction<
+          { id: string; groupId: string; order: number },
+          string,
+          { getName: (groups: IList[]) => string }
+        >,
+      ) {
+        const name = action.meta.getName(state.userLists);
         const newList: IList = {
           id: action.payload.id,
           tasks: [] as any,
+          totalTasks: 0,
           name: name,
           iconName: "",
-          tasksTotal: 0,
-          order: getOrderNumber(),
+          order: action.payload.order,
           groupId: action.payload.groupId,
         };
         state.userLists.push(newList);
@@ -62,21 +67,63 @@ const listsSlice = createSlice({
           payload: {
             id: nanoid(),
             groupId: groupId ?? "",
+            order: getOrderNumber(),
+          },
+          meta: {
+            getName: (groups: IList[]) =>
+              getUntitledName(groups, ListGroupNames.NEW_LIST_NAME),
           },
         };
       },
     },
+    copyList: {
+      reducer(
+        state,
+        action: PayloadAction<{ id: string; newId: string; order: number }>,
+      ) {
+        const src = state.userLists.find((x) => x.id === action.payload.id);
+
+        if (src == null) throw new Error("Can't find List to copy");
+
+        const copy = assignDeep(<IList>{}, src, <IList>{
+          selectedTicks: Number(Date.now()),
+          id: action.payload.newId,
+          order: action.payload.order,
+          name: `${src.name} [copy]`,
+          totalTasks: 0,
+        });
+        state.userLists.push(copy);
+      },
+      prepare(id: string) {
+        return {
+          payload: {
+            id,
+            newId: nanoid(),
+            order: getOrderNumber(),
+          },
+        };
+      },
+    },
+    deleteList(state, action: PayloadAction<string>) {
+      const index = state.userLists.findIndex((x) => x.id === action.payload);
+      if (index < 0) throw new Error("List is not found");
+      state.userLists.splice(index, 1);
+    },
     createGroup: {
-      reducer(state, action: PayloadAction<{ id: string }>) {
-        const name = getUntitledName(
-          state.groups,
-          ListGroupNames.NEW_GROUP_NAME,
-        );
+      reducer(
+        state,
+        action: PayloadAction<
+          { id: string; order: number },
+          string,
+          { getName: (groups: IGroup[]) => string }
+        >,
+      ) {
+        const name = action.meta.getName(state.groups);
 
         const newGroup: IGroup = {
           id: action.payload.id,
           name: name,
-          order: getOrderNumber(),
+          order: action.payload.order,
         };
         state.groups.push(newGroup);
       },
@@ -84,6 +131,11 @@ const listsSlice = createSlice({
         return {
           payload: {
             id: nanoid(),
+            order: getOrderNumber(),
+          },
+          meta: {
+            getName: (groups: IGroup[]) =>
+              getUntitledName(groups, ListGroupNames.NEW_GROUP_NAME),
           },
         };
       },
@@ -107,12 +159,18 @@ const listsSlice = createSlice({
         x.groupId = "";
       });
     },
-    selectList(state, action: PayloadAction<IList>) {
+    selectList(state, action: PayloadAction<IList | undefined>) {
       //todo: sync  selectedTicks with db for initial load
 
-      state.selectedList = assignDeep({}, action.payload, {
-        selectedTicks: Number(Date.now()),
-      });
+      if (action.payload == null) {
+        state.selectedListId = void 0;
+        return;
+      }
+
+      state.selectedListId = action.payload.id;
+      // state.selectedListId = assignDeep({}, action.payload.id, {
+      //   selectedTicks: Number(Date.now()),
+      // });
     },
     startEditItem(state, action: PayloadAction<string>) {
       state.editItemId = action.payload;
@@ -125,7 +183,7 @@ const listsSlice = createSlice({
     builder.addCase(initialFetch.fulfilled, (state, action) => {
       const [lists, groups] = action.payload;
       state.userLists = lists;
-      state.selectedList = lists?.[0];
+      state.selectedListId = lists?.[0]?.id;
 
       state.groups = groups;
     });
@@ -142,6 +200,8 @@ export const {
   startEditItem,
   endEditItem,
   unGroup,
+  deleteList,
+  copyList,
 } = listsSlice.actions;
 
 export const listsReducer = listsSlice.reducer;

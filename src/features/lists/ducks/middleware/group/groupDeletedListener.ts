@@ -7,11 +7,11 @@ export const groupDeletedListener = (startListening: AppStartListening) => {
     matcher: deleteGroup.match,
     effect: async (
       action,
-      { getState },
+      { getOriginalState },
     ) => {
       const groupId = action.payload;
 
-      const index = getState().lists.groups.findIndex(
+      const index = getOriginalState().lists.groups.findIndex(
         (x) => x.id === action.payload,
       );
       if (index < 0) return;

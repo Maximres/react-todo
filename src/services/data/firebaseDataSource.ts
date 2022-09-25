@@ -95,12 +95,12 @@ const getListsWithSubtasks = (db: Firestore) => {
     const result = lists.map((listDto) => {
       const list = {
         id: listDto.id,
+        name: listDto.name,
+        groupId: listDto.groupId,
+        iconName: listDto.iconName,
+        totalTasks: listDto.tasks.length,
+        order: Number(listDto.order),
       } as IList;
-      list.name = listDto.name;
-      list.groupId = listDto.groupId;
-      list.iconName = listDto.iconName;
-      list.tasksTotal = listDto.tasks.length;
-      list.order = Number(listDto.order);
 
       list.tasks = (listDto.tasks ||= []).map((taskDto) => {
         const task = {
@@ -209,7 +209,7 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
         list.name = listDto.name;
         list.groupId = listDto.groupId;
         list.iconName = listDto.iconName;
-        list.tasksTotal = listDto.tasks.length;
+        list.totalTasks = listDto.tasks.length;
         list.order = Number(listDto.order);
 
         list.tasks = (listDto.tasks ||= []).map((taskDto) => {
@@ -279,7 +279,7 @@ const getListsWithTasks = (db: Firestore) => {
           .map((taskSnap) => {
             const queries = taskSnap.value.docs.map((taskDoc) => {
               tasks.push({ ...(taskDoc.data() as TaskDto), id: taskDoc.id });
-              return ((getCollectionGroup(db, taskDoc.id, scheme.SubTasks) ));
+              return getCollectionGroup(db, taskDoc.id, scheme.SubTasks);
             });
 
             return queries;
@@ -301,7 +301,7 @@ const getListsWithTasks = (db: Firestore) => {
           list.name = listDto.name;
           list.groupId = listDto.groupId;
           list.iconName = listDto.iconName ?? "List";
-          list.tasksTotal = listDto.tasks.length;
+          list.totalTasks = listDto.tasks.length;
           list.order = Number(listDto.order);
 
           list.tasks = (listDto.tasks ||= []).map((taskDto) => {
@@ -337,6 +337,40 @@ const getListsWithTasks = (db: Firestore) => {
 
         resolve(result);
       });
+  });
+};
+
+const getLists = (db: Firestore) => {
+  const lists = [] as ListDto[];
+  return new Promise<IList[]>(async (resolve, reject) => {
+    try {
+      const queryListsSnap = await getDocs(
+        query(collection(db, scheme.Lists), orderBy("order", "asc")),
+      );
+      queryListsSnap.docs.forEach((listDoc) => {
+        lists.push({ ...(listDoc.data() as ListDto), id: listDoc.id });
+      });
+
+      const result = lists.map((listDto) => {
+        const list = {
+          id: listDto.id,
+        } as IList;
+        list.name = listDto.name;
+        list.groupId = listDto.groupId;
+        list.iconName = listDto.iconName ?? "List";
+        list.totalTasks = listDto.tasks.length;
+        list.order = Number(listDto.order);
+
+        list.tasks = [];
+
+        return list;
+      });
+
+      resolve(result);
+    } catch (e) {
+      console.error({ getLists: e });
+      reject([]);
+    }
   });
 };
 
@@ -423,6 +457,57 @@ const getSubtasks = (db: Firestore, taskId: string) => {
   });
 };
 
+const getTasks = (db: Firestore, listId: string) => {
+  const taskDtoList: TaskDto[] = [];
+  return new Promise<ITask[]>(async (resolve, reject) => {
+    try {
+      const tasksQueries = await getCollectionGroup(db, listId, scheme.Tasks);
+
+      tasksQueries.docs.forEach((taskDoc) => {
+        taskDtoList.push({
+          ...(taskDoc.data() as TaskDto),
+          id: taskDoc.id,
+        });
+      });
+      const result = _orderBy(
+        taskDtoList.map((taskDto) => {
+          const task: ITask = {
+            id: taskDto.id,
+            parentId: taskDto.parentId,
+            createdDate: Number(taskDto.createdDate),
+            subTasks: [],
+            order: Number(taskDto.order),
+
+            isImportant: taskDto.isImportant,
+            text: taskDto.text,
+            note: taskDto.note,
+            isChecked: taskDto.isChecked,
+            isMyDay: taskDto.isMyDay,
+
+            dueDate: taskDto.dueDate === 0 ? undefined : taskDto.dueDate,
+            remindDate:
+              taskDto.remindDate === 0 ? undefined : taskDto.remindDate,
+            repeatPeriod: taskDto?.repeatPeriod?.length
+              ? (taskDto.repeatPeriod as [
+                  index1: number,
+                  index2: keyof typeof reminderEnum,
+                ])
+              : undefined,
+          };
+
+          return task;
+        }),
+        ["order"],
+        ["asc"],
+      );
+      resolve(result);
+    } catch (e) {
+      console.error({ getTasks: e });
+      reject([]);
+    }
+  });
+};
+
 const getGroups = (db: Firestore) => {
   const groupDtoList = [] as GroupDto[];
 
@@ -498,20 +583,6 @@ const setTask = async (db: Firestore, task: ITask) => {
   }
 };
 
-const setList = async (db: Firestore, list: IList) => {
-  try {
-    const reference = doc(db, scheme.Lists, list.id);
-    const listDto = convertListToDto(list);
-
-    await setDoc(reference, listDto, { merge: true });
-    return true;
-  } catch (e: any) {
-    console.log("setListErrors");
-    console.error(e);
-    return false;
-  }
-};
-
 const setGroup = async (db: Firestore, group: IGroup) => {
   try {
     const reference = doc(db, scheme.Groups, group.id);
@@ -532,6 +603,20 @@ const updateTask = (db: Firestore, task: ITask) => {
   return updateDoc(reference, taskDto).catch((...args) => {
     console.error({ updateTaskError: args });
   });
+};
+
+const setList = async (db: Firestore, list: IList) => {
+  try {
+    const reference = doc(db, scheme.Lists, list.id);
+    const listDto = convertListToDto(list);
+
+    await setDoc(reference, listDto, { merge: true });
+    return true;
+  } catch (e: any) {
+    console.log("setListErrors");
+    console.error(e);
+    return false;
+  }
 };
 
 const updateList = (db: Firestore, list: IList) => {
@@ -581,6 +666,14 @@ const deleteGroup = (db: Firestore, id: string) => {
   });
 };
 
+const deleteList = (db: Firestore, id: string) => {
+  const reference = doc(db, scheme.Lists, id);
+
+  return deleteDoc(reference).catch((...args) => {
+    console.error({ deleteListError: args });
+  });
+};
+
 const getCollectionQuery = (
   firestore: Firestore,
   collectionName: string,
@@ -597,9 +690,7 @@ function getCollectionGroup(
   documentId: string,
   collectionName: string,
 ) {
-  return getDocs(
-    getCollectionQuery(firestore, collectionName, documentId),
-  );
+  return getDocs(getCollectionQuery(firestore, collectionName, documentId));
 }
 
 function convertToDto(task: ITask) {
@@ -628,6 +719,7 @@ function convertListToDto(list: IList) {
     iconName: list.iconName,
     tasks: [] as any,
     order: Number(list.order),
+    totalTasks: list.totalTasks,
   };
   return listDto;
 }
@@ -642,11 +734,13 @@ function convertGroupToDto(group: IGroup) {
 }
 
 export const FirebaseDataSource = {
-  getListsWithSubtasks,
+  getLists,
   getListsWithTasks,
+  getListsWithSubtasks,
   updateList,
-  setList,
+  setList: setList,
   ungroupLists,
+  deleteList,
 
   getGroups,
   setGroup,
@@ -659,6 +753,7 @@ export const FirebaseDataSource = {
   setSubtask,
   setTask,
 
+  getTasks,
   updateTask,
   deleteTask,
 };

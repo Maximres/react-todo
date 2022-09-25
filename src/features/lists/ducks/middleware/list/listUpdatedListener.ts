@@ -16,7 +16,7 @@ export const listUpdatedListener = (startListening: AppStartListening) => {
       const lists = getState().lists.userLists;
       const list = lists.find((t) => t.id === listId);
       if (list == null) return;
-      await dataService.updateList(list);
+      await dataService.setList(list);
     },
   });
 };

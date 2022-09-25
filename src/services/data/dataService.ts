@@ -7,12 +7,12 @@ import { IGroup, IList } from "@/constants/types/listsTypes";
 const db = getFirestore(firebaseApp);
 
 const dataService = {
-  getListsWithTasks: () => FirebaseDataSource.getListsWithTasks(db),
+  getLists: () => FirebaseDataSource.getLists(db),
   setList: (list: IList) => FirebaseDataSource.setList(db, list),
-  updateList: (list: IList) => FirebaseDataSource.updateList(db, list),
   ungroupLists: (lists: IList[]) => FirebaseDataSource.ungroupLists(db, lists),
   updateGroup: (group: IGroup) => FirebaseDataSource.updateGroup(db, group),
   deleteGroup: (id: string) => FirebaseDataSource.deleteGroup(db, id),
+  deleteList: (id: string) => FirebaseDataSource.deleteList(db, id),
 
   getSubtasksMany: (taskIds: string[]) =>
     FirebaseDataSource.getSubtasksMany(db, taskIds),
@@ -20,6 +20,7 @@ const dataService = {
   setSubtask: (task: ITask, subTask: ISubTask) =>
     FirebaseDataSource.setSubtask(db, task, subTask),
 
+  getTasks: (listId: string) => FirebaseDataSource.getTasks(db, listId),
   setTask: (task: ITask) => FirebaseDataSource.setTask(db, task),
   deleteTask: (id: string, parentId: string) =>
     FirebaseDataSource.deleteTask(db, id, parentId),

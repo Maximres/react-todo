@@ -1,5 +1,5 @@
 ﻿import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { Action, ThunkAction, TypedStartListening } from "@reduxjs/toolkit";
+import { Action, ThunkAction, TypedStartListening, isAllOf } from "@reduxjs/toolkit";
 import store from "@/app/configs/store";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;

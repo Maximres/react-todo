@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/constants/types/redux";
 import SimpleBar from "simplebar-react";
 import { IGroupedList } from "../ducks/constants/types";
+import { selectedListSelector } from "@/features/lists/ducks/selectors/selectedListSelector";
 
 export type RenderProps = {
   defaultItems: IList[];
@@ -24,7 +25,7 @@ const ListBarSection = ({ render }: Props) => {
   const defaultLists = useAppSelector((x) => x.lists.defaultLists);
   const orderedListsGroups = useAppSelector(orderedListsAndGroupsSelector);
   const userLists = useAppSelector((x) => x.lists.userLists);
-  const selectedList = useAppSelector((x) => x.lists.selectedList);
+  const selectedList = useAppSelector(selectedListSelector);
 
 
   const handleItemClick = useCallback(

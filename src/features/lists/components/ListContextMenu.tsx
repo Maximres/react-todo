@@ -1,14 +1,16 @@
 ﻿import React, { useContext } from "react";
-import { ControlledMenu, MenuDivider, MenuItem } from "@szhsin/react-menu";
+import { ClickEvent, ControlledMenu, MenuDivider, MenuItem } from "@szhsin/react-menu";
 import { ListItemOperations } from "@/features/lists/ducks/constants/contextMenuOperations";
 
 type Props = {
   menuProps: any;
   toggleMenu: (open?: boolean | undefined) => void;
+  onItemClick: (e: ClickEvent) => void;
+
 };
 
 const ListContextMenu = React.forwardRef(
-  ({ menuProps, toggleMenu }: Props, anchorRef) => {
+  ({ menuProps, toggleMenu, onItemClick }: Props, anchorRef) => {
     return (
       <ControlledMenu
         {...menuProps}
@@ -21,23 +23,7 @@ const ListContextMenu = React.forwardRef(
           e.preventDefault();
           e.stopPropagation();
         }}
-        onItemClick={(e) => {
-          const value = e.value as ListItemOperations;
-          switch (value) {
-            case ListItemOperations.Rename:
-              break;
-            case ListItemOperations.Share:
-              break;
-            case ListItemOperations.Move:
-              break;
-            case ListItemOperations.Ungroup:
-              break;
-            case ListItemOperations.Copy:
-              break;
-            case ListItemOperations.Delete:
-              break;
-          }
-        }}
+        onItemClick={onItemClick}
       >
         <MenuItem value={ListItemOperations.Rename}>Rename list</MenuItem>
         <MenuItem value={ListItemOperations.Share}>Share list</MenuItem>
@@ -47,7 +33,7 @@ const ListContextMenu = React.forwardRef(
         </MenuItem>
         <MenuItem value={ListItemOperations.Copy}>Duplicate list</MenuItem>
         <MenuDivider />
-        <MenuItem value={ListItemOperations.Delete}>Delete list</MenuItem>
+        <MenuItem className="text-danger" value={ListItemOperations.Delete}>Delete list</MenuItem>
       </ControlledMenu>
     );
   },

@@ -2,7 +2,7 @@
 import { unGroup } from "@features/lists";
 import { dataService } from "@/services/data";
 
-export const ungroupListener = (startListening: AppStartListening) => {
+export const listUnGroupedListener = (startListening: AppStartListening) => {
   startListening({
     matcher: unGroup.match,
     effect: async (action, { getState, getOriginalState }) => {

@@ -6,11 +6,12 @@ import { DndElement, DropPosition } from "../ducks/constants/types";
 import { useSortableList } from "../ducks/hooks/useSortableList";
 import useValidId from "@/utils/hooks/useValidId";
 import "@szhsin/react-menu/dist/index.css";
-import { useMenuState } from "@szhsin/react-menu";
+import { ClickEvent, useMenuState } from "@szhsin/react-menu";
 import { ListContextMenu } from "@/features/lists/components/ListContextMenu";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { isEditingSelector } from "../ducks/selectors/isEditingSelector";
-import { endEditItem } from "@features/lists";
+import { ListItemOperations } from "@/features/lists/ducks/constants/contextMenuOperations";
+import { copyList, deleteList, endEditItem, startEditItem } from "@features/lists";
 
 type Props = {
   uid: string;
@@ -34,6 +35,14 @@ type Props = {
     parentId: string | undefined,
   ) => void;
   hoverClass: string;
+};
+
+
+const isListItem = (value: unknown): value is ListItemOperations => {
+  return (
+    value != null &&
+    Object.values(ListItemOperations).includes(value as ListItemOperations)
+  );
 };
 
 const ListItem = (props: Props) => {
@@ -63,10 +72,40 @@ const ListItem = (props: Props) => {
     onDropHover,
   );
 
-  const isSubItem = parentId != null;
   const submitEdit = (text: string) => {
     onSubmitEdit(uid, text);
   };
+
+  const exitEditMode = () => {
+    dispatch(endEditItem());
+  };
+
+  const onItemClick = (e: ClickEvent) => {
+    if (!isListItem(e.value)) return;
+
+    switch (e.value) {
+      case ListItemOperations.Rename:{
+        dispatch(startEditItem(uid));
+        break;
+      }
+      case ListItemOperations.Share:
+        break;
+      case ListItemOperations.Move:
+        break;
+      case ListItemOperations.Ungroup:
+        break;
+      case ListItemOperations.Copy: {
+        dispatch(copyList(uid))
+        break;
+      }
+      case ListItemOperations.Delete: {
+        dispatch(deleteList(uid));
+        break;
+      }
+    }
+  };
+
+  const isSubItem = parentId != null;
   return (
     <>
       <li
@@ -99,6 +138,7 @@ const ListItem = (props: Props) => {
             name={name}
             isEditMode={focusableId}
             submitEdit={submitEdit}
+            onBlur={exitEditMode}
             className="mx-3"
           />
           <span className="badge rounded-pill bg-badge-light text-dark ms-auto fw-light">
@@ -106,9 +146,10 @@ const ListItem = (props: Props) => {
           </span>
         </div>
         <ListContextMenu
+          ref={ref}
           menuProps={menuProps}
           toggleMenu={toggleMenu}
-          ref={ref}
+          onItemClick={onItemClick}
         />
       </li>
     </>
