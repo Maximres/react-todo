@@ -29,12 +29,11 @@ const ListContextMenu = React.forwardRef(
         onItemClick={onItemClick}
       >
         <MenuItem value={ListItemOperations.Rename}>Rename list</MenuItem>
-        <MenuItem value={ListItemOperations.Share}>Share list</MenuItem>
         {canMove && (
           <>
             <SubMenu label="Move list to..." direction="bottom">
               {groups!.map((x) => (
-                <MenuItem value={[ListItemOperations.Move, x.id]}>{x.name}</MenuItem>
+                <MenuItem key={x.id} value={[ListItemOperations.Move, x.id]}>{x.name}</MenuItem>
               ))}
             </SubMenu>
           </>

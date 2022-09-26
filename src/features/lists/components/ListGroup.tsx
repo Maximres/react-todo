@@ -69,9 +69,9 @@ const ListGroup = ({
   const renderGroupItem = (item: IGroupedList) => {
     return (
       <GroupItem
-        name={item.name}
         key={item.id}
         uid={item.id}
+        name={item.name}
         onSubmitEdit={onGroupEditSubmit}
         onDropHover={onHover}
         hoverClass={getHoveringStyle(item.id)}

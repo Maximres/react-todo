@@ -101,11 +101,8 @@ const ListItem = (props: Props) => {
       }
       case ListItemOperations.Share:
         break;
-      case ListItemOperations.Move:
-        break;
       case ListItemOperations.Ungroup: {
         dispatch(removeFromGroup({ listId: uid }));
-
         break;
       }
       case ListItemOperations.Copy: {

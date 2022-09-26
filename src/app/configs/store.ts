@@ -27,7 +27,11 @@ const store = configureStore({
     lists: listsReducer,
   },
   middleware: (defaultMiddleware) =>
-    defaultMiddleware()
+    defaultMiddleware({
+      serializableCheck: {
+        ignoredActionPaths: ["meta.getName"],
+      },
+    })
       .concat(listsListenerMiddleware.middleware)
       .concat(tasksListenerMiddleware.middleware)
       .concat(detailsListenerMiddleware.middleware)
