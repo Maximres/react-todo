@@ -11,7 +11,14 @@ import { ListContextMenu } from "@/features/lists/components/ListContextMenu";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { isEditingSelector } from "../ducks/selectors/isEditingSelector";
 import { ListItemOperations } from "@/features/lists/ducks/constants/contextMenuOperations";
-import { copyList, deleteList, endEditItem, startEditItem } from "@features/lists";
+import {
+  copyList,
+  deleteList,
+  endEditItem,
+  moveItem,
+  removeFromGroup,
+  startEditItem,
+} from "@features/lists";
 
 type Props = {
   uid: string;
@@ -29,20 +36,16 @@ type Props = {
     dropPosition: DropPosition,
     parentId?: string,
   ) => void;
-  onDragEnd: (
-    id: string | null,
-    type: DndElement,
-    parentId: string | undefined,
-  ) => void;
+  onDragEnd: (id: string | null, type: DndElement, parentId: string | undefined) => void;
   hoverClass: string;
 };
 
+const isListItemOperation = (value: unknown): value is ListItemOperations => {
+  return value != null && Object.values(ListItemOperations).includes(value as ListItemOperations);
+};
 
-const isListItem = (value: unknown): value is ListItemOperations => {
-  return (
-    value != null &&
-    Object.values(ListItemOperations).includes(value as ListItemOperations)
-  );
+const isListItemMoveOperation = (value: unknown): value is [ListItemOperations.Move, string] => {
+  return value != null && Array.isArray(value) && value.length === 2;
 };
 
 const ListItem = (props: Props) => {
@@ -61,6 +64,7 @@ const ListItem = (props: Props) => {
   } = props;
   const dispatch = useAppDispatch();
   const focusableId = useAppSelector((x) => isEditingSelector(x, uid));
+  const groups = useAppSelector((x) => x.lists.groups);
   const dropdownMenuId = useValidId();
   const [menuProps, toggleMenu] = useMenuState();
 
@@ -81,10 +85,17 @@ const ListItem = (props: Props) => {
   };
 
   const onItemClick = (e: ClickEvent) => {
-    if (!isListItem(e.value)) return;
+    if (isListItemMoveOperation(e.value)) {
+      const [_, groupId] = e.value;
+      dispatch(moveItem({ listId: uid, groupId: groupId }));
+    }
+    
+    if (!isListItemOperation(e.value)) {
+      return;
+    }
 
     switch (e.value) {
-      case ListItemOperations.Rename:{
+      case ListItemOperations.Rename: {
         dispatch(startEditItem(uid));
         break;
       }
@@ -92,15 +103,20 @@ const ListItem = (props: Props) => {
         break;
       case ListItemOperations.Move:
         break;
-      case ListItemOperations.Ungroup:
+      case ListItemOperations.Ungroup: {
+        dispatch(removeFromGroup({ listId: uid }));
+
         break;
+      }
       case ListItemOperations.Copy: {
-        dispatch(copyList(uid))
+        dispatch(copyList(uid));
         break;
       }
       case ListItemOperations.Delete: {
         dispatch(deleteList(uid));
         break;
+      }
+      default: {
       }
     }
   };
@@ -150,6 +166,7 @@ const ListItem = (props: Props) => {
           menuProps={menuProps}
           toggleMenu={toggleMenu}
           onItemClick={onItemClick}
+          groups={groups}
         />
       </li>
     </>

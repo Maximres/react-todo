@@ -6,7 +6,7 @@ export const listUnGroupedListener = (startListening: AppStartListening) => {
   startListening({
     matcher: unGroup.match,
     effect: async (action, { getState, getOriginalState }) => {
-      const groupId = action.payload;
+      const groupId = action.payload.groupId;
 
       const ungroupedList = getOriginalState()
         .lists.userLists.filter((x) => x.groupId === groupId)

@@ -77,7 +77,7 @@ const GroupItem = ({
         break;
       }
       case GroupItemOperations.Ungroup: {
-        dispatch(unGroup(uid));
+        dispatch(unGroup({groupId: uid}));
         break;
       }
       case GroupItemOperations.Delete: {

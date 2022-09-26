@@ -5,7 +5,6 @@ import { initialFetch } from "@/utils/thunks/initialFetch";
 import { getOrderNumber } from "@/utils/helpers/order";
 import { getUntitledName } from "./helpers/getUntitledListName";
 import { ListGroupNames } from "@/features/tasks/ducks/constants";
-import { createTask, deleteTask } from "@features/tasks";
 
 const defaults = [
   {
@@ -34,9 +33,7 @@ const listsSlice = createSlice({
   initialState: initialState,
   reducers: {
     updateList(state, action: PayloadAction<IList>) {
-      const index = state.userLists.findIndex(
-        (x) => x.id === action.payload.id,
-      );
+      const index = state.userLists.findIndex((x) => x.id === action.payload.id);
       if (index < 0) throw new Error("List is not found");
       const list = state.userLists[index];
       state.userLists[index] = assignDeep({}, list, action.payload);
@@ -70,17 +67,13 @@ const listsSlice = createSlice({
             order: getOrderNumber(),
           },
           meta: {
-            getName: (groups: IList[]) =>
-              getUntitledName(groups, ListGroupNames.NEW_LIST_NAME),
+            getName: (groups: IList[]) => getUntitledName(groups, ListGroupNames.NEW_LIST_NAME),
           },
         };
       },
     },
     copyList: {
-      reducer(
-        state,
-        action: PayloadAction<{ id: string; newId: string; order: number }>,
-      ) {
+      reducer(state, action: PayloadAction<{ id: string; newId: string; order: number }>) {
         const src = state.userLists.find((x) => x.id === action.payload.id);
 
         if (src == null) throw new Error("Can't find List to copy");
@@ -134,8 +127,7 @@ const listsSlice = createSlice({
             order: getOrderNumber(),
           },
           meta: {
-            getName: (groups: IGroup[]) =>
-              getUntitledName(groups, ListGroupNames.NEW_GROUP_NAME),
+            getName: (groups: IGroup[]) => getUntitledName(groups, ListGroupNames.NEW_GROUP_NAME),
           },
         };
       },
@@ -151,13 +143,25 @@ const listsSlice = createSlice({
       if (index < 0) throw new Error("Group is not found");
       state.groups.splice(index, 1);
     },
-    unGroup(state, action: PayloadAction<string>) {
-      const listsToUngroup = state.userLists.filter(
-        (x) => x.groupId === action.payload,
-      );
+    unGroup(state, action: PayloadAction<{ groupId: string }>) {
+      const listsToUngroup = state.userLists.filter((x) => x.groupId === action.payload.groupId);
       listsToUngroup.forEach((x) => {
         x.groupId = "";
       });
+    },
+    moveItem(state, action: PayloadAction<{ listId: string; groupId: string }>) {
+      const groupIndex = state.groups.findIndex((x) => x.id === action.payload.groupId);
+      if (groupIndex < 0) throw new Error("Target Group is not found");
+      const list = state.userLists.find((x) => x.id === action.payload.listId);
+
+      if (list == null) throw new Error("List to move is not found");
+      list.groupId = action.payload.groupId;
+    },
+    removeFromGroup(state, action: PayloadAction<{ listId: string }>) {
+      const list = state.userLists.find((x) => x.id === action.payload.listId);
+      if (list == null) throw new Error("List is not found");
+
+      list.groupId = "";
     },
     selectList(state, action: PayloadAction<IList | undefined>) {
       //todo: sync  selectedTicks with db for initial load
@@ -202,6 +206,8 @@ export const {
   unGroup,
   deleteList,
   copyList,
+  removeFromGroup,
+  moveItem,
 } = listsSlice.actions;
 
 export const listsReducer = listsSlice.reducer;
