@@ -3,21 +3,13 @@ import { TasksRows } from "@/features/tasks/components/TasksRows";
 import { useAppSelector } from "@/constants/types/redux";
 import SimpleBar from "simplebar-react";
 import { useDrop } from "react-dnd";
-import _orderBy from "lodash/orderBy";
+import { orderedTasksSelector } from "@/features/tasks/ducks/selectors/orderedTasksSelector";
 
-const TasksTableSection = () => {
-  const tasks = useAppSelector((s) => s.tasks.tasks);
+const TasksSection = () => {
+  const tasks = useAppSelector(orderedTasksSelector);
   const selectedId = useAppSelector((s) => s.tasks.selectedRowId) ?? "";
 
-  const goneDoneTasks = useMemo(
-    () =>
-      _orderBy(
-        tasks.filter((x) => !x.isChecked),
-        ["order"],
-        ["asc"],
-      ),
-    [tasks],
-  );
+  const goneDoneTasks = useMemo(() => tasks.filter((x) => !x.isChecked), [tasks]);
   const doneTasks = useMemo(() => tasks.filter((x) => x.isChecked), [tasks]);
 
   const [{ getItem, isOver, canDrop }, drop] = useDrop(() => ({
@@ -58,4 +50,4 @@ const TasksTableSection = () => {
   );
 };
 
-export { TasksTableSection };
+export { TasksSection };

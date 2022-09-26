@@ -3,6 +3,7 @@ import Icons from "@/components/AppIcons";
 import React, { memo, useRef } from "react";
 import { ITask } from "@/constants/types/tasksTypes";
 import { useDrag, useDrop } from "react-dnd";
+import { useSortableTasks } from "@/features/tasks/ducks/hooks/useSortableTasks";
 
 type Props = {
   task: ITask;
@@ -25,42 +26,7 @@ const TaskComponent = ({
   borderCn,
   onDragEnd,
 }: Props) => {
-  const ref = useRef<HTMLTableRowElement>(null);
-
-  const [, drag] = useDrag(() => ({
-    type: "task",
-    item: () => ({ id: task.id, type: "task" }),
-    end: (item) => {
-      onDragEnd(item.id);
-    },
-  }));
-
-  const [, drop] = useDrop(() => ({
-    accept: "task",
-    hover: (item: any, monitor) => {
-      if (!ref.current) return;
-
-      const dragId = item.id;
-      const dropId = task.id;
-
-      // hovering itself
-      if (dragId === dropId) {
-        handleDrag(null, false);
-        return;
-      }
-
-      const dropRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleY = (dropRect.bottom - dropRect.top) / 2;
-      const clientOffset = monitor.getClientOffset();
-      const clientPositionY = clientOffset?.y ?? 0;
-      const hoverClientY = clientPositionY - dropRect.top;
-      const movingUpwards = hoverClientY <= hoverMiddleY;
-
-      handleDrag(dropId, movingUpwards);
-    },
-  }));
-
-  drag(drop(ref));
+  const [ref] = useSortableTasks(task.id, onDragEnd, handleDrag);
 
   return (
     <tr

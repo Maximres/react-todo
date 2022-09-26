@@ -3,7 +3,7 @@ import Icons from "@/components/AppIcons";
 import { createTask } from "@features/tasks";
 import { useAppDispatch } from "@/constants/types/redux";
 
-const CreateTaskFooter = () => {
+const TasksFooter = () => {
   const dispatch = useAppDispatch();
 
   const [isFocused, setFocused] = useState(false);
@@ -62,4 +62,4 @@ const CreateTaskFooter = () => {
   );
 };
 
-export { CreateTaskFooter };
+export { TasksFooter };

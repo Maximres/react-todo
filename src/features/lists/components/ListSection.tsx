@@ -5,22 +5,10 @@ import { selectList, updateGroup, updateList } from "@features/lists";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/constants/types/redux";
 import SimpleBar from "simplebar-react";
-import { IGroupedList } from "../ducks/constants/types";
-import { selectedListSelector } from "@/features/lists/ducks/selectors/selectedListSelector";
+import { selectedListSelector } from "../ducks/selectors/selectedListSelector";
+import ListGroup from "@/features/lists/components/ListGroup";
 
-export type RenderProps = {
-  defaultItems: IList[];
-  items: (IList | IGroupedList)[];
-  itemClick: (uid: string) => void;
-  editListSubmit: (uid: string, name: string) => void;
-  editGroupSubmit: (uid: string, name: string) => void;
-};
-
-type Props = {
-  render: (args: RenderProps) => JSX.Element;
-};
-
-const ListBarSection = ({ render }: Props) => {
+const ListSection = () => {
   const dispatch = useDispatch();
   const defaultLists = useAppSelector((x) => x.lists.defaultLists);
   const orderedListsGroups = useAppSelector(orderedListsAndGroupsSelector);
@@ -58,17 +46,24 @@ const ListBarSection = ({ render }: Props) => {
     <section className="flex-grow-1 overflow-hidden">
       <SimpleBar className="h-100" scrollbarMaxSize={200} autoHide={false} forceVisible={true}>
         <div className="w-100 pe-1 pb-1">
-          {render({
-            defaultItems: defaultLists,
-            items: orderedListsGroups,
-            itemClick: handleItemClick,
-            editListSubmit: handleListEditSubmit,
-            editGroupSubmit: handleGroupEditSubmit,
-          })}
+          <ListGroup
+            items={defaultLists}
+            onItemClick={handleItemClick}
+            onListEditSubmit={handleListEditSubmit}
+            onGroupEditSubmit={handleGroupEditSubmit}
+            dndDisabled={true}
+          />
+          <hr className="w-100 m-0" />
+          <ListGroup
+            items={orderedListsGroups}
+            onItemClick={handleItemClick}
+            onListEditSubmit={handleListEditSubmit}
+            onGroupEditSubmit={handleGroupEditSubmit}
+          />
         </div>
       </SimpleBar>
     </section>
   );
 };
 
-export { ListBarSection };
+export { ListSection };

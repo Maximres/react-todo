@@ -2,12 +2,12 @@
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { IList } from "@/constants/types/listsTypes";
 import { updateList } from "@features/lists";
-import { selectCurrentList } from "@/features/tasks/ducks/selectors/selectCurrentList";
+import { currentListSelector } from "@/features/tasks/ducks/selectors/currentListSelector";
 import classNames from "classnames";
 
-const ListInfoHeader = () => {
+const ListTasksHeader = () => {
   const dispatch = useAppDispatch();
-  const list = useAppSelector(selectCurrentList);
+  const list = useAppSelector(currentListSelector);
 
   if (list == null) return <></>;
 
@@ -40,4 +40,4 @@ const ListInfoHeader = () => {
   );
 };
 
-export { ListInfoHeader };
+export { ListTasksHeader };

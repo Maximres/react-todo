@@ -345,7 +345,7 @@ const getLists = (db: Firestore) => {
         list.name = listDto.name;
         list.groupId = listDto.groupId;
         list.iconName = listDto.iconName ?? "List";
-        list.totalTasks = listDto.tasks.length;
+        list.totalTasks = listDto.totalTasks;
         list.order = Number(listDto.order);
 
         list.tasks = [];
@@ -480,8 +480,7 @@ const getTasks = (db: Firestore, listId: string) => {
 
           return task;
         }),
-        ["order"],
-        ["asc"],
+        ["order", "asc"],
       );
       resolve(result);
     } catch (e) {

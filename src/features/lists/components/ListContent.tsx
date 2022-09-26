@@ -1,34 +1,14 @@
 ﻿import React from "react";
-import { ListBarSection, RenderProps } from "@/features/lists/components/ListBarSection";
+import { ListSection } from "@/features/lists/components/ListSection";
 import { ListFooter } from "@/features/lists/components/ListFooter";
-import ListGroup from "@/features/lists/components/ListGroup";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 
 const ListContent = () => {
-  const renderChild = (render: RenderProps) => (
-    <>
-      <ListGroup
-        items={render.defaultItems}
-        onItemClick={render.itemClick}
-        onListEditSubmit={render.editListSubmit}
-        onGroupEditSubmit={render.editGroupSubmit}
-        dndDisabled={true}
-      />
-      <hr className="w-100 m-0" />
-      <ListGroup
-        items={render.items}
-        onItemClick={render.itemClick}
-        onListEditSubmit={render.editListSubmit}
-        onGroupEditSubmit={render.editGroupSubmit}
-      />
-    </>
-  );
-
   return (
     <>
       <DndProvider backend={HTML5Backend}>
-        <ListBarSection render={renderChild} />
+        <ListSection />
         <ListFooter />
       </DndProvider>
     </>
