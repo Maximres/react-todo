@@ -2,7 +2,9 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "@/*": ["./*"],
+      "@/*": [
+        "./*"
+      ],
       "@features/details": [
         "features/details/index.ts"
       ],

@@ -115,7 +115,6 @@
   background-color: #e2e3e5 !important;
 }
 
-
 .col-check-width {
   width: 50px;
   min-width: 50px;
@@ -129,6 +128,7 @@
   padding-top: 2.75rem !important;
   padding-bottom: 2.75rem !important;
 }
+
 .pt-xxl {
   padding-top: 5rem !important;
 }
@@ -160,17 +160,16 @@
 }
 
 .drag-top {
-  box-shadow: 0px -3px 0px 0px rgba(0,0,0,0.74) !important;
+  box-shadow: 0px -3px 0px 0px rgba(0, 0, 0, 0.74) !important;
 }
+
 .drag-bottom {
-  box-shadow: 0px 3px 0px 0px rgba(135, 135, 221,0.74) !important;
+  box-shadow: 0px 3px 0px 0px rgba(135, 135, 221, 0.74) !important;
 }
 
 .drag-around {
-  box-shadow: 0px 3px 0px 0px rgba(0, 0, 0, 0.74),
-  -3px 0px 0px 0px rgba(0, 0, 0, 0.74) inset,
-  3px 0px 0px 0px rgba(0, 0, 0, 0.74) inset,
-  0px -3px 0px 0px rgba(0, 0, 0, 0.74) !important;
+  box-shadow: 0px 3px 0px 0px rgba(0, 0, 0, 0.74), -3px 0px 0px 0px rgba(0, 0, 0, 0.74) inset,
+    3px 0px 0px 0px rgba(0, 0, 0, 0.74) inset, 0px -3px 0px 0px rgba(0, 0, 0, 0.74) !important;
 }
 
 .szh-menu-container .szh-menu {

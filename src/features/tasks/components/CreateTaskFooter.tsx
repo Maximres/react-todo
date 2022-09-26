@@ -33,12 +33,7 @@ const CreateTaskFooter = () => {
   const handleNewTask = (
     <>
       <div className="input-group-text">
-        <input
-          className="form-check-input"
-          value=""
-          type="radio"
-          onChange={handleNewTaskSubmit}
-        />
+        <input className="form-check-input" value="" type="radio" onChange={handleNewTaskSubmit} />
       </div>
     </>
   );

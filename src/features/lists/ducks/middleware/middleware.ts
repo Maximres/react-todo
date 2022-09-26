@@ -12,8 +12,7 @@ import { totalTasksListener } from "./totalTasksListener";
 
 export const listsListenerMiddleware = createListenerMiddleware();
 
-const startAppListeningDetails =
-  listsListenerMiddleware.startListening as AppStartListening;
+const startAppListeningDetails = listsListenerMiddleware.startListening as AppStartListening;
 
 listUpdatedListener(startAppListeningDetails);
 listCreatedListener(startAppListeningDetails);

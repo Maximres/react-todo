@@ -33,7 +33,9 @@ const ListContextMenu = React.forwardRef(
           <>
             <SubMenu label="Move list to..." direction="bottom">
               {groups!.map((x) => (
-                <MenuItem key={x.id} value={[ListItemOperations.Move, x.id]}>{x.name}</MenuItem>
+                <MenuItem key={x.id} value={[ListItemOperations.Move, x.id]}>
+                  {x.name}
+                </MenuItem>
               ))}
             </SubMenu>
           </>

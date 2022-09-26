@@ -1,10 +1,5 @@
 ﻿import React from "react";
-import {
-  ClickEvent,
-  ControlledMenu,
-  MenuDivider,
-  MenuItem,
-} from "@szhsin/react-menu";
+import { ClickEvent, ControlledMenu, MenuDivider, MenuItem } from "@szhsin/react-menu";
 import { GroupItemOperations } from "../ducks/constants/contextMenuOperations";
 
 type Props = {
@@ -32,13 +27,13 @@ const GroupContextMenu = React.forwardRef(
       >
         <MenuItem value={GroupItemOperations.Rename}>Rename group</MenuItem>
         <MenuItem value={GroupItemOperations.Add}>New list</MenuItem>
-        {!isDeletable && (
-          <MenuItem value={GroupItemOperations.Ungroup}>Ungroup list</MenuItem>
-        )}
+        {!isDeletable && <MenuItem value={GroupItemOperations.Ungroup}>Ungroup list</MenuItem>}
         {isDeletable && (
           <>
             <MenuDivider />
-            <MenuItem className="text-danger" value={GroupItemOperations.Delete}>Delete group</MenuItem>
+            <MenuItem className="text-danger" value={GroupItemOperations.Delete}>
+              Delete group
+            </MenuItem>
           </>
         )}
       </ControlledMenu>

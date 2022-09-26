@@ -13,12 +13,7 @@ import {
   where,
   writeBatch,
 } from "firebase/firestore";
-import {
-  GroupDto,
-  ListDto,
-  SubTaskDto,
-  TaskDto,
-} from "@/constants/types/firebaseDocumentsDto";
+import { GroupDto, ListDto, SubTaskDto, TaskDto } from "@/constants/types/firebaseDocumentsDto";
 import { IGroup, IList } from "@/constants/types/listsTypes";
 import scheme from "@/constants/enums/firebaseCollectionScheme";
 import { isFulfilled, isRejected } from "@/utils/helpers/promiseResolver";
@@ -47,16 +42,14 @@ const getListsWithSubtasks = (db: Firestore) => {
       console.error({ "task req rejected: ": rejected });
     });
 
-    const subTasksQueries = queryTaskSnaps
-      .filter(isFulfilled)
-      .map((taskSnap) => {
-        const queries = taskSnap.value.docs.map((taskDoc) => {
-          tasks.push({ ...(taskDoc.data() as TaskDto), id: taskDoc.id });
-          return getCollectionGroup(db, taskDoc.id, scheme.SubTasks);
-        });
-
-        return queries;
+    const subTasksQueries = queryTaskSnaps.filter(isFulfilled).map((taskSnap) => {
+      const queries = taskSnap.value.docs.map((taskDoc) => {
+        tasks.push({ ...(taskDoc.data() as TaskDto), id: taskDoc.id });
+        return getCollectionGroup(db, taskDoc.id, scheme.SubTasks);
       });
+
+      return queries;
+    });
 
     const flattenQueries = flattenDeep(subTasksQueries);
     const subTaskSnaps = await Promise.allSettled(flattenQueries);
@@ -274,16 +267,14 @@ const getListsWithTasks = (db: Firestore) => {
           console.error({ "task req rejected: ": rejected });
         });
 
-        const subTasksQueries = queryTaskSnaps
-          .filter(isFulfilled)
-          .map((taskSnap) => {
-            const queries = taskSnap.value.docs.map((taskDoc) => {
-              tasks.push({ ...(taskDoc.data() as TaskDto), id: taskDoc.id });
-              return getCollectionGroup(db, taskDoc.id, scheme.SubTasks);
-            });
-
-            return queries;
+        const subTasksQueries = queryTaskSnaps.filter(isFulfilled).map((taskSnap) => {
+          const queries = taskSnap.value.docs.map((taskDoc) => {
+            tasks.push({ ...(taskDoc.data() as TaskDto), id: taskDoc.id });
+            return getCollectionGroup(db, taskDoc.id, scheme.SubTasks);
           });
+
+          return queries;
+        });
       })
       .then(() => {
         tasks.forEach((t) => {
@@ -320,13 +311,9 @@ const getListsWithTasks = (db: Firestore) => {
 
             task.isMyDay = taskDto.isMyDay;
             task.dueDate = taskDto.dueDate === 0 ? undefined : taskDto.dueDate;
-            task.remindDate =
-              taskDto.remindDate === 0 ? undefined : taskDto.remindDate;
+            task.remindDate = taskDto.remindDate === 0 ? undefined : taskDto.remindDate;
             task.repeatPeriod = taskDto?.repeatPeriod?.length
-              ? (taskDto.repeatPeriod as [
-                  index1: number,
-                  index2: keyof typeof reminderEnum,
-                ])
+              ? (taskDto.repeatPeriod as [index1: number, index2: keyof typeof reminderEnum])
               : undefined;
 
             return task;
@@ -485,13 +472,9 @@ const getTasks = (db: Firestore, listId: string) => {
             isMyDay: taskDto.isMyDay,
 
             dueDate: taskDto.dueDate === 0 ? undefined : taskDto.dueDate,
-            remindDate:
-              taskDto.remindDate === 0 ? undefined : taskDto.remindDate,
+            remindDate: taskDto.remindDate === 0 ? undefined : taskDto.remindDate,
             repeatPeriod: taskDto?.repeatPeriod?.length
-              ? (taskDto.repeatPeriod as [
-                  index1: number,
-                  index2: keyof typeof reminderEnum,
-                ])
+              ? (taskDto.repeatPeriod as [index1: number, index2: keyof typeof reminderEnum])
               : undefined,
           };
 
@@ -512,9 +495,7 @@ const getGroups = (db: Firestore) => {
   const groupDtoList = [] as GroupDto[];
 
   return new Promise<IGroup[]>((resolve) => {
-    const groupsQueries = getDocs(
-      query(collection(db, scheme.Groups), orderBy("order", "asc")),
-    );
+    const groupsQueries = getDocs(query(collection(db, scheme.Groups), orderBy("order", "asc")));
     groupsQueries
       .then((groupSnap) => {
         groupSnap.docs.forEach((groupDoc) => {
@@ -564,13 +545,7 @@ const setSubtask = async (db: Firestore, task: ITask, subTask: ISubTask) => {
 
 const setTask = async (db: Firestore, task: ITask) => {
   try {
-    const reference = doc(
-      db,
-      scheme.Lists,
-      task.parentId,
-      scheme.Tasks,
-      task.id,
-    );
+    const reference = doc(db, scheme.Lists, task.parentId, scheme.Tasks, task.id);
     const taskDto = convertToDto(task);
     await setDoc(reference, taskDto, { merge: true });
 
@@ -674,22 +649,14 @@ const deleteList = (db: Firestore, id: string) => {
   });
 };
 
-const getCollectionQuery = (
-  firestore: Firestore,
-  collectionName: string,
-  documentId: string,
-) =>
+const getCollectionQuery = (firestore: Firestore, collectionName: string, documentId: string) =>
   query(
     collectionGroup(firestore, collectionName),
     orderBy("order", "asc"),
     where("parentId", "==", documentId),
   );
 
-function getCollectionGroup(
-  firestore: Firestore,
-  documentId: string,
-  collectionName: string,
-) {
+function getCollectionGroup(firestore: Firestore, documentId: string, collectionName: string) {
   return getDocs(getCollectionQuery(firestore, collectionName, documentId));
 }
 

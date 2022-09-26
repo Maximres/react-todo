@@ -26,11 +26,7 @@ const AppErrorBoundary = ({ children }: Props) => {
   const forceUpdate = useCallback(() => setState((x) => !x), []);
 
   return (
-    <ErrorBoundary
-      resetKeys={[state]}
-      onReset={forceUpdate}
-      fallbackRender={ErrorFallback}
-    >
+    <ErrorBoundary resetKeys={[state]} onReset={forceUpdate} fallbackRender={ErrorFallback}>
       {children}
     </ErrorBoundary>
   );

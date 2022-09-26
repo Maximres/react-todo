@@ -1,18 +1,11 @@
-﻿import {
-  DndElement,
-  DropPosition,
-} from "@/features/lists/ducks/constants/types";
+﻿import { DndElement, DropPosition } from "@/features/lists/ducks/constants/types";
 import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 
 const useSortableGroup = (
   uid: string,
   onDragEnd: (id: string | null, type: DndElement, parentId?: string) => void,
-  onDropHover: (
-    dropId: string | null,
-    dropType: DndElement,
-    position: DropPosition,
-  ) => void,
+  onDropHover: (dropId: string | null, dropType: DndElement, position: DropPosition) => void,
 ) => {
   const ref = useRef<HTMLLIElement>(null);
 
@@ -68,16 +61,14 @@ const useSortableGroup = (
 
       const topDropYBaseline = dropY + thirdHeight;
       const centerDropYBaseline = dropY + thirdHeight * 2;
-      const topPartHovered =
-        clientPositionY >= dropY && clientPositionY <= topDropYBaseline;
+      const topPartHovered = clientPositionY >= dropY && clientPositionY <= topDropYBaseline;
       if (topPartHovered) {
         onDropHover(dropId, "group", "above");
         return;
       }
 
       const centerPartHovered =
-        clientPositionY > topDropYBaseline &&
-        clientPositionY <= centerDropYBaseline;
+        clientPositionY > topDropYBaseline && clientPositionY <= centerDropYBaseline;
       const draggingList = item.type === "list";
       if (centerPartHovered && draggingList) {
         onDropHover(dropId, "group", "inside");

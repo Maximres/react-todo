@@ -10,10 +10,7 @@ type Props = {
 const ReminderMenuItems = ({ setReminder, openCalendar }: Props) => {
   return (
     <ul className="dropdown-menu" style={{ width: "300px" }}>
-      <li
-        className="dropdown-item pointer"
-        onClick={(e) => setReminder(reminderEnum.LATER_TODAY)}
-      >
+      <li className="dropdown-item pointer" onClick={(e) => setReminder(reminderEnum.LATER_TODAY)}>
         <div className="d-flex align-items-center">
           <span className="me-2">
             <Icons.ClockRotate />
@@ -23,10 +20,7 @@ const ReminderMenuItems = ({ setReminder, openCalendar }: Props) => {
           </button>
         </div>
       </li>
-      <li
-        className="dropdown-item pointer"
-        onClick={() => setReminder(reminderEnum.TOMORROW)}
-      >
+      <li className="dropdown-item pointer" onClick={() => setReminder(reminderEnum.TOMORROW)}>
         <div className="d-flex align-items-center">
           <span className="me-2">
             <Icons.Tomorrow />
@@ -36,10 +30,7 @@ const ReminderMenuItems = ({ setReminder, openCalendar }: Props) => {
           </button>
         </div>
       </li>
-      <li
-        className="dropdown-item pointer"
-        onClick={() => setReminder(reminderEnum.NEXT_WEEK)}
-      >
+      <li className="dropdown-item pointer" onClick={() => setReminder(reminderEnum.NEXT_WEEK)}>
         <div className="d-flex align-items-center">
           <span className="me-2">
             <Icons.NextWeek />

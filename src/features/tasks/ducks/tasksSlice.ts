@@ -68,9 +68,7 @@ const tasksSlice = createSlice({
           subId: string;
         }>,
       ) {
-        const parentTask = state.tasks.find(
-          (t) => t.id === action.payload.parentId,
-        );
+        const parentTask = state.tasks.find((t) => t.id === action.payload.parentId);
         if (parentTask == null) return;
 
         const newSubTask: ISubTask = {
@@ -100,9 +98,7 @@ const tasksSlice = createSlice({
       const index = state.tasks.findIndex((x) => x.id === state.selectedRowId);
       if (index < 0) return;
 
-      const subIndex = state.tasks[index]!.subTasks?.findIndex(
-        (x) => x.id === action.payload,
-      );
+      const subIndex = state.tasks[index]!.subTasks?.findIndex((x) => x.id === action.payload);
       if (subIndex == null || subIndex < 0) return;
 
       state.tasks[index]!.subTasks!.splice(subIndex, 1);
@@ -119,17 +115,14 @@ const tasksSlice = createSlice({
 
       const payload = action.payload;
       const isChecked = payload.isChecked;
-      const subTask = state.tasks[index]!.subTasks?.find(
-        (p) => p.id === payload.subTaskId,
-      );
+      const subTask = state.tasks[index]!.subTasks?.find((p) => p.id === payload.subTaskId);
       if (subTask == null) return;
 
       subTask.isChecked = isChecked;
     },
     toggleSelected: (state, action: PayloadAction<{ task: ITask }>) => {
       const currentId = action.payload.task.id;
-      const toggleWithoutClose =
-        currentId !== state.selectedRowId && state.selectedRowId != null;
+      const toggleWithoutClose = currentId !== state.selectedRowId && state.selectedRowId != null;
       if (toggleWithoutClose) {
         state.selectedRowId = currentId;
         return;
@@ -141,19 +134,13 @@ const tasksSlice = createSlice({
     closeSidebar: (state) => {
       state.selectedRowId = undefined;
     },
-    toggleFavorite: (
-      state,
-      action: PayloadAction<{ task: ITask; isImportant: boolean }>,
-    ) => {
+    toggleFavorite: (state, action: PayloadAction<{ task: ITask; isImportant: boolean }>) => {
       const task = action.payload.task;
       const isImportant = action.payload.isImportant;
       const index = state.tasks.findIndex((x) => x.id === task.id);
       state.tasks[index].isImportant = isImportant;
     },
-    toggleChecked: (
-      state,
-      action: PayloadAction<{ task: ITask; isChecked: boolean }>,
-    ) => {
+    toggleChecked: (state, action: PayloadAction<{ task: ITask; isChecked: boolean }>) => {
       const task = action.payload.task;
       const isChecked = action.payload.isChecked;
       const filtered = state.tasks.filter((x) => x.id !== task.id);
@@ -201,7 +188,7 @@ const tasksSlice = createSlice({
       const sameList = state.listId === list.id;
       if (sameList) return;
 
-      state.tasks = list.tasks
+      state.tasks = list.tasks;
       state.listId = list.id;
       state.listName = list.name;
       state.listIcon = list.iconName;

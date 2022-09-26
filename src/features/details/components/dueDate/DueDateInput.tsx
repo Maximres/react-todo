@@ -31,8 +31,7 @@ const DueDateInput = forwardRef(
         ? "Today"
         : isTomorrow
         ? "Tomorrow"
-        : hasDueDate &&
-          format(dueDateValue, nextWeekOrGreater ? weekMonthDayFormat : weeks);
+        : hasDueDate && format(dueDateValue, nextWeekOrGreater ? weekMonthDayFormat : weeks);
     }
 
     const dueDateText = hasDueDate ? `Due ${date}` : "Add due date";
@@ -58,15 +57,10 @@ const DueDateInput = forwardRef(
             <Icons.Calendar className={hasDueDate ? "text-primary" : ""} />
           </span>
           <div className="form-control me-1 d-flex flex-column ">
-            <span className={hasDueDate ? "text-primary" : ""}>
-              {dueDateText}
-            </span>
+            <span className={hasDueDate ? "text-primary" : ""}>{dueDateText}</span>
           </div>
         </div>
-        <DueDateMenuItems
-          setReminder={setReminder}
-          openCalendar={() => setIsOpen(true)}
-        />
+        <DueDateMenuItems setReminder={setReminder} openCalendar={() => setIsOpen(true)} />
 
         {hasDueDate && (
           <button

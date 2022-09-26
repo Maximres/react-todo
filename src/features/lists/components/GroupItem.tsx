@@ -10,13 +10,7 @@ import { ClickEvent, useMenuState } from "@szhsin/react-menu";
 import { GroupItemOperations } from "@/features/lists/ducks/constants/contextMenuOperations";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { isEditingSelector } from "@/features/lists/ducks/selectors/isEditingSelector";
-import {
-  createList,
-  deleteGroup,
-  endEditItem,
-  startEditItem,
-  unGroup,
-} from "@features/lists";
+import { createList, deleteGroup, endEditItem, startEditItem, unGroup } from "@features/lists";
 
 type GroupProps = {
   children: JSX.Element;
@@ -24,21 +18,14 @@ type GroupProps = {
   uid: string;
   onSubmitEdit: (uid: string, name: string) => void;
 
-  onDropHover: (
-    dropId: string | null,
-    dropType: DndElement,
-    position: DropPosition,
-  ) => void;
+  onDropHover: (dropId: string | null, dropType: DndElement, position: DropPosition) => void;
   onDragEnd: (id: string | null, type: DndElement, parentId?: string) => void;
   hoverClass: string;
   hasSubItems: boolean;
 };
 
 const isGroupItem = (value: unknown): value is GroupItemOperations => {
-  return (
-    value != null &&
-    Object.values(GroupItemOperations).includes(value as GroupItemOperations)
-  );
+  return value != null && Object.values(GroupItemOperations).includes(value as GroupItemOperations);
 };
 
 const GroupItem = ({
@@ -56,11 +43,7 @@ const GroupItem = ({
   const collapseId = useValidId();
   const ariaLabel = useValidId();
   const [menuProps, toggleMenu] = useMenuState();
-  const [{ isDragging, item, isOver }, ref] = useSortableGroup(
-    uid,
-    onDragEnd,
-    onDropHover,
-  );
+  const [{ isDragging, item, isOver }, ref] = useSortableGroup(uid, onDragEnd, onDropHover);
   const isInEditMode = useAppSelector((x) => isEditingSelector(x, uid));
 
   const onItemClick = (e: ClickEvent) => {
@@ -77,7 +60,7 @@ const GroupItem = ({
         break;
       }
       case GroupItemOperations.Ungroup: {
-        dispatch(unGroup({groupId: uid}));
+        dispatch(unGroup({ groupId: uid }));
         break;
       }
       case GroupItemOperations.Delete: {

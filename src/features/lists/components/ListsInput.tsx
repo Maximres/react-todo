@@ -70,10 +70,9 @@ const ListsInput = ({ name, isEditMode, submitEdit, onBlur = () => {}, ...rest }
         autoFocus={isEditMode}
         ref={inputRef}
         type="text"
-        className={classNames(
-          "border-0 bg-transparent flex-grow-1 text-truncate",
-          [rest["className"]],
-        )}
+        className={classNames("border-0 bg-transparent flex-grow-1 text-truncate", [
+          rest["className"],
+        ])}
       />
     </span>
   );

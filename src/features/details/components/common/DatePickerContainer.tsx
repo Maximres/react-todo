@@ -11,13 +11,7 @@ type Props = {
   dateTimeType: reminderEnum;
 };
 
-const DatePickerContainer = ({
-  className,
-  children,
-  closeCalendar,
-  date,
-  dateTimeType,
-}: Props) => {
+const DatePickerContainer = ({ className, children, closeCalendar, date, dateTimeType }: Props) => {
   const [setReminder] = useReminder();
   return (
     <CalendarContainer className={className}>

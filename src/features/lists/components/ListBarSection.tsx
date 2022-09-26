@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useRef } from "react";
+﻿import React, { useCallback, useEffect } from "react";
 import { orderedListsAndGroupsSelector } from "../ducks/selectors/orderedListsAndGroupsSelector";
 import { IList } from "@/constants/types/listsTypes";
 import { selectList, updateGroup, updateList } from "@features/lists";
@@ -26,7 +26,6 @@ const ListBarSection = ({ render }: Props) => {
   const orderedListsGroups = useAppSelector(orderedListsAndGroupsSelector);
   const userLists = useAppSelector((x) => x.lists.userLists);
   const selectedList = useAppSelector(selectedListSelector);
-
 
   const handleItemClick = useCallback(
     (uid: string) => {
@@ -56,23 +55,16 @@ const ListBarSection = ({ render }: Props) => {
   }, [selectedList]);
 
   return (
-    <section
-      className="flex-grow-1 overflow-hidden"
-    >
-      <SimpleBar
-        className="h-100"
-        scrollbarMaxSize={200}
-        autoHide={false}
-        forceVisible={true}
-      >
+    <section className="flex-grow-1 overflow-hidden">
+      <SimpleBar className="h-100" scrollbarMaxSize={200} autoHide={false} forceVisible={true}>
         <div className="w-100 pe-1 pb-1">
-            {render({
-              defaultItems: defaultLists,
-              items: orderedListsGroups,
-              itemClick: handleItemClick,
-              editListSubmit: handleListEditSubmit,
-              editGroupSubmit: handleGroupEditSubmit,
-            })}
+          {render({
+            defaultItems: defaultLists,
+            items: orderedListsGroups,
+            itemClick: handleItemClick,
+            editListSubmit: handleListEditSubmit,
+            editGroupSubmit: handleGroupEditSubmit,
+          })}
         </div>
       </SimpleBar>
     </section>

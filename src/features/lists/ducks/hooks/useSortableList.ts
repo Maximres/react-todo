@@ -1,18 +1,11 @@
-﻿import {
-  DndElement,
-  DropPosition,
-} from "@/features/lists/ducks/constants/types";
+﻿import { DndElement, DropPosition } from "@/features/lists/ducks/constants/types";
 import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 
 const useSortableList = (
   uid: string,
   parentId: string | undefined,
-  onDragEnd: (
-    id: string | null,
-    type: DndElement,
-    parentId: string | undefined,
-  ) => void,
+  onDragEnd: (id: string | null, type: DndElement, parentId: string | undefined) => void,
   isDragDisabled: boolean | undefined,
   onDropHover: (
     dropId: string | null,

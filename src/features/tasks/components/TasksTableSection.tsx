@@ -10,7 +10,12 @@ const TasksTableSection = () => {
   const selectedId = useAppSelector((s) => s.tasks.selectedRowId) ?? "";
 
   const goneDoneTasks = useMemo(
-    () => _orderBy(tasks.filter((x) => !x.isChecked), ["order"], ["asc"]),
+    () =>
+      _orderBy(
+        tasks.filter((x) => !x.isChecked),
+        ["order"],
+        ["asc"],
+      ),
     [tasks],
   );
   const doneTasks = useMemo(() => tasks.filter((x) => x.isChecked), [tasks]);
@@ -36,16 +41,14 @@ const TasksTableSection = () => {
         <div className="row">
           <div className="col-12 pb-2">
             <table className="table table-hover table-light">
-              <tbody
-                ref={drop}
-              >
-              <TasksRows tasks={goneDoneTasks} selectedId={selectedId} />
+              <tbody ref={drop}>
+                <TasksRows tasks={goneDoneTasks} selectedId={selectedId} />
               </tbody>
             </table>
 
             <table className="table table-hover table-light">
               <tbody>
-              <TasksRows tasks={doneTasks} selectedId={selectedId} />
+                <TasksRows tasks={doneTasks} selectedId={selectedId} />
               </tbody>
             </table>
           </div>

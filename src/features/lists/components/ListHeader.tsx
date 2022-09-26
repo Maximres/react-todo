@@ -15,10 +15,7 @@ const ListHeader = () => {
             <span title="Maxim" className="fa-x fw-bold text-truncate">
               Maxim
             </span>
-            <span
-              title="test@gmail.com"
-              className="fa-sm lh-base text-muted text-truncate"
-            >
+            <span title="test@gmail.com" className="fa-sm lh-base text-muted text-truncate">
               test@gmail.com
             </span>
           </div>

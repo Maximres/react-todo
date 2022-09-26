@@ -27,14 +27,7 @@ const ListGroup = ({
 }: Props) => {
   const dispatch = useDispatch();
 
-  const {
-    onHover,
-    getHoveringStyle,
-    dragEndItem,
-    reset,
-    onDragEnd,
-    getDragResult,
-  } = useDnd();
+  const { onHover, getHoveringStyle, dragEndItem, reset, onDragEnd, getDragResult } = useDnd();
 
   const renderListItem = (item: IList, parentId?: string) => {
     return (
@@ -63,8 +56,6 @@ const ListGroup = ({
         })}
     </ul>
   );
-  
-
 
   const renderGroupItem = (item: IGroupedList) => {
     return (

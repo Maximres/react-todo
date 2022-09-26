@@ -16,9 +16,7 @@ const RowNoteTextArea = () => {
 
   const onChangeCallback = (e: any) => {
     setNote(e.target.value);
-    dispatch(
-      updateTask({ id: selectedTask.id, note: e.target.value } as ITask),
-    );
+    dispatch(updateTask({ id: selectedTask.id, note: e.target.value } as ITask));
   };
 
   return (

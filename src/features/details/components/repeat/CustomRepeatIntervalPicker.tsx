@@ -7,11 +7,7 @@ type Props = {
   closeDropdown: () => void;
 };
 
-const CustomRepeatIntervalPicker = ({
-  setIsOpen,
-  setReminder,
-  closeDropdown,
-}: Props) => {
+const CustomRepeatIntervalPicker = ({ setIsOpen, setReminder, closeDropdown }: Props) => {
   const [repeats, setRepeats] = useState(1);
   const [interval, setInterval] = useState(reminderEnum.REPEAT_DAILY);
 

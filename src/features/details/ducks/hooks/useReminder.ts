@@ -11,9 +11,7 @@ const useReminder = () => {
   const selectedTask = useAppSelector(selectCurrentTask);
 
   if (selectedTask == null)
-    throw new Error(
-      "useReminder used in wrong context. selectedTask shouldn't be null",
-    );
+    throw new Error("useReminder used in wrong context. selectedTask shouldn't be null");
   const selectedTaskCopy = { ...selectedTask };
   const setReminder = useCallback(
     (dateType: reminderEnum, value?: unknown) => {
@@ -49,8 +47,7 @@ const useReminder = () => {
           break;
         }
         case reminderEnum.REMINDER:
-          selectedTaskCopy.remindDate =
-            value == null ? undefined : Number(value);
+          selectedTaskCopy.remindDate = value == null ? undefined : Number(value);
           break;
         case reminderEnum.DUE_TODAY:
           selectedTaskCopy.dueDate = todayTicks;

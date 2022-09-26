@@ -38,10 +38,7 @@ const RowDetails = () => {
         onChange={(e) => handleTextChange(e, selectedRow)}
       />
 
-      <Icons.Favorite
-        onClick={() => toggleFavoriteTask()}
-        isImportant={selectedRow.isImportant}
-      />
+      <Icons.Favorite onClick={() => toggleFavoriteTask()} isImportant={selectedRow.isImportant} />
     </li>
   );
 };

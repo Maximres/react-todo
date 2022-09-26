@@ -8,8 +8,7 @@ import { taskCreatedListener } from "@/features/tasks/ducks/middleware/taskCreat
 
 export const tasksListenerMiddleware = createListenerMiddleware();
 
-const startAppListeningDetails =
-  tasksListenerMiddleware.startListening as AppStartListening;
+const startAppListeningDetails = tasksListenerMiddleware.startListening as AppStartListening;
 
 selectedListListener(startAppListeningDetails);
 subTaskCreatedListener(startAppListeningDetails);

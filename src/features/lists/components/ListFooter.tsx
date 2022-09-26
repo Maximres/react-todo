@@ -1,10 +1,8 @@
 ﻿import Icons from "@/components/AppIcons";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { ListGroupNames } from "@/features/tasks/ducks/constants";
 import { createGroup, createList } from "@features/lists";
 import { useAppSelector } from "@/constants/types/redux";
-import { getUntitledName } from "@/features/lists/ducks/helpers/getUntitledListName";
 
 const ListFooter = () => {
   const userLists = useAppSelector((x) => x.lists.userLists);
@@ -32,11 +30,7 @@ const ListFooter = () => {
           </div>
         </button>
 
-        <button
-          type="button"
-          className="btn m-1 p-2"
-          onClick={handleGroupCreation}
-        >
+        <button type="button" className="btn m-1 p-2" onClick={handleGroupCreation}>
           <Icons.NewGroup title="Create a new group" className="fs-5" />
         </button>
       </div>

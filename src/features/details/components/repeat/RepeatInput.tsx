@@ -14,10 +14,7 @@ type Props = {
 };
 
 const RepeatInput = forwardRef(
-  (
-    { isOpen, setIsOpen, closeDropdown }: Props,
-    ref: React.Ref<HTMLDivElement>,
-  ) => {
+  ({ isOpen, setIsOpen, closeDropdown }: Props, ref: React.Ref<HTMLDivElement>) => {
     const selectedTask = useAppSelector(selectCurrentTask);
     const [setReminder, clearReminder] = useReminder();
 
@@ -48,14 +45,10 @@ const RepeatInput = forwardRef(
           aria-expanded="false"
         >
           <span className="me-3">
-            <Icons.CalendarRepeat
-              className={hasRepeatDate ? "text-primary" : ""}
-            />
+            <Icons.CalendarRepeat className={hasRepeatDate ? "text-primary" : ""} />
           </span>
           <div className="form-control me-1 d-flex flex-column ">
-            <span className={hasRepeatDate ? "text-primary" : ""}>
-              {repeatText}
-            </span>
+            <span className={hasRepeatDate ? "text-primary" : ""}>{repeatText}</span>
           </div>
         </div>
         <RepeatMenuItems

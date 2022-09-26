@@ -1,8 +1,5 @@
-﻿import React, { useState } from "react";
-import {
-  ListBarSection,
-  RenderProps,
-} from "@/features/lists/components/ListBarSection";
+﻿import React from "react";
+import { ListBarSection, RenderProps } from "@/features/lists/components/ListBarSection";
 import { ListFooter } from "@/features/lists/components/ListFooter";
 import ListGroup from "@/features/lists/components/ListGroup";
 import { HTML5Backend } from "react-dnd-html5-backend";

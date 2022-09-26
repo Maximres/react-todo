@@ -1,14 +1,12 @@
 ﻿import reminderEnum from "constants/enums/reminderEnum";
 import { IIdentifier } from "@/constants/types/stateTypes";
 
-
-
 export interface ISubTask extends IIdentifier {
   readonly parentId: string;
   readonly createdDate: number;
   isChecked: boolean;
   text?: string;
-  order: number
+  order: number;
 }
 
 export interface IReminder {

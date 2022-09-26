@@ -7,10 +7,7 @@ import { selectList } from "@features/lists";
 export const selectedListListener = (startListening: AppStartListening) => {
   startListening({
     matcher: selectList.match,
-    effect: async (
-      action,
-      { dispatch, cancelActiveListeners, delay, signal },
-    ) => {
+    effect: async (action, { dispatch, cancelActiveListeners, delay, signal }) => {
       cancelActiveListeners();
       if (action.payload == null) return;
 
@@ -29,5 +26,3 @@ export const selectedListListener = (startListening: AppStartListening) => {
     },
   });
 };
-
-

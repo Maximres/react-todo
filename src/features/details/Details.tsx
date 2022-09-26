@@ -24,12 +24,7 @@ export const Details = (): JSX.Element | null => {
       id="details"
     >
       <div className="d-flex align-items-center flex-shrink-0 pt-3 px-3 mx-3 link-dark justify-content-end">
-        <button
-          type="button"
-          className="btn-close"
-          aria-label="Close"
-          onClick={closeDetails}
-        />
+        <button type="button" className="btn-close" aria-label="Close" onClick={closeDetails} />
       </div>
 
       <RowDetailsEditor />
@@ -42,8 +37,7 @@ export const Details = (): JSX.Element | null => {
         <div className="list-group ">
           <label className="list-group-item group-item-height d-flex justify-content-between align-items-center">
             <span className="me-3">
-              <Icons.File onClick={() => {
-              }} />
+              <Icons.File onClick={() => {}} />
             </span>
             <span className="form-control me-1" onFocus={() => ({})}>
               Add file
@@ -52,7 +46,7 @@ export const Details = (): JSX.Element | null => {
         </div>
       </div>
 
-      <RowNoteTextArea/>
+      <RowNoteTextArea />
 
       <Footer />
     </aside>

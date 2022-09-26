@@ -14,16 +14,13 @@ const dataService = {
   deleteGroup: (id: string) => FirebaseDataSource.deleteGroup(db, id),
   deleteList: (id: string) => FirebaseDataSource.deleteList(db, id),
 
-  getSubtasksMany: (taskIds: string[]) =>
-    FirebaseDataSource.getSubtasksMany(db, taskIds),
+  getSubtasksMany: (taskIds: string[]) => FirebaseDataSource.getSubtasksMany(db, taskIds),
   getSubtasks: (taskId: string) => FirebaseDataSource.getSubtasks(db, taskId),
-  setSubtask: (task: ITask, subTask: ISubTask) =>
-    FirebaseDataSource.setSubtask(db, task, subTask),
+  setSubtask: (task: ITask, subTask: ISubTask) => FirebaseDataSource.setSubtask(db, task, subTask),
 
   getTasks: (listId: string) => FirebaseDataSource.getTasks(db, listId),
   setTask: (task: ITask) => FirebaseDataSource.setTask(db, task),
-  deleteTask: (id: string, parentId: string) =>
-    FirebaseDataSource.deleteTask(db, id, parentId),
+  deleteTask: (id: string, parentId: string) => FirebaseDataSource.deleteTask(db, id, parentId),
   updateTask: (task: ITask) => FirebaseDataSource.updateTask(db, task),
 
   getGroups: () => FirebaseDataSource.getGroups(db),

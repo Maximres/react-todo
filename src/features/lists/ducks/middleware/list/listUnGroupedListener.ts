@@ -8,8 +8,7 @@ export const listUnGroupedListener = (startListening: AppStartListening) => {
     effect: async (action, { getState, getOriginalState }) => {
       const groupId = action.payload.groupId;
 
-      const ungroupedList = getOriginalState()
-        .lists.userLists.filter((x) => x.groupId === groupId)
+      const ungroupedList = getOriginalState().lists.userLists.filter((x) => x.groupId === groupId);
 
       await dataService.ungroupLists(ungroupedList);
     },

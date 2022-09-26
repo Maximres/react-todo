@@ -7,8 +7,7 @@ export const selectedTasksListener = (startListening: AppStartListening) => {
       const currState = currentState.tasks;
       const prevState = originalState.tasks;
       return (
-        currState.selectedRowId !== prevState.selectedRowId ||
-        currState.tasks !== prevState.tasks
+        currState.selectedRowId !== prevState.selectedRowId || currState.tasks !== prevState.tasks
       );
     },
     effect: async (action, { getState, dispatch }) => {

@@ -13,11 +13,7 @@ type Props = {
   CustomInput: React.ForwardRefExoticComponent<any>;
 };
 
-const ReminderDatePickerDropdown = ({
-  datePickerProps,
-  CustomInput,
-  dateTimeType,
-}: Props) => {
+const ReminderDatePickerDropdown = ({ datePickerProps, CustomInput, dateTimeType }: Props) => {
   const id = useId();
   const [customDate, setCustomDate] = useState<Date | null>(new Date());
   const [isOpen, setIsOpen] = useState(false);

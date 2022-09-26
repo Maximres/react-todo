@@ -24,10 +24,7 @@ const ReminderDatePickerDropdown = ({ CustomInput }: Props) => {
     dropdownNode?.addEventListener("hidden.bs.dropdown", handleHiddenDropdown);
 
     return () => {
-      dropdownNode?.removeEventListener(
-        "hidden.bs.dropdown",
-        handleHiddenDropdown,
-      );
+      dropdownNode?.removeEventListener("hidden.bs.dropdown", handleHiddenDropdown);
     };
   }, []);
 

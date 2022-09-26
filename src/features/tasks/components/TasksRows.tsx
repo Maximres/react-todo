@@ -1,11 +1,6 @@
 ﻿import React, { memo, useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "@/constants/types/redux";
-import {
-  toggleChecked,
-  toggleFavorite,
-  toggleSelected,
-  updateTask,
-} from "@/features/tasks";
+import { toggleChecked, toggleFavorite, toggleSelected, updateTask } from "@/features/tasks";
 import { ITask } from "@/constants/types/tasksTypes";
 import { Task } from "@/features/tasks/components/Task";
 import { getOrderNumber } from "@/utils/helpers/order";
@@ -65,8 +60,6 @@ const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
     setDragEndId(id);
   }, []);
 
-
-
   const handleDrag = useCallback((dropId: string | null, above: boolean) => {
     if (dropId == null && dropId !== droppableId) setDroppableId(null);
 
@@ -75,7 +68,6 @@ const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
     setDroppableId(dropId);
     setIsDragTop(above);
   }, []);
-
 
   const getBorderClass = useCallback(
     (id: string) => {

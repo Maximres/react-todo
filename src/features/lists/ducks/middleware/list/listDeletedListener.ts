@@ -8,9 +8,7 @@ export const listDeletedListener = (startListening: AppStartListening) => {
     effect: async (action, { getOriginalState, dispatch }) => {
       const listId = action.payload;
 
-      const index = getOriginalState().lists.userLists.findIndex(
-        (x) => x.id === action.payload,
-      );
+      const index = getOriginalState().lists.userLists.findIndex((x) => x.id === action.payload);
       if (index < 0) return;
 
       dispatch(selectList());

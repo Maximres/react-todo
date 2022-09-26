@@ -5,10 +5,7 @@ import { dataService } from "@/services/data";
 export const listUpdatedListener = (startListening: AppStartListening) => {
   startListening({
     matcher: updateList.match,
-    effect: async (
-      action,
-      { getState, cancelActiveListeners, delay, dispatch },
-    ) => {
+    effect: async (action, { getState, cancelActiveListeners, delay, dispatch }) => {
       cancelActiveListeners();
       await delay(1000);
 

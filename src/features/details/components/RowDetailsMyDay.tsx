@@ -27,10 +27,7 @@ const RowDetailsMyDay = () => {
             <Icons.MyDay />
           </span>
           <span
-            className={classNames(
-              { "text-primary": selectedTask.isMyDay },
-              "form-control me-1",
-            )}
+            className={classNames({ "text-primary": selectedTask.isMyDay }, "form-control me-1")}
             onFocus={() => ({})}
           >
             Add to My Day

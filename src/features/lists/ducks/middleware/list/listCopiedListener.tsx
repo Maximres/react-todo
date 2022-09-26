@@ -1,5 +1,5 @@
 ﻿import { AppStartListening } from "@/constants/types/redux";
-import { copyList, createList, selectList, startEditItem } from "@features/lists";
+import { copyList } from "@features/lists";
 import { dataService } from "@/services/data";
 
 export const listCopiedListener = (startListening: AppStartListening) => {

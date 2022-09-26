@@ -22,5 +22,5 @@ export interface IListsState {
   groups: IGroup[];
   selectedListId?: string;
 
-  editItemId?: string
+  editItemId?: string;
 }

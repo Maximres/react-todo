@@ -1,10 +1,5 @@
 ﻿import { useCallback, useState } from "react";
-import {
-  DndElement,
-  DragType,
-  DropPosition,
-  IGroupedList,
-} from "../constants/types";
+import { DndElement, DragType, DropPosition, IGroupedList } from "../constants/types";
 import { IList } from "@/constants/types/listsTypes";
 import { getDragResultItem } from "../helpers/dndHelpers";
 
@@ -16,17 +11,11 @@ const useDnd = () => {
   const [dropParentId, setDropParentId] = useState<string | undefined>();
 
   const onHover = useCallback(
-    (
-      currentDropId: string | null,
-      type: DndElement,
-      position: DropPosition,
-      parentId?: string,
-    ) => {
+    (currentDropId: string | null, type: DndElement, position: DropPosition, parentId?: string) => {
       const isReset = currentDropId == null && currentDropId !== dropItemId;
       if (isReset) setDropItemId(null);
 
-      const isHasNotChanged =
-        currentDropId === dropItemId && dropPosition === position;
+      const isHasNotChanged = currentDropId === dropItemId && dropPosition === position;
       if (isHasNotChanged) return;
 
       setDropItemId(currentDropId);

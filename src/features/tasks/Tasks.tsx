@@ -7,10 +7,7 @@ import { DndProvider } from "react-dnd";
 
 const Tasks = () => {
   return (
-    <main
-      className="bg-blueish flex-fill position-relative"
-      style={{ minWidth: 350 }}
-    >
+    <main className="bg-blueish flex-fill position-relative" style={{ minWidth: 350 }}>
       <DndProvider backend={HTML5Backend}>
         <ListInfoHeader />
         <TasksTableSection />

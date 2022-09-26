@@ -89,7 +89,7 @@ const ListItem = (props: Props) => {
       const [_, groupId] = e.value;
       dispatch(moveItem({ listId: uid, groupId: groupId }));
     }
-    
+
     if (!isListItemOperation(e.value)) {
       return;
     }
