@@ -2,13 +2,11 @@
 import { AppStartListening } from "constants/types/redux";
 
 import { selectedTasksListener } from "./selectedTasksListener";
+import { subTaskUpdatedListener } from "@/features/details/ducks/middleware/subTaskUpdatedListener";
 
 export const detailsListenerMiddleware = createListenerMiddleware();
-export const taskUpdatesListenerMiddleware = createListenerMiddleware();
 
 const startAppListeningDetails = detailsListenerMiddleware.startListening as AppStartListening;
 
-const startAppListeningTaskUpdates =
-  taskUpdatesListenerMiddleware.startListening as AppStartListening;
-
 selectedTasksListener(startAppListeningDetails);
+subTaskUpdatedListener(startAppListeningDetails);

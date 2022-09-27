@@ -122,6 +122,7 @@ const getListsWithSubtasks = (db: Firestore) => {
             parentId: subDto.parentId,
             createdDate: Number(subDto.createdDate),
             order: Number(subDto.order),
+            isChecked: subDto.isChecked
           } as ISubTask;
           subTask.text = subDto.text;
 
@@ -232,6 +233,7 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
               parentId: subDto.parentId,
               createdDate: Number(subDto.createdDate),
               order: Number(subDto.order),
+              isChecked: subDto.isChecked
             } as ISubTask;
 
             subTask.text = subDto.text;
@@ -386,14 +388,14 @@ const getSubtasksMany = (db: Firestore, taskIdList: string[]) => {
       .then(() => {
         const result = _orderBy(
           subTaskDtoList.map((subDto) => {
-            const subTask = {
+            const subTask: ISubTask = {
               id: subDto.id,
               parentId: subDto.parentId,
               createdDate: Number(subDto.createdDate),
               order: Number(subDto.order),
-            } as ISubTask;
-
-            subTask.text = subDto.text;
+              isChecked: subDto.isChecked,
+              text: subDto.text
+            };
 
             return subTask;
           }),
@@ -532,7 +534,7 @@ const setSubtask = async (db: Firestore, task: ITask, subTask: ISubTask) => {
       subTask.id,
     );
 
-    await setDoc(reference, subTask, { merge: true });
+    await setDoc(reference, convertSubTaskToDto(subTask), { merge: true });
 
     return true;
   } catch (e: any) {
@@ -688,6 +690,18 @@ function convertListToDto(list: IList) {
     totalTasks: list.totalTasks,
   };
   return listDto;
+}
+
+function convertSubTaskToDto(subTask: ISubTask) {
+  const subTaskDto: SubTaskDto = {
+    id: subTask.id,
+    order: subTask.order,
+    text: subTask.text ?? "",
+    parentId: subTask.parentId,
+    createdDate: subTask.createdDate,
+    isChecked: subTask.isChecked,
+  };
+  return subTaskDto;
 }
 
 function convertGroupToDto(group: IGroup) {

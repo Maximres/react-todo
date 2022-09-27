@@ -1,7 +1,7 @@
 ﻿import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { fetchSubtasks } from "@/features/tasks";
 import assignDeep from "lodash/assignIn";
-import { IState, ISubTask, ITask } from "@/constants/types/tasksTypes";
+import type { IState, ISubTask, ITask } from "@/constants/types/tasksTypes";
 import { selectList } from "@features/lists";
 import { getOrderNumber } from "@/utils/helpers/order";
 
@@ -120,6 +120,23 @@ const tasksSlice = createSlice({
 
       subTask.isChecked = isChecked;
     },
+    updateSubTask: (
+      state,
+      action: PayloadAction<{
+        subId: string;
+        subTask: ITask;
+      }>,
+    ) => {
+      const taskIndex = state.tasks.findIndex((x) => x.id === state.selectedRowId);
+      if (taskIndex < 0) return;
+
+      const { subId, subTask } = action.payload;
+      const subTasks = state.tasks[taskIndex]!.subTasks;
+      const subTaskIndex = subTasks?.findIndex((p) => p.id === subId);
+      if (subTaskIndex == null || subTaskIndex < 0) return;
+
+      subTasks![subTaskIndex] = assignDeep({}, subTasks![subTaskIndex], subTask);
+    },
     toggleSelected: (state, action: PayloadAction<{ task: ITask }>) => {
       const currentId = action.payload.task.id;
       const toggleWithoutClose = currentId !== state.selectedRowId && state.selectedRowId != null;
@@ -210,4 +227,5 @@ export const {
   deleteSubTask,
   toggleSubTaskChecked,
   createSubTask,
+  updateSubTask,
 } = tasksSlice.actions;

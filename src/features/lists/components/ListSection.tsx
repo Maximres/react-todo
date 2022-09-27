@@ -17,10 +17,10 @@ const ListSection = () => {
 
   const handleItemClick = useCallback(
     (uid: string) => {
-      const selectedList = userLists.find((i) => i.id === uid);
-      if (selectedList == null) return;
+      const selected = userLists.find((i) => i.id === uid);
+      if (selected == null) return;
 
-      dispatch(selectList(selectedList));
+      if (selected !== selectedList) dispatch(selectList(selected));
     },
     [userLists],
   );

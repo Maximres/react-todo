@@ -1,23 +1,33 @@
 ﻿import React from "react";
 import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
-import { toggleSubTaskChecked } from "@features/tasks";
-import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
+import { toggleSubTaskChecked, updateSubTask } from "@features/tasks";
 import isEmpty from "lodash/isEmpty";
-import { ISubTask } from "@/constants/types/tasksTypes";
+import { SubRowCheckBox } from "@/features/details/components/rows/SubRowCheck";
+import { SubRowText } from "@/features/details/components/rows/SubRowText";
+import { ITask } from "@/constants/types/tasksTypes";
 
 const SubRowDetailsEditor = () => {
   const subTasks = useAppSelector((s) => s.details.subTasks);
   const dispatch = useAppDispatch();
-  const handleSubTextChange = (e: any, subTask: ISubTask) => {
-    //todo: handle sub task change
+  const handleChange = (uid: string, text: string) => {
+    dispatch(
+      updateSubTask({
+        subId: uid,
+        subTask: {
+          text: text,
+        } as ITask,
+      }),
+    );
   };
 
-  const handleSubCheck = (subTask: ISubTask) => {
+  const handleSubCheck = (uid: string, isChecked: boolean) => {
     dispatch(
-      toggleSubTaskChecked({
-        subTaskId: subTask.id,
-        isChecked: !subTask.isChecked,
+      updateSubTask({
+        subId: uid,
+        subTask: {
+          isChecked: isChecked
+        } as ITask,
       }),
     );
   };
@@ -30,21 +40,16 @@ const SubRowDetailsEditor = () => {
               className="list-group-item d-flex justify-content-between align-items-center"
               key={subTask.id}
             >
-              <input
-                className="form-check-input flex-shrink-0 me-3"
-                type="checkbox"
-                checked={subTask.isChecked}
-                onChange={() => handleSubCheck(subTask)}
+              <SubRowCheckBox
+                uid={subTask.id}
+                isChecked={subTask.isChecked}
+                onChecked={handleSubCheck}
               />
-              <textarea
-                rows={1}
-                className={
-                  "form-control me-1 overflow-hidden " +
-                  (subTask.isChecked ? "text-decoration-line-through" : "")
-                }
-                value={subTask.text}
-                onKeyPress={handleEnterKeyPress}
-                onChange={(e) => handleSubTextChange(e, subTask)}
+              <SubRowText
+                uid={subTask.id}
+                text={subTask.text}
+                isChecked={subTask.isChecked}
+                handleChange={handleChange}
               />
               <div className="mx-2">
                 <Icons.Options />

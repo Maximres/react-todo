@@ -187,7 +187,7 @@ const listsSlice = createSlice({
     builder.addCase(initialFetch.fulfilled, (state, action) => {
       const [lists, groups] = action.payload;
       state.userLists = lists;
-      state.selectedListId = lists?.[0]?.id;
+      // state.selectedListId = lists?.[0]?.id;
 
       state.groups = groups;
     });
