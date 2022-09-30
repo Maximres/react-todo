@@ -1,9 +1,10 @@
 :root {
   --default-font-size-number: 15;
   --default-font-size-px: calc(var(--default-font-size-number) * 1px);
-  font-size: var(--default-font-size-px);
   --lists-section-width: 350px;
   --details-section-width: 380px;
+
+  font-size: var(--default-font-size-px);
 }
 
 .grid-container {

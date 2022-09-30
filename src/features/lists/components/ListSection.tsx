@@ -20,9 +20,10 @@ const ListSection = () => {
       const selected = userLists.find((i) => i.id === uid);
       if (selected == null) return;
 
-      if (selected !== selectedList) dispatch(selectList(selected));
+      const isNotSameList = selected.id !== selectedList?.id;
+      if (isNotSameList) dispatch(selectList(selected));
     },
-    [userLists],
+    [userLists, selectedList],
   );
 
   const handleListEditSubmit = useCallback((uid: string, name: string) => {
