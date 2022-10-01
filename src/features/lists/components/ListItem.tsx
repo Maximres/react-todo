@@ -5,7 +5,6 @@ import { ListsInput } from "./ListsInput";
 import { DndElement, DropPosition } from "../ducks/constants/types";
 import { useSortableList } from "../ducks/hooks/useSortableList";
 import useValidId from "@/utils/hooks/useValidId";
-import "@szhsin/react-menu/dist/index.css";
 import { ClickEvent, useMenuState } from "@szhsin/react-menu";
 import { ListContextMenu } from "@/features/lists/components/ListContextMenu";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";

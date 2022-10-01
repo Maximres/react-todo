@@ -4,6 +4,7 @@ import assignDeep from "lodash/assignIn";
 import type { IState, ISubTask, ITask } from "@/constants/types/tasksTypes";
 import { selectList } from "@features/lists";
 import { getOrderNumber } from "@/utils/helpers/order";
+import { newTask } from "@/features/tasks/ducks/helpers/taskCreator";
 
 const initialState: IState = {
   tasks: [],
@@ -24,21 +25,12 @@ const tasksSlice = createSlice({
     },
     createTask: {
       reducer(state, action: PayloadAction<{ text: string; id: string }>) {
-        const newTask: ITask = {
-          parentId: state.listId,
+        const task = newTask({
           id: action.payload.id,
-          isChecked: false,
+          parentId: state.listId,
           text: action.payload.text,
-          isImportant: false,
-          createdDate: Number(new Date()),
-          remindDate: undefined,
-          isMyDay: false,
-          dueDate: undefined,
-          note: "",
-          subTasks: [],
-          order: getOrderNumber(),
-        };
-        state.tasks.push(newTask);
+        });
+        state.tasks.push(task);
       },
       prepare(text: string) {
         return {
@@ -103,23 +95,6 @@ const tasksSlice = createSlice({
 
       state.tasks[index]!.subTasks!.splice(subIndex, 1);
     },
-    toggleSubTaskChecked: (
-      state,
-      action: PayloadAction<{
-        subTaskId: string;
-        isChecked: boolean;
-      }>,
-    ) => {
-      const index = state.tasks.findIndex((x) => x.id === state.selectedRowId);
-      if (index < 0) return;
-
-      const payload = action.payload;
-      const isChecked = payload.isChecked;
-      const subTask = state.tasks[index]!.subTasks?.find((p) => p.id === payload.subTaskId);
-      if (subTask == null) return;
-
-      subTask.isChecked = isChecked;
-    },
     updateSubTask: (
       state,
       action: PayloadAction<{
@@ -136,6 +111,31 @@ const tasksSlice = createSlice({
       if (subTaskIndex == null || subTaskIndex < 0) return;
 
       subTasks![subTaskIndex] = assignDeep({}, subTasks![subTaskIndex], subTask);
+    },
+    promoteSubTask: (
+      state,
+      action: PayloadAction<         string
+      >,
+    ) => {
+      const taskIndex = state.tasks.findIndex((x) => x.id === state.selectedRowId);
+      if (taskIndex < 0) return;
+
+      const subId  = action.payload;
+      const subTasks = state.tasks[taskIndex]!.subTasks;
+      const subTaskIndex = subTasks?.findIndex((p) => p.id === subId);
+      if (subTaskIndex == null || subTaskIndex < 0) return;
+      const subItems = subTasks!.splice(subTaskIndex, 1);
+      if (subItems.length <= 0) return;
+
+      const newTaskItem = subItems[0];
+
+      const promotedSubTask = newTask({
+        id: newTaskItem.id,
+        parentId: state.listId,
+        text: newTaskItem.text ?? "",
+      });
+
+      state.tasks.push(promotedSubTask);
     },
     toggleSelected: (state, action: PayloadAction<{ task: ITask }>) => {
       const currentId = action.payload.task.id;
@@ -225,7 +225,7 @@ export const {
   setTasks,
   setSubtasks,
   deleteSubTask,
-  toggleSubTaskChecked,
   createSubTask,
   updateSubTask,
+  promoteSubTask,
 } = tasksSlice.actions;

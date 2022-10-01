@@ -10,6 +10,9 @@ import { updateGroup, updateList } from "@features/lists";
 import { useDnd } from "@/features/lists/ducks/hooks/useDnd";
 import _isEmpty from "lodash/isEmpty";
 
+import "@szhsin/react-menu/dist/index.css";
+
+
 type Props = {
   items: (IList | IGroupedList)[];
   onItemClick: (uid: string) => void;

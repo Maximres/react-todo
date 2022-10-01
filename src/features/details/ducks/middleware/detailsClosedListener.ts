@@ -1,10 +1,11 @@
 ﻿import { AppStartListening } from "@/constants/types/redux";
 import { reset } from "../detailsSlice";
-import { closeSidebar } from "@features/tasks";
+import { closeSidebar, deleteTask } from "@features/tasks";
+import { isAnyOf } from "@reduxjs/toolkit";
 
 export const detailsClosedListener = (startListening: AppStartListening) => {
   startListening({
-    matcher: closeSidebar.match,
+    matcher: isAnyOf(deleteTask, closeSidebar),
     effect: (action, { dispatch }) => {
       dispatch(reset());
     },

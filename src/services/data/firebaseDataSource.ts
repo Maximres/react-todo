@@ -122,7 +122,7 @@ const getListsWithSubtasks = (db: Firestore) => {
             parentId: subDto.parentId,
             createdDate: Number(subDto.createdDate),
             order: Number(subDto.order),
-            isChecked: subDto.isChecked
+            isChecked: subDto.isChecked,
           } as ISubTask;
           subTask.text = subDto.text;
 
@@ -233,7 +233,7 @@ const getTaskWithSubtasks = (db: Firestore, uid: string) => {
               parentId: subDto.parentId,
               createdDate: Number(subDto.createdDate),
               order: Number(subDto.order),
-              isChecked: subDto.isChecked
+              isChecked: subDto.isChecked,
             } as ISubTask;
 
             subTask.text = subDto.text;
@@ -394,7 +394,7 @@ const getSubtasksMany = (db: Firestore, taskIdList: string[]) => {
               createdDate: Number(subDto.createdDate),
               order: Number(subDto.order),
               isChecked: subDto.isChecked,
-              text: subDto.text
+              text: subDto.text,
             };
 
             return subTask;
@@ -559,6 +559,31 @@ const setTask = async (db: Firestore, task: ITask) => {
   }
 };
 
+const promoteSubtask = async (db: Firestore, taskId: string, promotedTask: ITask) => {
+  debugger;
+  try {
+    const batch = writeBatch(db);
+    const subtaskRef = doc(
+      db,
+      scheme.Lists,
+      promotedTask.parentId,
+      scheme.Tasks,
+      taskId,
+      scheme.SubTasks,
+      promotedTask.id,
+    );
+    batch.delete(subtaskRef);
+
+    const promotedRef = doc(db, scheme.Lists, promotedTask.parentId, scheme.Tasks, promotedTask.id);
+    const taskDto = convertToDto(promotedTask);
+
+    batch.set(promotedRef, taskDto, { merge: true });
+    await batch.commit();
+  } catch (e) {
+    console.error({ promoteSubtaskError: e });
+  }
+};
+
 const setGroup = async (db: Firestore, group: IGroup) => {
   try {
     const reference = doc(db, scheme.Groups, group.id);
@@ -650,6 +675,29 @@ const deleteList = (db: Firestore, id: string) => {
   });
 };
 
+const deleteSubtask = (
+  db: Firestore,
+  pathIds: {
+    subId: string;
+    taskId: string;
+    listId: string;
+  },
+) => {
+  const reference = doc(
+    db,
+    scheme.Lists,
+    pathIds.listId,
+    scheme.Tasks,
+    pathIds.taskId,
+    scheme.SubTasks,
+    pathIds.subId,
+  );
+
+  return deleteDoc(reference).catch((...args) => {
+    console.error({ deleteSubtaskError: args });
+  });
+};
+
 const getCollectionQuery = (firestore: Firestore, collectionName: string, documentId: string) =>
   query(
     collectionGroup(firestore, collectionName),
@@ -718,7 +766,7 @@ export const FirebaseDataSource = {
   getListsWithTasks,
   getListsWithSubtasks,
   updateList,
-  setList: setList,
+  setList,
   ungroupLists,
   deleteList,
 
@@ -729,10 +777,11 @@ export const FirebaseDataSource = {
 
   getSubtasksMany,
   getSubtasks,
-
+  promoteSubtask,
   setSubtask,
-  setTask,
+  deleteSubtask,
 
+  setTask,
   getTasks,
   updateTask,
   deleteTask,

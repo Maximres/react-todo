@@ -15,9 +15,13 @@ const dataService = {
   getSubtasksMany: (taskIds: string[]) => FirebaseDataSource.getSubtasksMany(db, taskIds),
   getSubtasks: (taskId: string) => FirebaseDataSource.getSubtasks(db, taskId),
   setSubtask: (task: ITask, subTask: ISubTask) => FirebaseDataSource.setSubtask(db, task, subTask),
+  deleteSubtask: (subId: string, taskId: string, listId: string) =>
+    FirebaseDataSource.deleteSubtask(db, { subId, listId, taskId }),
 
   getTasks: (listId: string) => FirebaseDataSource.getTasks(db, listId),
   setTask: (task: ITask) => FirebaseDataSource.setTask(db, task),
+  promoteSubtask: (taskId: string, promoted: ITask) =>
+    FirebaseDataSource.promoteSubtask(db, taskId, promoted),
   deleteTask: (id: string, parentId: string) => FirebaseDataSource.deleteTask(db, id, parentId),
   updateTask: (task: ITask) => FirebaseDataSource.updateTask(db, task),
 

@@ -1,62 +1,45 @@
 ﻿import React from "react";
-import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
-import { toggleSubTaskChecked, updateSubTask } from "@features/tasks";
 import isEmpty from "lodash/isEmpty";
-import { SubRowCheckBox } from "@/features/details/components/rows/SubRowCheck";
-import { SubRowText } from "@/features/details/components/rows/SubRowText";
-import { ITask } from "@/constants/types/tasksTypes";
+import { SubRows } from "@/features/details/components/rows/SubRows";
+import { ClickEvent } from "@szhsin/react-menu";
+import { SubItemOperations } from "@/features/details/ducks/constants/contextMenuOperations";
+import { deleteSubTask, promoteSubTask, updateSubTask } from "@features/tasks";
+import { ISubTask, ITask } from "@/constants/types/tasksTypes";
 
 const SubRowDetailsEditor = () => {
-  const subTasks = useAppSelector((s) => s.details.subTasks);
   const dispatch = useAppDispatch();
-  const handleChange = (uid: string, text: string) => {
-    dispatch(
-      updateSubTask({
-        subId: uid,
-        subTask: {
-          text: text,
-        } as ITask,
-      }),
-    );
+  const subTasks = useAppSelector((s) => s.details.subTasks);
+
+  const onItemClick = (e: ClickEvent, subTask: ISubTask) => {
+    const value = e.value as SubItemOperations;
+
+    switch (value) {
+      case SubItemOperations.ToggleComplete:
+        dispatch(
+          updateSubTask({
+            subId: subTask.id,
+            subTask: {
+              isChecked: !subTask.isChecked,
+            } as ITask,
+          }),
+        );
+        break;
+      case SubItemOperations.Promote:
+        dispatch(promoteSubTask(subTask.id));
+        break;
+      case SubItemOperations.Delete:
+        dispatch(deleteSubTask(subTask.id));
+        break;
+    }
   };
 
-  const handleSubCheck = (uid: string, isChecked: boolean) => {
-    dispatch(
-      updateSubTask({
-        subId: uid,
-        subTask: {
-          isChecked: isChecked
-        } as ITask,
-      }),
-    );
-  };
   return (
     <>
       {!isEmpty(subTasks) &&
-        subTasks!.map((subTask) => {
-          return (
-            <li
-              className="list-group-item d-flex justify-content-between align-items-center"
-              key={subTask.id}
-            >
-              <SubRowCheckBox
-                uid={subTask.id}
-                isChecked={subTask.isChecked}
-                onChecked={handleSubCheck}
-              />
-              <SubRowText
-                uid={subTask.id}
-                text={subTask.text}
-                isChecked={subTask.isChecked}
-                handleChange={handleChange}
-              />
-              <div className="mx-2">
-                <Icons.Options />
-              </div>
-            </li>
-          );
-        })}
+        subTasks!.map((subTask) => (
+          <SubRows key={subTask.id} subTask={subTask} onItemClick={onItemClick} />
+        ))}
     </>
   );
 };

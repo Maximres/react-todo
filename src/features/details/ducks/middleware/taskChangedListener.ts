@@ -2,19 +2,29 @@
 import { updateDetails } from "../detailsSlice";
 import { isAnyOf } from "@reduxjs/toolkit";
 import {
+  createSubTask,
+  deleteSubTask,
+  promoteSubTask,
   toggleChecked,
   toggleFavorite,
   toggleSelected,
   updateSubTask,
   updateTask,
-  createSubTask,
-  deleteSubTask,
 } from "@features/tasks";
 
-export const selectedTasksListener = (startListening: AppStartListening) => {
+export const taskChangedListener = (startListening: AppStartListening) => {
   startListening({
-    matcher: isAnyOf(toggleChecked, toggleFavorite, toggleSelected, updateTask, updateSubTask, createSubTask, deleteSubTask,),
-    effect: async (action, { getState, dispatch }) => {
+    matcher: isAnyOf(
+      toggleChecked,
+      toggleFavorite,
+      toggleSelected,
+      updateTask,
+      updateSubTask,
+      createSubTask,
+      deleteSubTask,
+      promoteSubTask,
+    ),
+    effect: (action, { getState, dispatch }) => {
       const app = getState().tasks;
       const rowId = app.selectedRowId;
       const task = app.tasks.find((t) => t.id === rowId);
