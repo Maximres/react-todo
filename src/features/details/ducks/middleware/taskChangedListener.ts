@@ -3,7 +3,7 @@ import { updateDetails } from "../detailsSlice";
 import { isAnyOf } from "@reduxjs/toolkit";
 import {
   createSubTask,
-  deleteSubTask,
+  deleteSubTask, deleteTask,
   promoteSubTask,
   toggleChecked,
   toggleFavorite,
@@ -23,6 +23,7 @@ export const taskChangedListener = (startListening: AppStartListening) => {
       createSubTask,
       deleteSubTask,
       promoteSubTask,
+      deleteTask,
     ),
     effect: (action, { getState, dispatch }) => {
       const app = getState().tasks;

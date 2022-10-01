@@ -5,7 +5,7 @@ import { isAnyOf } from "@reduxjs/toolkit";
 
 export const detailsClosedListener = (startListening: AppStartListening) => {
   startListening({
-    matcher: isAnyOf(deleteTask, closeSidebar),
+    matcher: closeSidebar.match,
     effect: (action, { dispatch }) => {
       dispatch(reset());
     },
