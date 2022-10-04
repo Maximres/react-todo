@@ -11,11 +11,10 @@ import { listsWithoutCurrentSelector } from "@/features/tasks/ducks/selectors/li
 import { useTaskItemOperations } from "@/features/tasks/ducks/hooks/useTaskItemOperations";
 
 type Props = {
-  tasks: ITask[];
-  selectedId: string;
+  boundaryRef: React.RefObject<null>
 };
 
-const TasksWithContextMenuInner = () => {
+const TasksWithContextMenuInner = ({boundaryRef}: Props) => {
   const dispatch = useAppDispatch();
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
@@ -65,6 +64,7 @@ const TasksWithContextMenuInner = () => {
           </table>
         </ContextMenu.Provider>
         <TaskContextMenu
+          ref={boundaryRef}
           menuProps={menuProps}
           toggleMenu={toggleMenu}
           anchorPoints={anchorPoint}
