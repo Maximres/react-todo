@@ -2,11 +2,11 @@
 import { updateList } from "@features/lists";
 import { dataService } from "@/services/data";
 import { isAnyOf } from "@reduxjs/toolkit";
-import { createTask, deleteTask } from "@features/tasks";
+import { createTask, deleteTask, promoteSubTask } from "@features/tasks";
 
 export const totalTasksListener = (startListening: AppStartListening) => {
   startListening({
-    matcher: isAnyOf(createTask, deleteTask),
+    matcher: isAnyOf(createTask, deleteTask, promoteSubTask),
     effect: async (action, { getState, dispatch }) => {
       const state = getState().lists;
       const listId = state.selectedListId;
@@ -20,8 +20,12 @@ export const totalTasksListener = (startListening: AppStartListening) => {
       if (deleteTask.match(action)) {
         totalTasks--;
       }
+      if (promoteSubTask.match(action)){
+        totalTasks++;
+      }
 
-      const newList = { ...list, totalTasks: totalTasks };
+      const total = totalTasks < 0 ? 0 : totalTasks;
+      const newList = { ...list, totalTasks: total };
       dispatch(updateList(newList));
       await dataService.setList(newList);
     },

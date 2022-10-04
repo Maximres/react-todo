@@ -1,11 +1,11 @@
 ﻿import { AppStartListening } from "@/constants/types/redux";
-import { toggleChecked, toggleFavorite, updateTask } from "@features/tasks";
+import { toggleChecked, updateTask } from "@features/tasks";
 import { dataService } from "@/services/data";
 import { isAnyOf } from "@reduxjs/toolkit";
 
 export const taskChangedListener = (startListening: AppStartListening) => {
   startListening({
-    matcher: isAnyOf(updateTask, toggleChecked, toggleFavorite),
+    matcher: isAnyOf(updateTask, toggleChecked),
     effect: async (action, { getState, cancelActiveListeners, delay }) => {
       cancelActiveListeners();
       await delay(1000);
@@ -15,9 +15,6 @@ export const taskChangedListener = (startListening: AppStartListening) => {
         taskId = action.payload.id;
       }
       if (toggleChecked.match(action)) {
-        taskId = action.payload.task.id;
-      }
-      if (toggleFavorite.match(action)) {
         taskId = action.payload.task.id;
       }
 

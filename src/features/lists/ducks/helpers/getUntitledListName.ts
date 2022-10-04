@@ -1,5 +1,5 @@
 ﻿import { IGroup, IList } from "@/constants/types/listsTypes";
-import { ListGroupNames } from "@/features/tasks/ducks/constants";
+import { ListGroupNames } from "@/features/tasks/ducks/constants/constants";
 
 const getUntitledCount = (collection: IGroup[] | IList[] = [], name: ListGroupNames) => {
   const untitledCount = collection.filter((x) => x.name.startsWith(name)).length;

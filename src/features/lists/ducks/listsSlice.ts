@@ -4,7 +4,7 @@ import { IGroup, IList, IListsState } from "@/constants/types/listsTypes";
 import { initialFetch } from "@/utils/thunks/initialFetch";
 import { getOrderNumber } from "@/utils/helpers/order";
 import { getUntitledName } from "./helpers/getUntitledListName";
-import { ListGroupNames } from "@/features/tasks/ducks/constants";
+import { ListGroupNames } from "@/features/tasks/ducks/constants/constants";
 
 const defaults = [
   {

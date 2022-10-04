@@ -17,11 +17,11 @@ const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    updateTask: (state, action: PayloadAction<ITask>) => {
+    updateTask: (state, action: PayloadAction<{ id: string; task: Partial<Omit<ITask, "id">> | ITask }>) => {
       const index = state.tasks.findIndex((x) => x.id === action.payload.id);
       if (index < 0) return;
       const task = state.tasks[index];
-      state.tasks[index] = assignDeep({}, task, action.payload);
+      state.tasks[index] = assignDeep(<ITask>{}, task, action.payload.task );
     },
     createTask: {
       reducer(state, action: PayloadAction<{ text: string; id: string }>) {
@@ -112,15 +112,11 @@ const tasksSlice = createSlice({
 
       subTasks![subTaskIndex] = assignDeep({}, subTasks![subTaskIndex], subTask);
     },
-    promoteSubTask: (
-      state,
-      action: PayloadAction<         string
-      >,
-    ) => {
+    promoteSubTask: (state, action: PayloadAction<string>) => {
       const taskIndex = state.tasks.findIndex((x) => x.id === state.selectedRowId);
       if (taskIndex < 0) return;
 
-      const subId  = action.payload;
+      const subId = action.payload;
       const subTasks = state.tasks[taskIndex]!.subTasks;
       const subTaskIndex = subTasks?.findIndex((p) => p.id === subId);
       if (subTaskIndex == null || subTaskIndex < 0) return;
@@ -151,12 +147,12 @@ const tasksSlice = createSlice({
     closeSidebar: (state) => {
       state.selectedRowId = undefined;
     },
-    toggleFavorite: (state, action: PayloadAction<{ task: ITask; isImportant: boolean }>) => {
-      const task = action.payload.task;
-      const isImportant = action.payload.isImportant;
-      const index = state.tasks.findIndex((x) => x.id === task.id);
-      state.tasks[index].isImportant = isImportant;
-    },
+    /*    toggleFavorite: (state, action: PayloadAction<{ task: ITask; isImportant: boolean }>) => {
+          const task = action.payload.task;
+          const isImportant = action.payload.isImportant;
+          const index = state.tasks.findIndex((x) => x.id === task.id);
+          state.tasks[index].isImportant = isImportant;
+        },*/
     toggleChecked: (state, action: PayloadAction<{ task: ITask; isChecked: boolean }>) => {
       const task = action.payload.task;
       const isChecked = action.payload.isChecked;
@@ -216,7 +212,6 @@ const tasksSlice = createSlice({
 export const tasksReducer = tasksSlice.reducer;
 export const {
   toggleChecked,
-  toggleFavorite,
   toggleSelected,
   closeSidebar,
   updateTask,

@@ -5,7 +5,7 @@ import useReminder from "../../ducks/hooks/useReminder";
 import RepeatMenuItems from "./RepeatMenuItems";
 import getRepeatName from "../../ducks/helpers/getRepeatName";
 import { useAppSelector } from "@/constants/types/redux";
-import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
+import { currentTaskSelector } from "@/utils/selectors/currentTaskSelector";
 
 type Props = {
   isOpen: boolean;
@@ -15,7 +15,7 @@ type Props = {
 
 const RepeatInput = forwardRef(
   ({ isOpen, setIsOpen, closeDropdown }: Props, ref: React.Ref<HTMLDivElement>) => {
-    const selectedTask = useAppSelector(selectCurrentTask);
+    const selectedTask = useAppSelector(currentTaskSelector);
     const [setReminder, clearReminder] = useReminder();
 
     const hasRepeatDate = selectedTask && selectedTask.repeatPeriod != null;

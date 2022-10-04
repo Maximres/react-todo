@@ -3,11 +3,11 @@ import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { updateTask } from "@features/tasks";
 import { ITask } from "@/constants/types/tasksTypes";
-import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
+import { currentTaskSelector } from "@/utils/selectors/currentTaskSelector";
 
 const RowNoteTextArea = () => {
   const dispatch = useAppDispatch();
-  const selectedTask = useAppSelector(selectCurrentTask) as ITask;
+  const selectedTask = useAppSelector(currentTaskSelector) as ITask;
   const [note, setNote] = useState(selectedTask.note);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const RowNoteTextArea = () => {
 
   const onChangeCallback = (e: any) => {
     setNote(e.target.value);
-    dispatch(updateTask({ id: selectedTask.id, note: e.target.value } as ITask));
+    dispatch(updateTask({ id: selectedTask.id, task: { note: e.target.value }  }));
   };
 
   return (

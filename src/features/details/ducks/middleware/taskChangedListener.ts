@@ -3,10 +3,11 @@ import { updateDetails } from "../detailsSlice";
 import { isAnyOf } from "@reduxjs/toolkit";
 import {
   createSubTask,
-  deleteSubTask, deleteTask,
+  deleteSubTask,
+  deleteTask,
   promoteSubTask,
+  setTasks,
   toggleChecked,
-  toggleFavorite,
   toggleSelected,
   updateSubTask,
   updateTask,
@@ -16,7 +17,6 @@ export const taskChangedListener = (startListening: AppStartListening) => {
   startListening({
     matcher: isAnyOf(
       toggleChecked,
-      toggleFavorite,
       toggleSelected,
       updateTask,
       updateSubTask,
@@ -24,6 +24,7 @@ export const taskChangedListener = (startListening: AppStartListening) => {
       deleteSubTask,
       promoteSubTask,
       deleteTask,
+      setTasks,
     ),
     effect: (action, { getState, dispatch }) => {
       const app = getState().tasks;

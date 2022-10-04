@@ -4,7 +4,7 @@ import { RootState } from "@/constants/types/redux";
 const selectCurrentTaskId = (state: RootState) => state.tasks.selectedRowId;
 const selectTasks = (state: RootState) => state.tasks.tasks;
 
-const selectCurrentTask = createSelector(
+const currentTaskSelector = createSelector(
   selectCurrentTaskId,
   selectTasks,
   (currentTaskId, tasks) => {
@@ -17,4 +17,4 @@ const selectCurrentTask = createSelector(
   },
 );
 
-export { selectCurrentTask };
+export { currentTaskSelector };

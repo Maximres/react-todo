@@ -4,10 +4,10 @@ import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { ITask } from "@/constants/types/tasksTypes";
 import { deleteTask } from "@/features/tasks";
 import { differenceInYears, format } from "date-fns";
-import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
+import { currentTaskSelector } from "@/utils/selectors/currentTaskSelector";
 
 const Footer = () => {
-  const selectedRow = useAppSelector(selectCurrentTask) as ITask;
+  const selectedRow = useAppSelector(currentTaskSelector) as ITask;
   const dispatch = useAppDispatch();
   const clickHandler = () => {
     dispatch(deleteTask(selectedRow.id));

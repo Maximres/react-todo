@@ -1,4 +1,4 @@
-﻿import React, { useEffect } from "react";
+﻿import React from "react";
 import Icons from "@/components/AppIcons";
 import RowDetailsEditor from "./components/RowDetailsEditor";
 import RowDetailsReminder from "./components/RowDetailsReminder";
@@ -11,21 +11,6 @@ import { RowNoteTextArea } from "@/features/details/components/rows/RowNoteTextA
 export const Details = (): JSX.Element | null => {
   const isVisible = useAppSelector((state) => state.details.isVisible);
   const dispatch = useAppDispatch();
-
-
-  useEffect(() => {
-    console.log("initial")
-    return () => {
-      console.log("unmount")
-    }
-  }, [])
-
-  useEffect(() => {
-    console.log("no deps")
-  })
-
-  console.log("inside")
-
 
   const closeDetails = () => {
     dispatch(closeSidebar());

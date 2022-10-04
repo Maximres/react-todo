@@ -5,7 +5,8 @@ import { differenceInCalendarDays, format } from "date-fns";
 import reminderEnum from "@/constants/enums/reminderEnum";
 import useReminder from "../../ducks/hooks/useReminder";
 import { useAppSelector } from "@/constants/types/redux";
-import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
+import { currentTaskSelector } from "@/utils/selectors/currentTaskSelector";
+import { formatDueDateValue } from "@/utils/helpers/formatDueDateValue";
 
 type Props = {
   isOpen: boolean;
@@ -14,27 +15,13 @@ type Props = {
 
 const DueDateInput = forwardRef(
   ({ isOpen, setIsOpen }: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
-    const selectedTask = useAppSelector(selectCurrentTask);
+    const selectedTask = useAppSelector(currentTaskSelector);
     const [setReminder, clearReminder] = useReminder();
-    const weeks = "EEEE";
-    const weekMonthDayFormat = "iii, LLL d";
+
     const hasDueDate = selectedTask && selectedTask.dueDate;
-    let date;
-    if (hasDueDate) {
-      const dueDateValue = selectedTask.dueDate as number;
-      const diffDays = differenceInCalendarDays(dueDateValue, new Date());
+    const date = formatDueDateValue(selectedTask?.dueDate);
 
-      const isToday = diffDays === 0;
-      const isTomorrow = diffDays === 1;
-      const nextWeekOrGreater = diffDays > 1;
-      date = isToday
-        ? "Today"
-        : isTomorrow
-        ? "Tomorrow"
-        : hasDueDate && format(dueDateValue, nextWeekOrGreater ? weekMonthDayFormat : weeks);
-    }
-
-    const dueDateText = hasDueDate ? `Due ${date}` : "Add due date";
+    const dueDateText = date ? `Due ${date}` : "Add due date";
 
     const handleClearReminder = (e: any) => {
       e.preventDefault();

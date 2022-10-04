@@ -1,13 +1,13 @@
 ﻿import React from "react";
 import Icons from "@/components/AppIcons";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
-import { selectCurrentTask } from "@/utils/selectors/selectCurrentRow";
+import { currentTaskSelector } from "@/utils/selectors/currentTaskSelector";
 import { ISubTask, ITask } from "@/constants/types/tasksTypes";
-import { toggleChecked, toggleFavorite, updateTask } from "@/features/tasks";
+import { toggleChecked, updateTask } from "@/features/tasks";
 import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
 
 const RowDetails = () => {
-  const selectedRow = useAppSelector(selectCurrentTask) as ITask;
+  const selectedRow = useAppSelector(currentTaskSelector);
   const dispatch = useAppDispatch();
 
   const handleCheck = (task: ITask) => {
@@ -15,13 +15,31 @@ const RowDetails = () => {
   };
 
   const handleTextChange = (e: any, task: ISubTask) => {
-    dispatch(updateTask({ ...(task as ITask), text: e.target.value }));
+    dispatch(
+      updateTask({
+        id: task.id,
+        task: {
+          text: e.target.value,
+        }
+      }),
+    );
   };
 
   const toggleFavoriteTask = () => {
-    const row = selectedRow;
-    dispatch(toggleFavorite({ task: row, isImportant: !row.isImportant }));
+    const row = selectedRow!;
+    dispatch(
+      updateTask({
+        id: row.id,
+        task: {
+          isImportant: !row.isImportant,
+        } ,
+      }),
+    );
   };
+
+  if (selectedRow == null)
+    return null
+
   return (
     <li className="list-group-item group-item-height d-flex justify-content-between align-items-center flex-fill">
       <input

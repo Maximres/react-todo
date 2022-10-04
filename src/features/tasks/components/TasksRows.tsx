@@ -1,16 +1,16 @@
 ﻿import React, { memo, useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "@/constants/types/redux";
-import { toggleChecked, toggleFavorite, toggleSelected, updateTask } from "@/features/tasks";
+import { toggleChecked, toggleSelected, updateTask } from "@/features/tasks";
 import { ITask } from "@/constants/types/tasksTypes";
 import { Task } from "@/features/tasks/components/Task";
 import { getOrderNumber } from "@/utils/helpers/order";
 
 type Props = {
   tasks: ITask[];
-  selectedId: string;
+  selectedId?: string;
 };
 
-const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
+const TasksComponent = ({ tasks, selectedId = "" }: Props): JSX.Element | null => {
   const dispatch = useAppDispatch();
 
   const [dragEndId, setDragEndId] = useState<string | null>();
@@ -39,13 +39,13 @@ const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
     const meanOrder = (destItem.order + siblingsOrder) / 2.0;
 
     const srcCopy = { ...source, order: meanOrder };
-    dispatch(updateTask(srcCopy));
+    dispatch(updateTask({ id: srcCopy.id, task: srcCopy }));
     setDroppableId(null);
     setDragEndId(null);
   }, [dragEndId]);
 
   const toggleImportant = useCallback((task: ITask) => {
-    dispatch(toggleFavorite({ task: task, isImportant: !task.isImportant }));
+    dispatch(updateTask({ id: task.id, task: { isImportant: !task.isImportant } }));
   }, []);
 
   const toggleSideBar = useCallback((task: ITask) => {
@@ -79,6 +79,8 @@ const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
     [droppableId, isDragTop],
   );
 
+  if (!tasks) return null;
+
   const elements = tasks.map((row) => (
     <Task
       key={row.id}
@@ -93,7 +95,7 @@ const TasksComponent = ({ tasks, selectedId }: Props): JSX.Element | null => {
     />
   ));
 
-  return tasks ? <>{elements}</> : null;
+  return <>{elements}</>;
 };
 
 export const TasksRows = memo(TasksComponent);

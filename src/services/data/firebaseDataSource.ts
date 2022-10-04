@@ -560,7 +560,6 @@ const setTask = async (db: Firestore, task: ITask) => {
 };
 
 const promoteSubtask = async (db: Firestore, taskId: string, promotedTask: ITask) => {
-  debugger;
   try {
     const batch = writeBatch(db);
     const subtaskRef = doc(
