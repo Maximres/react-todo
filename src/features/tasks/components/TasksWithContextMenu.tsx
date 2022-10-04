@@ -8,10 +8,6 @@ import { useDrop } from "react-dnd";
 import { TasksRows } from "@/features/tasks/components/TasksRows";
 import { ContextMenu } from "../ducks/contexts/contextMenu";
 import { listsWithoutCurrentSelector } from "@/features/tasks/ducks/selectors/listsWithoutCurrentSelector";
-import { TaskItemOperations } from "@/features/tasks/ducks/constants/contextMenuOperations";
-import { deleteTask, toggleChecked, updateTask } from "@features/tasks";
-import reminderEnum from "@/constants/enums/reminderEnum";
-import { setRemindDate } from "@/features/tasks/ducks/helpers/remindDatesHelper";
 import { useTaskItemOperations } from "@/features/tasks/ducks/hooks/useTaskItemOperations";
 
 type Props = {
@@ -19,14 +15,12 @@ type Props = {
   selectedId: string;
 };
 
-
-
 const TasksWithContextMenuInner = () => {
   const dispatch = useAppDispatch();
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
   const [task, setTask] = useState<ITask>();
-  const handleOperation =  useTaskItemOperations();
+  const handleOperation = useTaskItemOperations();
   const selectedId = useAppSelector((s) => s.tasks.selectedRowId);
   const filteredLists = useAppSelector(listsWithoutCurrentSelector);
   const tasks = useAppSelector(orderedTasksSelector);
@@ -41,7 +35,7 @@ const TasksWithContextMenuInner = () => {
   }));
 
   const onItemClick = (e: ClickEvent) => {
-    handleOperation(e.value, task)
+    handleOperation(e.value, task);
   };
 
   const goneDoneTasks = useMemo(() => tasks.filter((x) => !x.isChecked), [tasks]);

@@ -6,6 +6,7 @@ import { taskChangedListener } from "./taskChangedListener";
 import { taskDeletedListener } from "./taskDeletedListener";
 import { taskCreatedListener } from "./taskCreatedListener";
 import { subTaskPromotedListener } from "./subTaskPromotedListener";
+import { taskMovedListener } from "./taskMovedListener";
 
 export const tasksListenerMiddleware = createListenerMiddleware();
 
@@ -17,3 +18,4 @@ taskChangedListener(startAppListeningDetails);
 taskDeletedListener(startAppListeningDetails);
 taskCreatedListener(startAppListeningDetails);
 subTaskPromotedListener(startAppListeningDetails);
+taskMovedListener(startAppListeningDetails);

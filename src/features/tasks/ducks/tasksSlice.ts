@@ -17,11 +17,14 @@ const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    updateTask: (state, action: PayloadAction<{ id: string; task: Partial<Omit<ITask, "id">> | ITask }>) => {
+    updateTask: (
+      state,
+      action: PayloadAction<{ id: string; task: Partial<Omit<ITask, "id">> | ITask }>,
+    ) => {
       const index = state.tasks.findIndex((x) => x.id === action.payload.id);
       if (index < 0) return;
       const task = state.tasks[index];
-      state.tasks[index] = assignDeep(<ITask>{}, task, action.payload.task );
+      state.tasks[index] = assignDeep(<ITask>{}, task, action.payload.task);
     },
     createTask: {
       reducer(state, action: PayloadAction<{ text: string; id: string }>) {
@@ -133,6 +136,12 @@ const tasksSlice = createSlice({
 
       state.tasks.push(promotedSubTask);
     },
+    moveTask(state, action: PayloadAction<{ taskId: string; listId: string }>) {
+      const taskIndex = state.tasks.findIndex((x) => x.id === action.payload.taskId);
+      if (taskIndex < 0) return;
+
+      state.tasks.splice(taskIndex, 1);
+    },
     toggleSelected: (state, action: PayloadAction<{ task: ITask }>) => {
       const currentId = action.payload.task.id;
       const toggleWithoutClose = currentId !== state.selectedRowId && state.selectedRowId != null;
@@ -201,7 +210,6 @@ const tasksSlice = createSlice({
       const sameList = state.listId === list.id;
       if (sameList) return;
 
-      state.tasks = list.tasks;
       state.listId = list.id;
       state.listName = list.name;
       state.listIcon = list.iconName;
@@ -223,4 +231,5 @@ export const {
   createSubTask,
   updateSubTask,
   promoteSubTask,
+  moveTask,
 } = tasksSlice.actions;

@@ -14,7 +14,7 @@ import {
   copyList,
   deleteList,
   endEditItem,
-  moveItem,
+  moveList,
   removeFromGroup,
   startEditItem,
 } from "@features/lists";
@@ -86,7 +86,7 @@ const ListItem = (props: Props) => {
   const onItemClick = (e: ClickEvent) => {
     if (isListItemMoveOperation(e.value)) {
       const [_, groupId] = e.value;
-      dispatch(moveItem({ listId: uid, groupId: groupId }));
+      dispatch(moveList({ listId: uid, groupId: groupId }));
     }
 
     if (!isListItemOperation(e.value)) {

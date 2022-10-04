@@ -9,7 +9,7 @@
 import { tasksReducer } from "@/features/tasks";
 import { detailsListenerMiddleware, detailsReducer } from "@features/details";
 import { listsReducer } from "@features/lists";
-import { tasksListenerMiddleware } from "@/features/tasks/ducks/middleware/tasksMiddleware";
+import { tasksListenerMiddleware } from "@/features/tasks/ducks/middleware/middleware";
 import { listsListenerMiddleware } from "@/features/lists/ducks/middleware/middleware";
 
 const consoleLogger = (api: MiddlewareAPI<Dispatch, any>) => {

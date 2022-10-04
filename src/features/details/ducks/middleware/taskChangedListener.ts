@@ -5,6 +5,7 @@ import {
   createSubTask,
   deleteSubTask,
   deleteTask,
+  moveTask,
   promoteSubTask,
   setTasks,
   toggleChecked,
@@ -25,6 +26,7 @@ export const taskChangedListener = (startListening: AppStartListening) => {
       promoteSubTask,
       deleteTask,
       setTasks,
+      moveTask,
     ),
     effect: (action, { getState, dispatch }) => {
       const app = getState().tasks;

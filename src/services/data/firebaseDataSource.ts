@@ -4,7 +4,6 @@ import {
   collectionGroup,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   orderBy,
   query,
@@ -17,317 +16,9 @@ import { GroupDto, ListDto, SubTaskDto, TaskDto } from "@/constants/types/fireba
 import { IGroup, IList } from "@/constants/types/listsTypes";
 import scheme from "@/constants/enums/firebaseCollectionScheme";
 import { isFulfilled, isRejected } from "@/utils/helpers/promiseResolver";
-import flattenDeep from "lodash/flattenDeep";
 import _orderBy from "lodash/orderBy";
 import { ISubTask, ITask } from "@/constants/types/tasksTypes";
 import reminderEnum from "@/constants/enums/reminderEnum";
-
-const getListsWithSubtasks = (db: Firestore) => {
-  const lists = [] as ListDto[];
-  const tasks = [] as TaskDto[];
-  const subTasks = [] as SubTaskDto[];
-
-  return new Promise<IList[]>(async (resolve) => {
-    const queryListsSnap = await getDocs(collection(db, scheme.Lists));
-
-    const tasksQueries = queryListsSnap.docs.map((listDoc) => {
-      lists.push({ ...(listDoc.data() as ListDto), id: listDoc.id });
-      return getCollectionGroup(db, listDoc.id, scheme.Tasks);
-    });
-
-    const queryTaskSnaps = await Promise.allSettled(tasksQueries);
-
-    //skipping rejected queries
-    queryTaskSnaps.filter(isRejected).forEach((rejected) => {
-      console.error({ "task req rejected: ": rejected });
-    });
-
-    const subTasksQueries = queryTaskSnaps.filter(isFulfilled).map((taskSnap) => {
-      const queries = taskSnap.value.docs.map((taskDoc) => {
-        tasks.push({ ...(taskDoc.data() as TaskDto), id: taskDoc.id });
-        return getCollectionGroup(db, taskDoc.id, scheme.SubTasks);
-      });
-
-      return queries;
-    });
-
-    const flattenQueries = flattenDeep(subTasksQueries);
-    const subTaskSnaps = await Promise.allSettled(flattenQueries);
-
-    //skipping rejected queries
-    subTaskSnaps.filter(isRejected).forEach((subTaskRejected) => {
-      console.error({ "subtask req rejected: ": subTaskRejected });
-    });
-
-    subTaskSnaps.filter(isFulfilled).forEach((subTaskSnap) => {
-      subTaskSnap.value.docs.forEach((subTaskDoc) => {
-        subTasks.push({
-          ...(subTaskDoc.data() as SubTaskDto),
-          id: subTaskDoc.id,
-        });
-      });
-    });
-
-    //todo merge arrays
-
-    subTasks.forEach((sub) => {
-      const parent = tasks.find((t) => t.id === sub.parentId);
-      if (parent != null) {
-        parent.subTasks ??= [];
-        parent.subTasks.push(sub);
-      }
-    });
-
-    tasks.forEach((t) => {
-      const parent = lists.find((l) => l.id === t.parentId);
-      if (parent != null) {
-        parent.tasks ??= [];
-        parent.tasks.push(t);
-      }
-    });
-    const result = lists.map((listDto) => {
-      const list = {
-        id: listDto.id,
-        name: listDto.name,
-        groupId: listDto.groupId,
-        iconName: listDto.iconName,
-        totalTasks: listDto.tasks.length,
-        order: Number(listDto.order),
-      } as IList;
-
-      list.tasks = (listDto.tasks ||= []).map((taskDto) => {
-        const task = {
-          id: taskDto.id,
-          createdDate: Number(taskDto.createdDate),
-          parentId: taskDto.parentId,
-          order: Number(taskDto.order),
-        } as ITask;
-        task.isImportant = taskDto.isImportant;
-        task.text = taskDto.text;
-        task.note = taskDto.note;
-        task.isChecked = taskDto.isChecked;
-        //todo other props
-
-        task.isMyDay = taskDto.isMyDay;
-        task.dueDate = taskDto.dueDate;
-        task.remindDate = taskDto.remindDate;
-        task.repeatPeriod = taskDto.repeatPeriod as [
-          index1: number,
-          index2: keyof typeof reminderEnum,
-        ];
-
-        task.subTasks = (taskDto.subTasks ||= []).map((subDto) => {
-          const subTask = {
-            id: subDto.id,
-            parentId: subDto.parentId,
-            createdDate: Number(subDto.createdDate),
-            order: Number(subDto.order),
-            isChecked: subDto.isChecked,
-          } as ISubTask;
-          subTask.text = subDto.text;
-
-          return subTask;
-        });
-        return task;
-      });
-
-      return list;
-    });
-
-    return resolve(result);
-  });
-};
-
-const getTaskWithSubtasks = (db: Firestore, uid: string) => {
-  let listDto = {} as ListDto;
-  const taskDtos = [] as TaskDto[];
-  const subTaskDtos = [] as SubTaskDto[];
-
-  return new Promise<IList>((resolve) => {
-    getDoc(doc(db, scheme.Lists, uid))
-      .then((queryListsSnap) => {
-        listDto = {
-          ...queryListsSnap.data(),
-          id: queryListsSnap.id,
-        } as ListDto;
-        return getCollectionGroup(db, queryListsSnap.id, scheme.Tasks);
-      })
-      .then((queryTaskSnap) => {
-        //skipping rejected queries
-        const queries = queryTaskSnap.docs.map((taskDoc) => {
-          taskDtos.push({ ...(taskDoc.data() as TaskDto), id: taskDoc.id });
-          return getCollectionGroup(db, taskDoc.id, scheme.SubTasks);
-        });
-
-        return queries;
-      })
-      .then((queries) => Promise.allSettled(queries))
-      .then((subTaskSnaps) => {
-        subTaskSnaps.forEach((subTaskSnap) => {
-          if (isRejected(subTaskSnap)) {
-            //todo handle
-            console.error({ "subtask req rejected: ": subTaskSnap });
-            return;
-          }
-          const subTasksQueries = subTaskSnap.value.docs.map((subTaskDoc) => {
-            subTaskDtos.push({
-              ...(subTaskDoc.data() as SubTaskDto),
-              id: subTaskDoc.id,
-            });
-            return null;
-          });
-        });
-      })
-      .then(() => {
-        //todo merge arrays
-
-        subTaskDtos.forEach((sub) => {
-          const parent = taskDtos.find((t) => t.id === sub.parentId);
-          if (parent != null) {
-            parent.subTasks ??= [];
-            parent.subTasks.push(sub);
-          }
-        });
-
-        taskDtos.forEach((t) => {
-          const parent = listDto;
-          if (parent != null) {
-            parent.tasks ??= [];
-            parent.tasks.push(t);
-          }
-        });
-
-        const list = {
-          id: listDto.id,
-        } as IList;
-        list.name = listDto.name;
-        list.groupId = listDto.groupId;
-        list.iconName = listDto.iconName;
-        list.totalTasks = listDto.tasks.length;
-        list.order = Number(listDto.order);
-
-        list.tasks = (listDto.tasks ||= []).map((taskDto) => {
-          const task = {
-            id: taskDto.id,
-            createdDate: Number(taskDto.createdDate),
-            parentId: taskDto.parentId,
-            order: Number(taskDto.order),
-          } as ITask;
-          task.isImportant = taskDto.isImportant;
-          task.text = taskDto.text;
-          task.note = taskDto.note;
-          task.isChecked = taskDto.isChecked;
-          //todo other props
-
-          task.isMyDay = taskDto.isMyDay;
-          task.dueDate = taskDto.dueDate;
-          task.remindDate = taskDto.remindDate;
-          task.repeatPeriod = taskDto.repeatPeriod as [
-            index1: number,
-            index2: keyof typeof reminderEnum,
-          ];
-
-          task.subTasks = (taskDto.subTasks ||= []).map((subDto) => {
-            const subTask = {
-              id: subDto.id,
-              parentId: subDto.parentId,
-              createdDate: Number(subDto.createdDate),
-              order: Number(subDto.order),
-              isChecked: subDto.isChecked,
-            } as ISubTask;
-
-            subTask.text = subDto.text;
-
-            return subTask;
-          });
-          return task;
-        });
-
-        return resolve(list);
-      });
-  });
-};
-
-const getListsWithTasks = (db: Firestore) => {
-  const lists = [] as ListDto[];
-  const tasks = [] as TaskDto[];
-
-  return new Promise<IList[]>((resolve) => {
-    getDocs(query(collection(db, scheme.Lists), orderBy("order", "asc")))
-      .then((queryListsSnap) => {
-        const tasksQueries = queryListsSnap.docs.map((listDoc) => {
-          lists.push({ ...(listDoc.data() as ListDto), id: listDoc.id });
-          return getCollectionGroup(db, listDoc.id, scheme.Tasks);
-        });
-
-        return tasksQueries;
-      })
-      .then((value) => Promise.allSettled(value))
-      .then((queryTaskSnaps) => {
-        //skipping rejected queries
-        queryTaskSnaps.filter(isRejected).forEach((rejected) => {
-          console.error({ "task req rejected: ": rejected });
-        });
-
-        const subTasksQueries = queryTaskSnaps.filter(isFulfilled).map((taskSnap) => {
-          const queries = taskSnap.value.docs.map((taskDoc) => {
-            tasks.push({ ...(taskDoc.data() as TaskDto), id: taskDoc.id });
-            return getCollectionGroup(db, taskDoc.id, scheme.SubTasks);
-          });
-
-          return queries;
-        });
-      })
-      .then(() => {
-        tasks.forEach((t) => {
-          const parent = lists.find((l) => l.id === t.parentId);
-          if (parent != null) {
-            parent.tasks ??= [];
-            parent.tasks.push(t);
-          }
-        });
-
-        const result = lists.map((listDto) => {
-          const list = {
-            id: listDto.id,
-          } as IList;
-          list.name = listDto.name;
-          list.groupId = listDto.groupId;
-          list.iconName = listDto.iconName ?? "List";
-          list.totalTasks = listDto.tasks.length;
-          list.order = Number(listDto.order);
-
-          list.tasks = (listDto.tasks ||= []).map((taskDto) => {
-            const task = {
-              id: taskDto.id,
-              createdDate: Number(taskDto.createdDate),
-              parentId: taskDto.parentId,
-              order: Number(taskDto.order),
-            } as ITask;
-            task.isImportant = taskDto.isImportant;
-            task.text = taskDto.text;
-            task.note = taskDto.note;
-            task.isChecked = taskDto.isChecked;
-
-            //todo other props
-
-            task.isMyDay = taskDto.isMyDay;
-            task.dueDate = taskDto.dueDate === 0 ? undefined : taskDto.dueDate;
-            task.remindDate = taskDto.remindDate === 0 ? undefined : taskDto.remindDate;
-            task.repeatPeriod = taskDto?.repeatPeriod?.length
-              ? (taskDto.repeatPeriod as [index1: number, index2: keyof typeof reminderEnum])
-              : undefined;
-
-            return task;
-          });
-
-          return list;
-        });
-
-        resolve(result);
-      });
-  });
-};
 
 const getLists = (db: Firestore) => {
   const lists = [] as ListDto[];
@@ -349,8 +40,6 @@ const getLists = (db: Firestore) => {
         list.iconName = listDto.iconName ?? "List";
         list.totalTasks = listDto.totalTasks;
         list.order = Number(listDto.order);
-
-        list.tasks = [];
 
         return list;
       });
@@ -583,6 +272,22 @@ const promoteSubtask = async (db: Firestore, taskId: string, promotedTask: ITask
   }
 };
 
+const moveTask = async (db: Firestore, listId: string, movedTask: ITask) => {
+  try {
+    const batch = writeBatch(db);
+    const taskRef = doc(db, scheme.Lists, movedTask.parentId, scheme.Tasks, movedTask.id);
+    batch.delete(taskRef);
+
+    const targetTasks = doc(db, scheme.Lists, listId, scheme.Tasks, movedTask.id);
+    const taskDto = convertToDto({ ...movedTask, parentId: listId });
+
+    batch.set(targetTasks, taskDto, { merge: true });
+    await batch.commit();
+  } catch (e) {
+    console.error({ moveTaskError: e });
+  }
+};
+
 const setGroup = async (db: Firestore, group: IGroup) => {
   try {
     const reference = doc(db, scheme.Groups, group.id);
@@ -762,8 +467,6 @@ function convertGroupToDto(group: IGroup) {
 
 export const FirebaseDataSource = {
   getLists,
-  getListsWithTasks,
-  getListsWithSubtasks,
   updateList,
   setList,
   ungroupLists,
@@ -784,4 +487,5 @@ export const FirebaseDataSource = {
   getTasks,
   updateTask,
   deleteTask,
+  moveTask,
 };

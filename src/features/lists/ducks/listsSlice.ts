@@ -22,6 +22,7 @@ const defaults = [
     groupId: "",
   },
 ] as IList[];
+
 const initialState: IListsState = {
   defaultLists: defaults,
   userLists: [],
@@ -50,7 +51,6 @@ const listsSlice = createSlice({
         const name = action.meta.getName(state.userLists);
         const newList: IList = {
           id: action.payload.id,
-          tasks: [] as any,
           totalTasks: 0,
           name: name,
           iconName: "",
@@ -149,7 +149,7 @@ const listsSlice = createSlice({
         x.groupId = "";
       });
     },
-    moveItem(state, action: PayloadAction<{ listId: string; groupId: string }>) {
+    moveList(state, action: PayloadAction<{ listId: string; groupId: string }>) {
       const groupIndex = state.groups.findIndex((x) => x.id === action.payload.groupId);
       if (groupIndex < 0) throw new Error("Target Group is not found");
       const list = state.userLists.find((x) => x.id === action.payload.listId);
@@ -207,7 +207,7 @@ export const {
   deleteList,
   copyList,
   removeFromGroup,
-  moveItem,
+  moveList,
 } = listsSlice.actions;
 
 export const listsReducer = listsSlice.reducer;

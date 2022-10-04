@@ -7,7 +7,7 @@ export interface IList extends IOrderable {
   groupId?: string;
   iconName: string;
   totalTasks: number;
-  tasks: ITask[];
+  // tasks: ITask[];
   selectedTicks?: number;
 }
 

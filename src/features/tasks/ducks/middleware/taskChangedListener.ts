@@ -8,7 +8,7 @@ export const taskChangedListener = (startListening: AppStartListening) => {
     matcher: isAnyOf(updateTask, toggleChecked),
     effect: async (action, { getState, cancelActiveListeners, delay }) => {
       cancelActiveListeners();
-      await delay(1000);
+      await delay(700);
 
       let taskId: string;
       if (updateTask.match(action)) {

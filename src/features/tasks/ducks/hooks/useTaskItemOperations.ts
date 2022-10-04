@@ -1,6 +1,6 @@
 ﻿import { useAppDispatch } from "@/constants/types/redux";
 import { TaskItemOperations } from "@/features/tasks/ducks/constants/contextMenuOperations";
-import { deleteTask, toggleChecked, updateTask } from "@features/tasks";
+import { deleteTask, moveTask, toggleChecked, updateTask } from "@features/tasks";
 import { clearReminderDate, setRemindDate } from "@/features/tasks/ducks/helpers/remindDatesHelper";
 import reminderEnum from "@/constants/enums/reminderEnum";
 import { ITask } from "@/constants/types/tasksTypes";
@@ -17,17 +17,27 @@ const useTaskItemOperations = () => {
   const dispatch = useAppDispatch();
 
   const handleOperation = (operation: any, task?: ITask) => {
+    if (task == null) return;
+
     if (isTaskItemMoveOperation(operation)) {
-      const [_, groupId] = operation;
-      // dispatch(moveItem({ listId: uid, groupId: groupId }));
+      const [, listId] = operation;
+      dispatch(moveTask({ taskId: task.id, listId: listId }));
     }
 
-    if (!isTaskItemOperation(operation) || task == null) {
+    if (!isTaskItemOperation(operation)) {
       return;
     }
 
     switch (operation) {
       case TaskItemOperations.ToggleMyDay:
+        dispatch(
+          updateTask({
+            id: task.id,
+            task: {
+              isMyDay: !task.isMyDay,
+            },
+          }),
+        );
         break;
       case TaskItemOperations.ToggleImportance:
         dispatch(
