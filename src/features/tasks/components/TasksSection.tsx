@@ -9,7 +9,7 @@ const TasksSection = () => {
     <section ref={contextBoundaryRef} >
       <div className="vh-100">
         <SimpleBar
-          className="h-100 px-5 pb-4 pt-xxl"
+          className="h-100 px-5 pb-5 pt-xxl"
           scrollbarMaxSize={200}
           autoHide={false}
           forceVisible={true}

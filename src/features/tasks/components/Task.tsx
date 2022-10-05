@@ -8,7 +8,7 @@ import { ContextMenu } from "../ducks/contexts/contextMenu";
 
 type Props = {
   task: ITask;
-  selectedId: string;
+  activeId: string;
   handleCheck: (task: ITask) => void;
   toggleImportant: (task: ITask) => void;
   toggleSideBar: (task: ITask) => void;
@@ -19,7 +19,7 @@ type Props = {
 
 const TaskComponent = ({
   task,
-  selectedId,
+  activeId,
   toggleSideBar,
   handleCheck,
   toggleImportant,
@@ -37,7 +37,7 @@ const TaskComponent = ({
         className={cn(
           "row my-1",
           {
-            "table-active": selectedId === task.id,
+            "table-active": activeId === task.id,
           },
           [borderCn],
         )}

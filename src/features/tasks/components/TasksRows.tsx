@@ -7,10 +7,10 @@ import { getOrderNumber } from "@/utils/helpers/order";
 
 type Props = {
   tasks: ITask[];
-  selectedId?: string;
+  activeId?: string;
 };
 
-const TasksComponent = ({ tasks, selectedId = "" }: Props): JSX.Element | null => {
+const TasksComponent = ({ tasks, activeId = "" }: Props): JSX.Element | null => {
   const dispatch = useAppDispatch();
 
   const [dragEndId, setDragEndId] = useState<string | null>();
@@ -85,7 +85,7 @@ const TasksComponent = ({ tasks, selectedId = "" }: Props): JSX.Element | null =
     <Task
       key={row.id}
       task={row}
-      selectedId={selectedId}
+      activeId={activeId}
       toggleImportant={toggleImportant}
       toggleSideBar={toggleSideBar}
       handleCheck={handleCheck}

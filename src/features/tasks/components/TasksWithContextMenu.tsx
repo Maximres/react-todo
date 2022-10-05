@@ -11,10 +11,10 @@ import { listsWithoutCurrentSelector } from "@/features/tasks/ducks/selectors/li
 import { useTaskItemOperations } from "@/features/tasks/ducks/hooks/useTaskItemOperations";
 
 type Props = {
-  boundaryRef: React.RefObject<null>
+  boundaryRef: React.RefObject<null>;
 };
 
-const TasksWithContextMenuInner = ({boundaryRef}: Props) => {
+const TasksWithContextMenuInner = ({ boundaryRef }: Props) => {
   const dispatch = useAppDispatch();
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
@@ -39,7 +39,6 @@ const TasksWithContextMenuInner = ({boundaryRef}: Props) => {
 
   const goneDoneTasks = useMemo(() => tasks.filter((x) => !x.isChecked), [tasks]);
   const doneTasks = useMemo(() => tasks.filter((x) => x.isChecked), [tasks]);
-  const isActive = canDrop && isOver;
 
   const toggleContextMenu = useCallback((open: boolean, x: number, y: number, task: ITask) => {
     toggleMenu(open);
@@ -47,19 +46,20 @@ const TasksWithContextMenuInner = ({boundaryRef}: Props) => {
     setTask(task);
   }, []);
 
+  const isActive = menuProps.state === "open" ? task?.id : selectedId;
   return (
     <div className="row">
       <div className="col-12 pb-2">
         <ContextMenu.Provider value={toggleContextMenu}>
           <table className="table table-hover table-light">
             <tbody ref={drop}>
-              <TasksRows tasks={goneDoneTasks} selectedId={selectedId} />
+              <TasksRows tasks={goneDoneTasks} activeId={isActive} />
             </tbody>
           </table>
 
           <table className="table table-hover table-light">
             <tbody>
-              <TasksRows tasks={doneTasks} selectedId={selectedId} />
+              <TasksRows tasks={doneTasks} activeId={isActive} />
             </tbody>
           </table>
         </ContextMenu.Provider>
