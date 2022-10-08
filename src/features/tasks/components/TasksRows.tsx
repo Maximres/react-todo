@@ -13,7 +13,7 @@ type Props = {
 const TasksComponent = ({ tasks, activeId = "" }: Props): JSX.Element | null => {
   const dispatch = useAppDispatch();
 
-  const [dragEndId, setDragEndId] = useState<string | null>();
+  const [dragEndId, setDragEndId] = useState<string | null>(null);
   const [isDragTop, setIsDragTop] = useState(false);
   const [droppableId, setDroppableId] = useState<string | null>(null);
 

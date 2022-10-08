@@ -180,3 +180,11 @@
 .szh-menu-container .szh-menu__submenu .szh-menu {
   padding: 0 1rem;
 }
+
+.collapse-ml {
+  margin-left: -0.75rem;
+}
+
+.collapse-w {
+  width: 20px;
+}

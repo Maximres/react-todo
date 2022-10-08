@@ -1,21 +1,21 @@
 ﻿import React, { memo, useCallback, useMemo, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
+import { useAppSelector } from "@/constants/types/redux";
 import { ITask } from "@/constants/types/tasksTypes";
 import { TaskContextMenu } from "@/features/tasks/components/TaskContextMenu";
 import { ClickEvent, useMenuState } from "@szhsin/react-menu";
-import { orderedTasksSelector } from "@/features/tasks/ducks/selectors/orderedTasksSelector";
+import { orderedTasksSelector } from "../ducks/selectors/orderedTasksSelector";
 import { useDrop } from "react-dnd";
-import { TasksRows } from "@/features/tasks/components/TasksRows";
+import { TasksRows } from "./TasksRows";
 import { ContextMenu } from "../ducks/contexts/contextMenu";
-import { listsWithoutCurrentSelector } from "@/features/tasks/ducks/selectors/listsWithoutCurrentSelector";
-import { useTaskItemOperations } from "@/features/tasks/ducks/hooks/useTaskItemOperations";
+import { listsWithoutCurrentSelector } from "../ducks/selectors/listsWithoutCurrentSelector";
+import { useTaskItemOperations } from "../ducks/hooks/useTaskItemOperations";
+import { TasksCollapse } from "@/features/tasks/components/TasksCollapse";
 
 type Props = {
   boundaryRef: React.RefObject<null>;
 };
 
 const TasksWithContextMenuInner = ({ boundaryRef }: Props) => {
-  const dispatch = useAppDispatch();
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
   const [task, setTask] = useState<ITask>();
@@ -46,22 +46,18 @@ const TasksWithContextMenuInner = ({ boundaryRef }: Props) => {
     setTask(task);
   }, []);
 
-  const isActive = menuProps.state === "open" ? task?.id : selectedId;
+  const activeId = menuProps.state === "open" ? task?.id : selectedId;
   return (
     <div className="row">
       <div className="col-12 pb-2">
         <ContextMenu.Provider value={toggleContextMenu}>
-          <table className="table table-hover table-light">
+          <table className="table table-hover table-light mb-0">
             <tbody ref={drop}>
-              <TasksRows tasks={goneDoneTasks} activeId={isActive} />
+              <TasksRows tasks={goneDoneTasks} activeId={activeId} />
             </tbody>
           </table>
-
-          <table className="table table-hover table-light">
-            <tbody>
-              <TasksRows tasks={doneTasks} activeId={isActive} />
-            </tbody>
-          </table>
+          <TasksCollapse doneTasks={doneTasks} activeId={activeId} />
+          <div className="my-3" />
         </ContextMenu.Provider>
         <TaskContextMenu
           ref={boundaryRef}

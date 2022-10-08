@@ -40,6 +40,10 @@ const Search = (props: any) => Icon(props, solid("magnifying-glass"));
 const Planned = (props: any) => Icon(props, regular("rectangle-list"));
 const All = (props: any) => Icon(props, solid("infinity"));
 const Task = (props: any) => Icon(props, solid("house"));
+const Angle = (props: any) => {
+  const { isCollapsed, ...rest } = props;
+  return Icon(rest, isCollapsed ? solid("angle-right") : solid("angle-down"));
+};
 
 const Icons = {
   Options: memo(Options),
@@ -69,6 +73,7 @@ const Icons = {
   Planned: memo(Planned),
   All: memo(All),
   Task: memo(Task),
+  Angle: memo(Angle),
 };
 
 export default Icons;
