@@ -6,7 +6,7 @@ import DueDateInput from "./dueDate/DueDateInput";
 import RepeatInput from "./repeat/RepeatInput";
 import ReminderIntervalPickerDropdown from "./reminder/ReminderIntervalPickerDropdown";
 
-const RowDetailsReminder = () => {
+const Reminder = () => {
   return (
     <div className="m-3">
       <div className="list-group">
@@ -49,4 +49,4 @@ const RowDetailsReminder = () => {
   );
 };
 
-export default RowDetailsReminder;
+export default Reminder;

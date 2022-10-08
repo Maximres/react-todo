@@ -5,7 +5,7 @@ import { updateTask } from "@features/tasks";
 import { ITask } from "@/constants/types/tasksTypes";
 import { currentTaskSelector } from "@/utils/selectors/currentTaskSelector";
 
-const RowNoteTextArea = () => {
+const Note = () => {
   const dispatch = useAppDispatch();
   const selectedTask = useAppSelector(currentTaskSelector) as ITask;
   const [note, setNote] = useState(selectedTask.note);
@@ -38,6 +38,6 @@ const RowNoteTextArea = () => {
   );
 };
 
-RowNoteTextArea.displayName = "RowNoteTextArea";
+Note.displayName = "Note";
 
-export { RowNoteTextArea };
+export { Note };

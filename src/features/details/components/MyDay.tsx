@@ -5,7 +5,7 @@ import { currentTaskSelector } from "@/utils/selectors/currentTaskSelector";
 import { updateTask } from "@/features/tasks";
 import classNames from "classnames";
 
-const RowDetailsMyDay = () => {
+const MyDay = () => {
   const selectedTask = useAppSelector(currentTaskSelector);
   const dispatch = useAppDispatch();
   const addToMyDay = () => {
@@ -46,4 +46,4 @@ const RowDetailsMyDay = () => {
   );
 };
 
-export default RowDetailsMyDay;
+export default MyDay;

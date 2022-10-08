@@ -6,7 +6,7 @@ import RowDetails from "./rows/RowDetails";
 import "@szhsin/react-menu/dist/index.css";
 
 
-const RowDetailsEditor = () => {
+const Editor = () => {
   return (
     <div className="m-3">
       <ul className="list-group">
@@ -18,4 +18,4 @@ const RowDetailsEditor = () => {
   );
 };
 
-export default RowDetailsEditor;
+export default Editor;
