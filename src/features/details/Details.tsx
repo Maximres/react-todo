@@ -16,15 +16,19 @@ export const Details = (): JSX.Element | null => {
 
   return (
     <aside id="details" className="overflow-auto">
-      <SimpleBar className="h-100" scrollbarMaxSize={200} autoHide={false} forceVisible={true}>
-        <div className="vh-100 d-flex flex-column align-items-stretch flex-shrink-0 bg-light">
-          <Close />
-          <Editor />
-          <MyDay />
-          <Reminder />
-          <Attachment />
-          <Note />
-          <Footer />
+      <SimpleBar className="h-100" scrollbarMaxSize={200} autoHide={false} forceVisible={false}>
+        <div className="vh-100">
+          <div className="h-100 d-flex flex-column align-items-stretch flex-shrink-0 bg-light">
+            <Close />
+            <Editor />
+            <MyDay />
+            <Reminder />
+            <Attachment />
+            {/*todo: replace textarea with MUI multiline*/}
+            <Note />
+            <Footer />
+            <div />
+          </div>
         </div>
       </SimpleBar>
     </aside>
