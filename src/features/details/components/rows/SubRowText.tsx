@@ -1,9 +1,8 @@
 ﻿import React, { useState, useTransition } from "react";
-import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
-import cn from "classnames";
 import { updateSubTask } from "@features/tasks";
 import { ITask } from "@/constants/types/tasksTypes";
 import { useAppDispatch } from "@/constants/types/redux";
+import { InputBase } from "@mui/material";
 
 type Props = {
   uid: string;
@@ -35,14 +34,15 @@ const SubRowText = ({ uid, isChecked, text = "" }: Props) => {
   };
 
   return (
-    <textarea
-      rows={1}
-      className={cn("form-control me-1 overflow-hidden ", {
-        "text-decoration-line-through": isChecked,
-      })}
+    <InputBase
+      sx={{ flexGrow: 1 }}
       value={value}
-      onKeyPress={handleEnterKeyPress}
       onChange={onChange}
+      inputProps={{
+        style: {
+          textDecoration: isChecked ? "line-through" : "none",
+        },
+      }}
     />
   );
 };

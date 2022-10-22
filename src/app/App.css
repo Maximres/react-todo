@@ -36,25 +36,6 @@
   /*//todo: calculate right padd*/
 }
 
-#details .form-control:not([data-preseve-border]) {
-  border: 0;
-  padding: 0;
-}
-
-#details textarea.form-control {
-  min-height: 24px;
-  height: auto;
-}
-
-#details textarea.form-control[data-main-row-title] {
-  min-height: 36px;
-  height: auto;
-}
-
-#details .form-control:focus {
-  box-shadow: none;
-}
-
 .group-item-height {
   min-height: calc(
     1rem * calc(45 / var(--default-font-size-number))

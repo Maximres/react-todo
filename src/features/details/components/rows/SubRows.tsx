@@ -4,6 +4,7 @@ import { SubRowCheckBox } from "@/features/details/components/rows/SubRowCheck";
 import { SubRowText } from "@/features/details/components/rows/SubRowText";
 import { ClickEvent } from "@szhsin/react-menu";
 import { SubRowContextMenu } from "@/features/details/components/rows/SubRowContextMenu";
+import { Divider, Stack } from "@mui/material";
 
 type Props = {
   subTask: ISubTask;
@@ -11,22 +12,25 @@ type Props = {
 };
 
 const SubRows = ({ subTask, onItemClick }: Props) => {
-  const ref = useRef(null);
+  const boundingBoxRef = useRef(null);
 
   const onContextItemClick = (e: ClickEvent) => {
     onItemClick(e, subTask);
   };
 
   return (
-    <div
-      className="list-group-item d-flex justify-content-between align-items-center"
-      key={subTask.id}
-      ref={ref}
-    >
-      <SubRowCheckBox uid={subTask.id} isChecked={subTask.isChecked} />
-      <SubRowText uid={subTask.id} text={subTask.text} isChecked={subTask.isChecked} />
-      <SubRowContextMenu ref={ref} isChecked={subTask.isChecked} onItemClick={onContextItemClick} />
-    </div>
+    <>
+      <Stack ref={boundingBoxRef} direction="row" sx={{ height: 40 }}>
+        <SubRowCheckBox uid={subTask.id} isChecked={subTask.isChecked} />
+        <SubRowText uid={subTask.id} text={subTask.text} isChecked={subTask.isChecked} />
+        <SubRowContextMenu
+          ref={boundingBoxRef}
+          isChecked={subTask.isChecked}
+          onItemClick={onContextItemClick}
+        />
+      </Stack>
+      <Divider light={true} orientation="horizontal" sx={{ ml: "40px", mr: "15px" }} />
+    </>
   );
 };
 

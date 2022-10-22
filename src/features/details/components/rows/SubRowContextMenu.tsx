@@ -2,19 +2,24 @@
 import Icons from "@/components/AppIcons";
 import { SubItemOperations } from "../../ducks/constants/contextMenuOperations";
 import React from "react";
+import { Box, IconButton } from "@mui/material";
 
 type Props = {
   isChecked: boolean;
   onItemClick: (e: ClickEvent) => void;
 };
 
+const menuButton = () => (
+  <Box sx={{ width: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <IconButton size="small" sx={{ flexGrow: 1 }}>
+      <Icons.Options />
+    </IconButton>
+  </Box>
+);
+
 const SubRowContextMenu = React.forwardRef(({ isChecked, onItemClick }: Props, ref: any) => (
   <Menu
-    menuButton={
-      <div>
-        <Icons.Options className="px-2" />
-      </div>
-    }
+    menuButton={menuButton}
     boundingBoxRef={ref}
     onClick={(e) => {
       e.preventDefault();

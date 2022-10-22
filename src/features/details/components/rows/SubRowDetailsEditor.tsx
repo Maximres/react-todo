@@ -34,11 +34,14 @@ const SubRowDetailsEditor = () => {
     }
   };
 
+  const hasSteps = !isEmpty(subTasks);
   return (
     <>
-      {!isEmpty(subTasks) &&
+      {hasSteps &&
         subTasks!.map((subTask) => (
-          <SubRows key={subTask.id} subTask={subTask} onItemClick={onItemClick} />
+          <>
+            <SubRows key={subTask.id} subTask={subTask} onItemClick={onItemClick} />
+          </>
         ))}
     </>
   );

@@ -1,21 +1,24 @@
-﻿import React, { forwardRef } from "react";
+﻿import React from "react";
 import Icons from "@/components/AppIcons";
-import ReminderMenuItems from "./ReminderMenuItems";
 import { format } from "date-fns";
 import useReminder from "../../ducks/hooks/useReminder";
 import reminderEnum from "@/constants/enums/reminderEnum";
 import { useAppSelector } from "@/constants/types/redux";
 import { currentTaskSelector } from "@/utils/selectors/currentTaskSelector";
+import ReminderContainer from "@/features/details/components/common/CommonDateContainer";
+import { ContextMenuReminder } from "../../ducks/constants/contextMenuReminder";
+import { ReminderOperations } from "./ReminderOperations";
+import { ListItemOperations } from "@/features/lists/ducks/constants/contextMenuOperations";
 
 type Props = {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
 };
 
-const ReminderInput = forwardRef(({ isOpen, setIsOpen }: Props, ref: React.Ref<HTMLDivElement>) => {
+const ReminderInput = () => {
   const selectedTask = useAppSelector(currentTaskSelector);
   const [setReminder, clearReminder] = useReminder();
-  const hasReminder = selectedTask && selectedTask.remindDate;
+  const hasReminder = selectedTask && selectedTask.remindDate != null;
   const pattern12AmPmFormat = "p";
   const weekMonthDayFormat = "iii, LLL d";
   const reminderText = hasReminder
@@ -25,40 +28,50 @@ const ReminderInput = forwardRef(({ isOpen, setIsOpen }: Props, ref: React.Ref<H
     ? format(selectedTask.remindDate as number, weekMonthDayFormat)
     : null;
 
-  const handleClearReminder = (e: any) => {
+  const handleClearReminder = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     clearReminder(reminderEnum.REMINDER);
   };
 
-  return (
-    <div className="dropdown d-flex justify-content-between align-items-center" onClick={() => {}}>
-      <div
-        className=" d-flex justify-content-between align-items-center pointer flex-grow-1"
-        data-bs-toggle="dropdown"
-        ref={ref}
-        aria-expanded="false"
-      >
-        <span className="me-3">
-          <Icons.Reminder className={hasReminder ? "text-primary" : ""} />
-        </span>
-        <div className="form-control me-1 d-flex flex-column ">
-          <span className={hasReminder ? "text-primary" : ""}>{reminderText}</span>
-          {hasReminder && <span className="text-secondary">{reminderDetailedText}</span>}
-        </div>
-      </div>
-      <ReminderMenuItems setReminder={setReminder} openCalendar={() => setIsOpen(true)} />
+  const onItemClick = (type: any, value?: number) => {
+    const reminderType = type as ContextMenuReminder;
 
-      {hasReminder && (
-        <button
-          type="button"
-          className="btn-close"
-          aria-label="Close"
-          onClick={handleClearReminder}
+    switch (reminderType) {
+      case ContextMenuReminder.LaterToday:
+        setReminder(reminderEnum.LATER_TODAY);
+        break;
+      case ContextMenuReminder.Tomorrow:
+        setReminder(reminderEnum.TOMORROW);
+        break;
+      case ContextMenuReminder.NextWeek:
+        setReminder(reminderEnum.NEXT_WEEK);
+        break;
+      case ContextMenuReminder.Custom:
+        setReminder(reminderEnum.REMINDER, value)
+        break;
+    }
+  };
+
+  if (selectedTask == null) return null;
+
+  return (
+    <ReminderOperations
+      reminder={selectedTask.remindDate}
+      onItemClick={onItemClick}
+      render={(props) => (
+        <ReminderContainer
+          ref={props.anchorRef}
+          onClick={props.onClick}
+          text={reminderText}
+          detailsText={reminderDetailedText}
+          hasValue={hasReminder}
+          clear={handleClearReminder}
+          Icon={<Icons.Reminder />}
         />
       )}
-    </div>
+    />
   );
-});
+};
 
-export default ReminderInput;
+export { ReminderInput };

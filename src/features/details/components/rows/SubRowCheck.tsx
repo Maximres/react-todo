@@ -2,6 +2,7 @@
 import { updateSubTask } from "@features/tasks";
 import { ITask } from "@/constants/types/tasksTypes";
 import { useAppDispatch } from "@/constants/types/redux";
+import { Box, Checkbox } from "@mui/material";
 
 type Props = {
   uid: string;
@@ -37,12 +38,9 @@ const SubRowCheckBox = ({ uid, isChecked }: Props) => {
   };
 
   return (
-    <input
-      className="form-check-input flex-shrink-0 me-3"
-      type="checkbox"
-      checked={checked}
-      onChange={onChange}
-    />
+    <Box sx={{ width: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <Checkbox size="small" checked={checked} onChange={onChange} />
+    </Box>
   );
 };
 

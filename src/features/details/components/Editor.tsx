@@ -2,19 +2,21 @@
 import SubRowDetails from "./rows/SubRowDetailsEditor";
 import SubRowCreator from "./rows/SubRowDetailsCreator";
 import RowDetails from "./rows/RowDetails";
+import { Box, Paper } from "@mui/material";
 
 import "@szhsin/react-menu/dist/index.css";
 
-
 const Editor = () => {
   return (
-    <div className="m-3">
-      <ul className="list-group">
-        <RowDetails />
-        <SubRowDetails />
-        <SubRowCreator />
-      </ul>
-    </div>
+    <>
+      <Box mx="1rem" mb="0.5rem">
+        <Paper variant="outlined">
+          <RowDetails />
+          <SubRowDetails />
+          <SubRowCreator />
+        </Paper>
+      </Box>
+    </>
   );
 };
 

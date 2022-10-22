@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { currentTaskSelector } from "@/utils/selectors/currentTaskSelector";
 import { ISubTask, ITask } from "@/constants/types/tasksTypes";
 import { toggleChecked, updateTask } from "@/features/tasks";
-import { handleEnterKeyPress } from "@/utils/helpers/enterKeyHandler";
+import { Box, Checkbox, IconButton, InputBase, Stack } from "@mui/material";
 
 const RowDetails = () => {
   const selectedRow = useAppSelector(currentTaskSelector);
@@ -20,7 +20,7 @@ const RowDetails = () => {
         id: task.id,
         task: {
           text: e.target.value,
-        }
+        },
       }),
     );
   };
@@ -32,32 +32,35 @@ const RowDetails = () => {
         id: row.id,
         task: {
           isImportant: !row.isImportant,
-        } ,
+        },
       }),
     );
   };
 
-  if (selectedRow == null)
-    return null
+  if (selectedRow == null) return null;
 
   return (
-    <li className="list-group-item group-item-height d-flex justify-content-between align-items-center flex-fill">
-      <input
-        className="form-check-input me-3 p-2 flex-shrink-0"
-        type="checkbox"
-        checked={selectedRow.isChecked}
-        onChange={() => handleCheck(selectedRow)}
-      />
-      <textarea
-        rows={1}
-        className="form-control me-1 overflow-hidden fw-bolder fs-4"
+    <Stack direction="row" sx={{ height: 50 }}>
+      <Box sx={{ width: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Checkbox checked={selectedRow.isChecked} onChange={() => handleCheck(selectedRow)} />
+      </Box>
+      <InputBase
+        sx={{ flexGrow: 1 }}
+        inputProps={{
+          style: {
+            fontSize: "1.5rem",
+            fontWeight: 500,
+          },
+        }}
         value={selectedRow.text}
-        onKeyPress={handleEnterKeyPress}
         onChange={(e) => handleTextChange(e, selectedRow)}
       />
-
-      <Icons.Favorite onClick={() => toggleFavoriteTask()} isImportant={selectedRow.isImportant} />
-    </li>
+      <Box sx={{ width: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <IconButton size="small" sx={{ flexGrow: 1 }} onClick={() => toggleFavoriteTask()}>
+          <Icons.Favorite isImportant={selectedRow.isImportant} />
+        </IconButton>
+      </Box>
+    </Stack>
   );
 };
 

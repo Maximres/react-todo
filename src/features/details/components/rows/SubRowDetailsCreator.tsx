@@ -3,6 +3,8 @@ import { createSubTask } from "@features/tasks";
 import { useAppDispatch, useAppSelector } from "@/constants/types/redux";
 import { currentTaskSelector } from "@/utils/selectors/currentTaskSelector";
 import { ITask } from "@/constants/types/tasksTypes";
+import { Box, Checkbox, IconButton, InputBase, Stack } from "@mui/material";
+import Icons from "@/components/AppIcons";
 
 const SubRowDetailsCreator = () => {
   const dispatch = useAppDispatch();
@@ -24,41 +26,30 @@ const SubRowDetailsCreator = () => {
     }
   };
 
+  const isNotInTarget = !newTaskFocused && !newTaskValue;
   return (
-    <li className="list-group-item d-flex justify-content-between align-items-center">
-      {!newTaskFocused && !newTaskValue ? (
-        <>
-          <span className="me-3" id="add-task">
-            +
-          </span>
-          <input
-            className="form-control me-1"
-            type="text"
-            placeholder={"New step"}
-            onFocus={() => setNewTaskFocus(true)}
-          />
-        </>
-      ) : (
-        <>
-          <input
-            className="form-check-input me-3 flex-shrink-0"
-            type="checkbox"
-            onChange={handleNewTaskCheck}
-            aria-label="..."
-          />
-          <textarea
-            rows={1}
-            className="form-control me-4 overflow-hidden"
-            autoFocus={newTaskFocused}
-            onBlur={() => setNewTaskFocus(false)}
-            value={newTaskValue}
-            onKeyPress={handleSubCheckOnEnter}
-            onChange={(e) => setNewTaskValue(e.target.value)}
-            aria-label="..."
-          />
-        </>
-      )}
-    </li>
+    <Stack direction="row" sx={{ height: 40 }}>
+      <Box sx={{ width: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        {isNotInTarget ? (
+          <IconButton size="small" sx={{ flexGrow: 1 }}>
+            <Icons.Plus />
+          </IconButton>
+        ) : (
+          <Checkbox size="small" checked={false} onChange={handleNewTaskCheck} />
+        )}
+      </Box>
+
+      <InputBase
+        sx={{ flexGrow: 1 }}
+        value={newTaskValue}
+        autoFocus={newTaskFocused}
+        onBlur={() => setNewTaskFocus(false)}
+        onFocus={() => setNewTaskFocus(true)}
+        onChange={(e) => setNewTaskValue(e.target.value)}
+        onKeyPress={handleSubCheckOnEnter}
+        placeholder={isNotInTarget ? "Next step" : ""}
+      />
+    </Stack>
   );
 };
 

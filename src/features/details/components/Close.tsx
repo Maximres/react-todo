@@ -1,6 +1,8 @@
 ﻿import React from "react";
 import { useAppDispatch } from "@/constants/types/redux";
 import { closeSidebar } from "@/features/tasks";
+import { Box, IconButton } from "@mui/material";
+import Icons from "@/components/AppIcons";
 
 const Close = () => {
   const dispatch = useAppDispatch();
@@ -10,9 +12,21 @@ const Close = () => {
   };
 
   return (
-    <div className="d-flex align-items-center flex-shrink-0 pt-3 px-3 mx-3 link-dark justify-content-end">
-      <button type="button" className="btn-close" aria-label="Close" onClick={closeDetails} />
-    </div>
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "end",
+          mr: "1rem",
+          my: "0.5rem",
+        }}
+      >
+        <IconButton onClick={closeDetails} size="medium" sx={{ width: 40, height: 40 }}>
+          <Icons.Close />
+        </IconButton>
+      </Box>
+    </>
   );
 };
 
