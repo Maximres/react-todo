@@ -1,3 +1,6 @@
+![image](https://github.com/Maximres/react-todo/assets/31441331/45d50f4f-04bd-4239-b17c-04659f0f9629)
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
